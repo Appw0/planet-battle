@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <termios.h>
+#include <math.h>
 
 // Screen Width and Height, this should be a global value passed in when this is
 // Turned into a function
