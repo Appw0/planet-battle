@@ -38,8 +38,8 @@ void introMovie() {
 		"But as the millennia have passed, few have ever ventured here, and few have ever bothered,\n"
 		"for none have made it back alive.\n"
 		"\nAs you land your leaky starship on its rotting hull, gales of force whistling around,\n"
-		"with plasma cutter buzzing in anticipation, you wonder...\n"
-		"'Will I the next to die?'@\n"
+		"and plasma cutter buzzing with anticipation, you begin to wonder...\n"
+		"'Will I be the next to die?'@\n"
 	};
 	
 	setbuf(stdout, NULL);
