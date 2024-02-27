@@ -24,20 +24,28 @@ void enableRawMode() {
 }
 
 int main() {
-	int i, lilGuy = 0;
+	int x, y, lilGuyX = 0, lilGuyY = 0;
 	char c = '\0';
 	
 	enableRawMode();
 	
 	do {
 		if (c == 'd') {
-			lilGuy++;
+			lilGuyX++;
 		} else if (c == 'a') {
-			lilGuy = lilGuy > 0 ? --lilGuy: lilGuy;
+			lilGuyX = lilGuyX > 0 ? --lilGuyX: lilGuyX;
+		} else if (c == 's') {
+			lilGuyY++;
+		} else if (c == 'w') {
+			lilGuyY = lilGuyY > 0 ? --lilGuyY: lilGuyY;
 		}
 		printf("\x1b[2J"); // Clear screen
 		printf("\x1b[H");
-		for (i = 0; i < lilGuy; i++) {
+		
+		for (y = 0; y < lilGuyY; y++) {
+			printf("\n");
+		}
+		for (x = 0; x < lilGuyX; x++) {
 			printf(" ");
 		}
 		printf("@\n");
