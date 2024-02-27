@@ -1,5 +1,4 @@
 // Got help from reading: https://viewsourcecode.org/snaptoken/kilo/02.enteringnewTermSettingsMode.html
-// Use 'a' and 'd' to schmoove, and q to exit.
 #include <ctype.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -7,6 +6,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+
+#define SPRITESIZE 5
+#define ITEMNUM 3
 
 struct termios originalTermSettings;
 
@@ -28,7 +30,7 @@ void enableRawMode() {
 int main() {
 	int lineLength, i, x, y, selected = 0;
 	char c = '\0';
-	char itemSprites[][5][6] = {
+	char itemSprites[ITEMNUM][SPRITESIZE][SPRITESIZE + 1] = {
 		{
 			"     ",
 			" \\ / ",
@@ -79,6 +81,9 @@ int main() {
 			} else if (strcmp(keyEscape, "[D") == 0) {
 				selected = --selected < 0 ? 0 : selected;
 			}
+		} else if (c == 10) {
+			printf("\n\n ==Item get!   +1 %s\n", itemNames[selected]);
+			break;
 		} else if (iscntrl(c)) {
 			printf("%d\n", c);
 		} else {
@@ -90,9 +95,9 @@ int main() {
 		
 		printf("\n\n   ▀█▀ █▄█ ██▀   ▄▀▀ █▄█ ▄▀▄ █▀▄ █▀▄ ██▀\n    █  █ █ █▄▄   ▄██ █ █ ▀▄▀ █▀  █▀  █▄▄\n\n");
 		
-		for (y = 0; y < 5; y++) {
+		for (y = 0; y < SPRITESIZE; y++) {
 			printf("     ");
-			for (x = 0; x < 3; x++) {
+			for (x = 0; x < ITEMNUM; x++) {
 				int selectedSpacer = 2*(x == selected);
 				printf("%c %s %c  ", spacers[selectedSpacer], itemSprites[x][y], spacers[selectedSpacer + 1]);
 			}
