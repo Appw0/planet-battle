@@ -26,7 +26,7 @@ void enableRawMode() {
 }
 
 int main() {
-	int i, x, y, selected = 0;
+	int lineLength, i, x, y, selected = 0;
 	char c = '\0';
 	char itemSprites[][5][6] = {
 		{
@@ -88,7 +88,7 @@ int main() {
 		printf("\x1b[2J"); // Clear screen
 		printf("\x1b[H");
 		
-		printf("\n\n  ░▀█▀░█▄█▒██▀░░░▄▀▀░█▄█░▄▀▄▒█▀▄▒█▀▄▒██▀\n  ░▒█▒▒█▒█░█▄▄▒░▒▄██▒█▒█░▀▄▀░█▀▒░█▀▒░█▄▄\n\n");
+		printf("\n\n   ▀█▀ █▄█ ██▀   ▄▀▀ █▄█ ▄▀▄ █▀▄ █▀▄ ██▀\n    █  █ █ █▄▄   ▄██ █ █ ▀▄▀ █▀  █▀  █▄▄\n\n");
 		
 		for (y = 0; y < 5; y++) {
 			printf("     ");
@@ -100,14 +100,17 @@ int main() {
 		}
 		
 		printf("\n           -- %s --\n", itemNames[selected]);
-		printf("\n%s\n", itemDescriptions[selected]);
 		
-		// printf("%d\n", (int)((double)strlen(itemDescriptions[selected])/64+0.5));
-		
-		// for (i = 0; i < 1; i++) {
-			// strncat(descriptionLine, itemDescriptions[selected] + 64*i, 64);
-			// printf("%s", descriptionLine);
-		// }
+		lineLength = 0;
+		for (i = 0; i < strlen(itemDescriptions[selected]); i++) {
+			lineLength++;
+			printf("%c", itemDescriptions[selected][i]);
+			if (lineLength > 50 && itemDescriptions[selected][i] == ' ') {
+				printf("\n");
+				lineLength = 0;
+			}
+		}
+		printf("\n");
 	} while (read(STDIN_FILENO, &c, 1) == 1 && c != 'q');
 	return 0;
 }
