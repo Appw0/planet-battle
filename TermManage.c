@@ -21,6 +21,18 @@ void enableRawMode() {
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &newTermSettings);
 }
 
+void printColorBg(int color, int bgColor) {
+	printf("\033[%d;%dm", color, bgColor + 10);
+}
+
+void printColor(int color) {
+	printColorBg(color, black);
+}
+
+void resetColor() {
+	printf("\033[0m");
+}
+
 void clearTerm() {
 	printf("\e[1;1H\e[2J"); // Clear Screen
 }

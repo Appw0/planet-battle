@@ -8,12 +8,12 @@
 int map[maph][mapw];
 
 // Checks if actors need to be rendered first
-int CheckActors(int x, int y) {
+int drawActorsAt(int x, int y) {
   int i;
   for (i=0; i<actorCount; i++) { 
     if ((actors[i][actorID]>0) && ((actors[i][actorX]==x) && (actors[i][actorY]==y))) {
-      return GetActorProperties(actors[i][actorID]);
-      break;
+      drawActor(actors[i][actorID]);
+      return 1;
     }
   }
   return 0;
@@ -63,18 +63,11 @@ void drawScreen(char topText[] , char sideText[]) {
     // Loops through every "pixel" to determine what to print
     for (y=0; y<maph; y++) {
         for (x=0; x<mapw; x++) {
-            int Draw;
-            
-            // Check to see if an actor needs to be drawn, draws first found in list
-            // as such player should always be the first entry
-            Draw = CheckActors(x,y);
-            if (Draw < 1) {
-              // If not then get the draw properties of map tile
-              Draw = GetTileProperties(map[y][x]);
-            }
-            printf("%c",Draw); // Draw Tile Sprite
-            printf("\033[0m"); // Reset Color
+			// Attempt to draw actors at this tile
+			// If none are drawn here, draw the map tile instead.
+			if (drawActorsAt(x, y) == 0) drawTile(map[y][x]);
         }
+		resetColor();
         printf("|");
         
         // Print Side Bar Text Line
