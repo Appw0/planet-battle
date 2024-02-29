@@ -49,7 +49,7 @@ void drawScreen(char topText[] , char sideText[]) {
     int x, y;
     int i=0;
     
-    printf("\e[1;1H\e[2J"); // Clear Screen
+    clearTerm();
     // Top line printing
     // Must be exactly this length to work for current board size
     
