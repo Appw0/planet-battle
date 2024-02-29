@@ -1,7 +1,7 @@
 #include "project.h"
 
 // actorCount, can go as high as needed (zero id monsters do nothing)
-int actors[actorCount][actorProperty]={{1,10,5,0,100,75}};
+int actors[actorCount][actorProperty]={{1,10,5,0,0,100}};
 
 // Matrix of tile colors by tile ID
 // Foreground, Background
