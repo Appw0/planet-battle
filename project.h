@@ -17,14 +17,23 @@
 
 // Actor Properties Things
 #define actorCount 16
-#define actorProperty 7
+#define actorProperty 8
 #define actorTypes 4
+
 // Actor Property IDs
 #define actorID 0
 #define actorX 1
 #define actorY 2
 #define actorMoveCool 3
+#define actorWeaponID 4
 
+// Items 
+#define itemCount 4
+#define itemProperty 2
+#define itemNameLength 20
+#define inventorySize 4
+
+// Colors
 #define black 30
 #define red 31
 #define green 32
@@ -44,6 +53,11 @@
 
 extern int map[maph][mapw];
 extern int actors[actorCount][actorProperty];
+
+extern int item[itemCount][itemProperty];
+extern char itemName[itemCount][itemNameLength];
+
+extern int playerInventory[inventorySize];
 
 extern int tileColors[tileTypes][2];
 extern char tileChars[tileTypes];
