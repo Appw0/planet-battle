@@ -21,11 +21,12 @@ void tempGenArray(int array[maph][mapw]) {
 void tempGenActors(int array2[actorCount][actorProperty]) {
   int i;
   for (i=1; i<5; i++) {
-    array2[i][0]=rand()%2+2;
-    array2[i][1]=rand()%(mapw-2)+1;
-    array2[i][2]=rand()%(maph-2)+1;
-    array2[i][3]=rand()%2+1;
-    array2[i][4]=1;
+    array2[i][0]=rand()%2+2;        // Type
+    array2[i][1]=rand()%(mapw-2)+1; // Pos X
+    array2[i][2]=rand()%(maph-2)+1; // Pos Y
+    array2[i][3]=rand()%2+1;        // Move Points
+    array2[i][4]=1;                 // Weapon ID, set zero for player
+    array2[i][5]=4;                 // Health (temp)
   }
 }
 
