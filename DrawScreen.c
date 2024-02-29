@@ -8,15 +8,11 @@
 int map[maph][mapw];
 
 // Checks if actors need to be rendered first
-int drawActorsAt(int x, int y) {
-  int i;
-  for (i=0; i<actorCount; i++) { 
-    if ((actors[i][actorID]>0) && ((actors[i][actorX]==x) && (actors[i][actorY]==y))) {
-      drawActor(actors[i][actorID]);
-      return 1;
-    }
-  }
-  return 0;
+// this needs to be cleaned up
+int drawActorsAt(int x, int y) {;
+  int val = getActorsAt(x,y,1);
+  if (val > 0) drawActor(val);
+  return val;
 }
 
 // Prints text with padding and wrapping (if put in a loop)
@@ -76,8 +72,10 @@ void drawScreen(char topText[] , char sideText[]) {
     }
     
     // Needs some padding equation here
-    printf("Health: %3d%%   Shield: %3d%%             |", actors[0][3] , actors[0][4] );
+    printf("Health: %3d%%   Shield: %3d%%             |", actors[0][5] , actors[0][4] );
     printText(sideText, 15, i);
+    printf("\n");
+    printf("%s  %s  %s",getInventoryName(0),getInventoryName(1),getInventoryName(2));
     
     printf("\n");
 }
