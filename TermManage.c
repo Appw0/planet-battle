@@ -42,10 +42,12 @@ int readKey(char keyEscape[], int codeLength) {
 	return read(STDIN_FILENO, keyEscape, codeLength);
 }
 
-int menuHandleInput(int* selected, char keyCode[], int optionNum) {
-	if (keyCode[0] == 'd' || strcmp(keyCode, "\e[C") == 0) {
+int menuHandleInput(int* selected, char keyCode[], int optionNum, int vertical) {
+	if (!vertical && (keyCode[0] == 'd' || strcmp(keyCode, "\e[C") == 0) ||
+		vertical && (keyCode[0] == 's' || strcmp(keyCode, "\e[B") == 0)) {
 		*selected = ++*selected > optionNum - 1 ? optionNum - 1 : *selected;
-	} else if (keyCode[0] == 'a' || strcmp(keyCode, "\e[D") == 0) {
+	} else if (!vertical && (keyCode[0] == 'a' || strcmp(keyCode, "\e[D") == 0) ||
+		vertical && (keyCode[0] == 'w' || strcmp(keyCode, "\e[A") == 0)) {
 		*selected = --*selected < 0 ? 0 : *selected;
 	} else if (keyCode[0] == 10) {
 		return 0;
@@ -53,7 +55,7 @@ int menuHandleInput(int* selected, char keyCode[], int optionNum) {
 	return 1;
 }
 
-int askWithTextMenu(char text[], char options[][32], char moreInfo[][512], int optionNum) {
+int askWithTextMenu(char text[], char options[][32], char moreInfo[][512], int optionNum, int vertical) {
 	int i, selected = 0;
 	char keyCode[8];
 	
@@ -61,12 +63,20 @@ int askWithTextMenu(char text[], char options[][32], char moreInfo[][512], int o
 	do {
 		clearTerm();
 		printf("%s", text);
+		// for (i = 0; i < optionNum; i++) {
+			// int selectedSpacer = 2*(i == selected);
+			// printf("%c %s %c ", selectSpacers[selectedSpacer], options[i], selectSpacers[selectedSpacer + 1]);
+		// }
+		// printf("%s\n", moreInfo[selected]);
+		
 		for (i = 0; i < optionNum; i++) {
 			int selectedSpacer = 2*(i == selected);
 			printf("%c %s %c ", selectSpacers[selectedSpacer], options[i], selectSpacers[selectedSpacer + 1]);
+			if (selectedSpacer > 0 && vertical) printf("%s", moreInfo[selected]);
+			if (vertical) printf("\n");
 		}
-		printf("%s\n", moreInfo[selected]);
-	} while (readKey(keyCode, 8) && menuHandleInput(&selected, keyCode, optionNum));
+		if (!vertical) printf("%s", moreInfo[selected]);
+	} while (readKey(keyCode, 8) && menuHandleInput(&selected, keyCode, optionNum, vertical));
 }
 
 // TODO: Update/make new function to use item/sprite IDs instead of passing an entire array
@@ -86,5 +96,5 @@ int askWithSpriteMenu(char text[], char sprites[][5][6], char moreInfo[][512], i
 			printf("\n");
 		}
 		printf("\n%s\n", moreInfo[selected]);
-	} while(readKey(keyCode, 8) && menuHandleInput(&selected, keyCode, optionNum));
+	} while(readKey(keyCode, 8) && menuHandleInput(&selected, keyCode, optionNum, 0));
 }
