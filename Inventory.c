@@ -11,7 +11,7 @@ char itemName[itemCount][itemNameLength] = { "None", "Basic Knife", "Basic Laser
 int playerInventory[inventorySize]={1,0,0};
 
 int getInventoryProperty(int actorNum, int slotNum, int type) {
-  int actorType=actors[actorNum][actorID];
+  int actorType=actors[actorNum][actorTypeID];
   
   if (actorType == 1) { //checks if actor the call is for is the player
     switch (type) {

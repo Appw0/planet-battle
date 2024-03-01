@@ -59,7 +59,7 @@ void move(char c) {
   
   int i;
   for (i=1; i<actorCount; i++) {
-    if (actors[i][actorID]>1) {   
+    if (actors[i][actorTypeID]>1) {   
       moveActor(i,rand()%4+1);
       
     }

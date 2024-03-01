@@ -21,7 +21,7 @@
 #define actorTypes 4
 
 // Actor Property IDs
-#define actorID 0
+#define actorTypeID 0
 #define actorX 1
 #define actorY 2
 #define actorMoveCool 3

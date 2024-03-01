@@ -15,10 +15,10 @@ void sleepMs(int millis) {
 int getActorsAt(int x, int y, int type) {
   int i;
   for (i=0; i<actorCount; i++) { 
-    if ((actors[i][actorID]>0) && ((actors[i][actorX]==x) && (actors[i][actorY]==y))) {
+    if ((actors[i][actorTypeID]>0) && ((actors[i][actorX]==x) && (actors[i][actorY]==y))) {
       switch (type) {
         case 1:
-          return actors[i][actorID];
+          return actors[i][actorTypeID];
           break;
         default:
           return i;

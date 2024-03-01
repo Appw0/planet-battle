@@ -23,7 +23,7 @@ int Attack(int dir, int xpos, int ypos, int actorNum) {
   if (targetActorNum>=0) {
     actors[targetActorNum][5]=actors[targetActorNum][5]-getInventoryProperty(actorNum, 0, 1);
     if (actors[targetActorNum][5]<1) {
-      actors[targetActorNum][actorID]=0;
+      actors[targetActorNum][actorTypeID]=0;
     }
     return 1;
   }
