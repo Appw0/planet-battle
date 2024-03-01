@@ -51,6 +51,23 @@
 #define lcyan 96
 #define white 97
 
+#define $black "\033[30m"
+#define $red "\033[31m"
+#define $green "\033[32m"
+#define $yellow "\033[33m"
+#define $blue "\033[34m"
+#define $magenta "\033[35m"
+#define $cyan "\033[36m"
+#define $lgray "\033[37m"
+#define $gray "\033[90m"
+#define $lred "\033[91m"
+#define $lgreen "\033[92m"
+#define $lyellow "\033[93m"
+#define $lblue "\033[94m"
+#define $lmagenta "\033[95m"
+#define $lcyan "\033[96m"
+#define $white "\033[97m"
+
 extern int map[maph][mapw];
 extern int actors[actorCount][actorProperty];
 
