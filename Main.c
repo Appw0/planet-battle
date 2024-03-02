@@ -2,10 +2,10 @@
 
 int main()
 {
+    int inventoryMode=0, slot;
 
-
-    char sideText[]="test text to write to the iovefugiesochfehs gfjkajfv negaihfcjeakl fevajknf jeiaklcfnyoiaejside. I can wri23894713098 benwfnv9poweir,8239ncyfieowjte all sorts of stuff over here waijdjiajksadjf";
-    char topText[]="Level Name"; 
+    char sideText[]="This is a test level for development while actual maps get created.";
+    char topText[]="Test Level"; 
     tempGenArray(map);
     srand(time(NULL));
     tempGenActors(actors);
@@ -19,11 +19,26 @@ int main()
 	enableRawMode();
 	
   do {
-    move(c);
      
-		printf("\n");
-    drawScreen(topText, sideText);
-    printf("\n");
+    if (c=='i') {
+      inventoryMode=inventoryMode^1;
+      slot=0;
+    }
+    
+    if (inventoryMode==1) {
+      
+      slot=manageInventory(c, slot);
+      drawScreen(topText, sideText);
+      drawInventory(slot);
+    } else {
+      if ((c=='w')||(c=='a')||(c=='s')||(c=='d')||(c=='.')) {
+        move(c);
+      }
+      drawScreen(topText, sideText);
+    }
+    
+    
+    
     
     
 		//if (iscntrl(c)) {
