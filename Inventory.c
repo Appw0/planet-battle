@@ -1,14 +1,19 @@
 #include "project.h"
 
-// 
-int item[itemCount][itemProperty]={{0,0},
-                                   {2,0},
+// 0 is type: 0 is melee, 1 is ranged, 2 is utility, 3 is any (aka just used for none)
+// 1 is damage?
+int item[itemCount][itemProperty]={{3,0},
                                    {0,2},
-                                   {2,0}};
+                                   {1,2},
+                                   {0,2}};
 
-char itemName[itemCount][itemNameLength] = { "None", "Basic Knife", "Basic Laser", "Monster Weapon - D"};
+char itemName[itemCount][itemNameLength] = { "None", "Basic Knife", "Basic Laser", "MonsterDebug"};
 
-int playerInventory[inventorySize]={1,0,0};
+// Pos 0 is melee, Pos 1 is ranged, Pos 3 is utility
+int playerInventory[inventorySize]={1,0,0,3,2};
+
+
+
 
 int getInventoryProperty(int actorNum, int slotNum, int type) {
   int actorType=actors[actorNum][actorTypeID];
@@ -46,7 +51,31 @@ int getInventoryProperty(int actorNum, int slotNum, int type) {
   }
 }
 
+
 // This passes back a pointer, make sure its handled properly
 char *getInventoryName(int slotNum) {
       return itemName[playerInventory[slotNum]];
+}
+
+
+int manageInventory(char c, int slotSelected) {
+
+  if ((c=='w')||(c=='s')) {
+    if (c=='w') {
+    	slotSelected--;
+   	}
+    if (c=='s') {
+    	slotSelected++;
+   	}
+  
+    if (slotSelected < 0) slotSelected=inventorySize-1;
+    if (slotSelected > inventorySize-1) slotSelected=0;
+  
+  } else if ((c=='e')&&(slotSelected>2)) {
+  
+    playerInventory[0]=playerInventory[0]^playerInventory[slotSelected];
+    playerInventory[slotSelected]=playerInventory[0]^playerInventory[slotSelected];
+    playerInventory[0]=playerInventory[0]^playerInventory[slotSelected];
+  }
+  return slotSelected;
 }
