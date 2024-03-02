@@ -35,3 +35,7 @@ int getActorsAt(int x, int y, int type) {
       break;
   }
 }
+
+int percent(int num, int outOf) {
+  return roundf(((float)num/(float)outOf)*(float)100);
+}
