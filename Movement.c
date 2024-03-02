@@ -4,6 +4,7 @@ void moveActor(int actorNum, int dir) {
 
   int xpos=actors[actorNum][actorX];
   int ypos=actors[actorNum][actorY];
+  int dX, dY;
   int attackDone;
   
   // Dec the actor move cooldown
@@ -18,18 +19,11 @@ void moveActor(int actorNum, int dir) {
       if ( attackDone == 0 ) {
         
         // Move in direction
-        if ((dir==north) && (map[ypos-1][xpos]>Barrier)) {
-      		actors[actorNum][actorY]=actors[actorNum][actorY]-1;
-      	}
-        if ((dir==east) && (map[ypos][xpos-1]>Barrier)) {
-      		actors[actorNum][actorX]=actors[actorNum][actorX]-1;
-      	}
-        if ((dir==south) && (map[ypos+1][xpos]>Barrier)) {
-      		actors[actorNum][actorY]=actors[actorNum][actorY]+1;
-      	}
-        if ((dir==west) && (map[ypos][xpos+1]>Barrier)) {
-      		actors[actorNum][actorX]=actors[actorNum][actorX]+1;
-      	}
+		directionToXY(dir, &dX, &dY);
+		if (map[ypos + dY][xpos + dX] > Barrier) {
+			actors[actorNum][actorX] += dX;
+			actors[actorNum][actorY] += dY;
+		}
        
       }
     } else {
@@ -55,7 +49,8 @@ void move(char c) {
   	dir=west;
  	}
   
-  moveActor(0,dir);
+  // This is not good. This function should be split into AI and player movement, and not take a char as input.
+  if (dir != -1) moveActor(0,dir);
   
   int i;
   for (i=1; i<actorCount; i++) {
