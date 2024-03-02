@@ -39,3 +39,24 @@ int getActorsAt(int x, int y, int type) {
 int percent(int num, int outOf) {
   return roundf(((float)num/(float)outOf)*(float)100);
 }
+
+int directionToXY(int direction, int* x, int* y) {
+	(*x) = 0;
+	(*y) = 0;
+	switch (direction) {
+		case north:
+			(*y) = -1;
+			break;
+		case east:
+			(*x) = -1;
+			break;
+		case south:
+			(*y) = 1;
+			break;
+		case west:
+			(*x) = 1;
+			break;
+		default:
+			printf("\nINVALID DIRECTION!\n");
+	}
+}
