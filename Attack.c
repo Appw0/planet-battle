@@ -2,28 +2,33 @@
 
 // this will be the most barebones of code
 
-int Attack(int dir, int xpos, int ypos, int actorNum) {
-  int targetActorNum;
-  targetActorNum=-1;
+int Attack(int dir, int xpos, int ypos, int actorID) {
+  int targetActorID;
+  targetActorID=-1;
   
   if (dir==1){
-      targetActorNum=getActorsAt(xpos,ypos-1,0); 
+      targetActorID=getActorsAt(xpos,ypos-1,0); 
   }
   if (dir==2){
-      targetActorNum=getActorsAt(xpos-1,ypos,0); 
+      targetActorID=getActorsAt(xpos-1,ypos,0); 
   }
   if (dir==3){
-      targetActorNum=getActorsAt(xpos,ypos+1,0); 
+      targetActorID=getActorsAt(xpos,ypos+1,0); 
   }
   if (dir==4){
-      targetActorNum=getActorsAt(xpos+1,ypos,0); 
+      targetActorID=getActorsAt(xpos+1,ypos,0); 
   }
-
-  printf("%d",targetActorNum);
-  if (targetActorNum>=0) {
-    actors[targetActorNum][5]=actors[targetActorNum][5]-getInventoryProperty(actorNum, 0, 1);
-    if (actors[targetActorNum][5]<1) {
-      actors[targetActorNum][actorTypeID]=0;
+  
+  // so monsters dont kill each other
+  if ((actors[targetActorID][actorTypeID] > 1)&&(actors[actorID][actorTypeID] > 1)) {
+    return 0;
+  }
+  
+  printf("%d",targetActorID);
+  if (targetActorID>=0) {
+    actors[targetActorID][actorHealth]=actors[targetActorID][actorHealth]-getInventoryProperty(actorID, 0, 2);
+    if (actors[targetActorID][actorHealth]<1) {
+      actors[targetActorID][actorTypeID]=0;
     }
     return 1;
   }
