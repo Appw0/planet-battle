@@ -29,13 +29,3 @@ void tempGenActors(int array2[actorCount][actorProperty]) {
     array2[i][5]=4;                 // Health (temp)
   }
 }
-
-void actorRandomWalk(int actors[actorCount][actorProperty]) {
-  int i, move, dir;
-  for (i = 1; i<=actorCount; i++) {
-  move=rand()%3-1;
-  dir=rand()%2+1;
-  actors[i][dir]=actors[i][dir]+move;
-  
-  }
-}
