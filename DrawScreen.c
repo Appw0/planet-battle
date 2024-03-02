@@ -40,6 +40,10 @@ int printText(char text[], int width, int start) {
         }
 }
 
+void drawPlayerEquipped() {
+  printf("M: %-16s R: %-16s U: %-16s",getInventoryName(0),getInventoryName(1),getInventoryName(2));
+}
+
 // Primary Drawing Function
 void drawScreen(char topText[] , char sideText[]) {
     int x, y;
@@ -50,8 +54,8 @@ void drawScreen(char topText[] , char sideText[]) {
     // Must be exactly this length to work for current board size
     
     
-    printf("GAME NAME - ");
-    printText(topText, 20, 0);
+    printf("PlanetBattle - ");
+    printText(topText, 17, 0);
     printf(" |");
     i = printText(sideText, 15, i);
     printf("\n");
@@ -72,10 +76,36 @@ void drawScreen(char topText[] , char sideText[]) {
     }
     
     // Needs some padding equation here
-    printf("Health: %3d%%   Shield: %3d%%             |", actors[0][5] , actors[0][4] );
+    printf("Health: %3d%%   Shield: %3d%%             |", percent(actors[0][actorHealth],10) , actors[0][4] );
     printText(sideText, 15, i);
     printf("\n");
-    printf("%s  %s  %s",getInventoryName(0),getInventoryName(1),getInventoryName(2));
+    drawPlayerEquipped();
     
     printf("\n");
+}
+
+// Draws inventory list, do not clear screen when drawing
+void drawInventory(int selected) {
+
+  printf("\nInventory\n");
+  
+  int i;
+  printf("Equipped Items\n");
+  
+  printf("Melee  : %s",getInventoryName(0));
+  printf(selected == 0 ? " <\n" : "\n");
+  
+  printf("Ranged : %s",getInventoryName(1));
+  printf(selected == 1 ? " <\n" : "\n");
+  
+  printf("Utility: %s",getInventoryName(2));
+  printf(selected == 2 ? " <\n" : "\n");
+  
+  printf("\n");
+
+  for (i=3; i<inventorySize; i++) {
+    printf("Slot %2d: %s",i-2,getInventoryName(i));
+    printf(selected == i ? " <\n" : "\n");
+    
+  }
 }
