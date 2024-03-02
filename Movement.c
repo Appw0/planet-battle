@@ -40,13 +40,13 @@ void move(char c) {
   	dir=north;
  	}
   if (c=='a') {
-  	dir=east;
+  	dir=west;
  	}
   if (c=='s') {
   	dir=south;
  	}
   if (c=='d') {
-  	dir=west;
+  	dir=east;
  	}
   
   // This is not good. This function should be split into AI and player movement, and not take a char as input.

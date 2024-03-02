@@ -48,13 +48,13 @@ int directionToXY(int direction, int* x, int* y) {
 			(*y) = -1;
 			break;
 		case east:
-			(*x) = -1;
+			(*x) = 1;
 			break;
 		case south:
 			(*y) = 1;
 			break;
 		case west:
-			(*x) = 1;
+			(*x) = -1;
 			break;
 		default:
 			printf("\nINVALID DIRECTION!\n");
