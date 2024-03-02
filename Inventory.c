@@ -1,22 +1,23 @@
 #include "project.h"
 
-// 0 is type: 0 is melee, 1 is ranged, 2 is utility, 3 is any (aka just used for none)
+// 0 is type: 0 is melee, 1 is ranged, 2 is utility, -1 is none
 // 1 is damage?
-int item[itemCount][itemProperty]={{3,0},
+int item[itemCount][itemProperty]={{-1,0},
                                    {0,2},
                                    {1,2},
-                                   {0,2}};
+                                   {0,2},
+                                   {0,100}};
 
-char itemName[itemCount][itemNameLength] = { "None", "Basic Knife", "Basic Laser", "MonsterDebug"};
+char itemName[itemCount][itemNameLength] = { "None", "Basic Knife", "Basic Laser", "MonsterDebug", "SUPER KNIFE"};
 
 // Pos 0 is melee, Pos 1 is ranged, Pos 3 is utility
-int playerInventory[inventorySize]={1,0,0,3,2};
+int playerInventory[inventorySize]={1,0,0,3,2,4};
 
 
 
 
-int getInventoryProperty(int actorNum, int slotNum, int type) {
-  int actorType=actors[actorNum][actorTypeID];
+int getInventoryProperty(int actorID, int slotNum, int type) {
+  int actorType=actors[actorID][actorTypeID];
   
   if (actorType == 1) { //checks if actor the call is for is the player
     switch (type) {
@@ -33,7 +34,7 @@ int getInventoryProperty(int actorNum, int slotNum, int type) {
         break;
     }
   } else {
-    int actorWeapon=actors[actorNum][actorWeaponID];
+    int actorWeapon=actors[actorID][actorWeaponID];
     
     switch (type) {
       case 0: // ID number
@@ -56,7 +57,7 @@ int getInventoryProperty(int actorNum, int slotNum, int type) {
 char *getInventoryName(int slotNum) {
       return itemName[playerInventory[slotNum]];
 }
-
+int slotType;
 
 int manageInventory(char c, int slotSelected) {
 
@@ -72,10 +73,12 @@ int manageInventory(char c, int slotSelected) {
     if (slotSelected > inventorySize-1) slotSelected=0;
   
   } else if ((c=='e')&&(slotSelected>2)) {
-  
-    playerInventory[0]=playerInventory[0]^playerInventory[slotSelected];
-    playerInventory[slotSelected]=playerInventory[0]^playerInventory[slotSelected];
-    playerInventory[0]=playerInventory[0]^playerInventory[slotSelected];
+    slotType=getInventoryProperty(0, slotSelected, 1);
+    if (slotType >= 0) {
+      playerInventory[slotType]=playerInventory[slotType]^playerInventory[slotSelected];
+      playerInventory[slotSelected]=playerInventory[slotType]^playerInventory[slotSelected];
+      playerInventory[slotType]=playerInventory[slotType]^playerInventory[slotSelected];
+    }
   }
   return slotSelected;
 }
