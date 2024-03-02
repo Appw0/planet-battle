@@ -18,16 +18,16 @@ void moveActor(int actorNum, int dir) {
       if ( attackDone == 0 ) {
         
         // Move in direction
-        if ((dir==1) && (map[ypos-1][xpos]>Barrier)) {
+        if ((dir==north) && (map[ypos-1][xpos]>Barrier)) {
       		actors[actorNum][actorY]=actors[actorNum][actorY]-1;
       	}
-        if ((dir==2) && (map[ypos][xpos-1]>Barrier)) {
+        if ((dir==east) && (map[ypos][xpos-1]>Barrier)) {
       		actors[actorNum][actorX]=actors[actorNum][actorX]-1;
       	}
-        if ((dir==3) && (map[ypos+1][xpos]>Barrier)) {
+        if ((dir==south) && (map[ypos+1][xpos]>Barrier)) {
       		actors[actorNum][actorY]=actors[actorNum][actorY]+1;
       	}
-        if ((dir==4) && (map[ypos][xpos+1]>Barrier)) {
+        if ((dir==west) && (map[ypos][xpos+1]>Barrier)) {
       		actors[actorNum][actorX]=actors[actorNum][actorX]+1;
       	}
        
@@ -40,19 +40,19 @@ void moveActor(int actorNum, int dir) {
 
 void move(char c) {
 
-  int dir;
+  int dir = -1;
   
   if (c=='w') {
-  	dir=1;
+  	dir=north;
  	}
   if (c=='a') {
-  	dir=2;
+  	dir=east;
  	}
   if (c=='s') {
-  	dir=3;
+  	dir=south;
  	}
   if (c=='d') {
-  	dir=4;
+  	dir=west;
  	}
   
   moveActor(0,dir);
@@ -60,7 +60,7 @@ void move(char c) {
   int i;
   for (i=1; i<actorCount; i++) {
     if (actors[i][actorTypeID]>1) {   
-      moveActor(i,rand()%4+1);
+      moveActor(i,rand()%4);
       
     }
   }

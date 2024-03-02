@@ -6,16 +6,16 @@ int Attack(int dir, int xpos, int ypos, int actorID) {
   int targetActorID;
   targetActorID=-1;
   
-  if (dir==1){
+  if (dir==north){
       targetActorID=getActorsAt(xpos,ypos-1,0); 
   }
-  if (dir==2){
+  if (dir==east){
       targetActorID=getActorsAt(xpos-1,ypos,0); 
   }
-  if (dir==3){
+  if (dir==south){
       targetActorID=getActorsAt(xpos,ypos+1,0); 
   }
-  if (dir==4){
+  if (dir==west){
       targetActorID=getActorsAt(xpos+1,ypos,0); 
   }
   

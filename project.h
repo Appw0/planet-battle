@@ -14,6 +14,10 @@
 // Map Properties
 #define Barrier 1
 #define tileTypes 4
+#define east 0
+#define north 1
+#define west 2
+#define south 3
 
 // Actor Properties Things
 #define actorCount 16
