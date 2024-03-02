@@ -30,7 +30,7 @@
 #define actorShield 6 // ???
 
 // Items 
-#define itemCount 4
+#define itemCount 5
 #define itemProperty 2
 #define itemNameLength 17 //16 Chars with 1 for null
 #define inventorySize 13 //10 slots plus 3 equipped
