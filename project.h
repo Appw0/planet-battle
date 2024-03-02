@@ -26,12 +26,14 @@
 #define actorY 2
 #define actorMoveCool 3
 #define actorWeaponID 4
+#define actorHealth 5
+#define actorShield 6 // ???
 
 // Items 
 #define itemCount 4
 #define itemProperty 2
-#define itemNameLength 20
-#define inventorySize 4
+#define itemNameLength 17 //16 Chars with 1 for null
+#define inventorySize 13 //10 slots plus 3 equipped
 
 // Colors
 #define black 30
@@ -67,6 +69,9 @@
 #define $lmagenta "\033[95m"
 #define $lcyan "\033[96m"
 #define $white "\033[97m"
+
+
+char *getInventoryName(int slotNum);
 
 extern int map[maph][mapw];
 extern int actors[actorCount][actorProperty];
