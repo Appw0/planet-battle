@@ -10,7 +10,7 @@ int main()
     
     tempGenArray(map);
     srand(time(NULL));
-    tempGenActors(actors);
+    spawnEnemies(10,7);
     
 	char keyCode[8];
 	
