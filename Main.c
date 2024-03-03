@@ -29,7 +29,10 @@ int main()
 		 playerHadTurn = 1; // pass time
 	 } else if (keyCode[0] == 'f') {
 		 playerAimLaser();
-   } else if (playerMovement(keyCode)) {
+		 computeLaserMap();
+		 drawScreen();
+		 sleepMs(500);
+	 } else if (playerMovement(keyCode)) {
 		 playerHadTurn = 1;
 	 }
 	 

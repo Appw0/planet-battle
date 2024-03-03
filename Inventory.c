@@ -1,55 +1,42 @@
 #include "project.h"
 
-// 0 is type: 0 is melee, 1 is ranged, 2 is utility, -1 is none
-// 1 is damage?
-int item[itemCount][itemProperty]={{-1,0},
-                                   {0,2},
-                                   {1,2},
-                                   {0,2},
-                                   {0,100}};
+int item[itemCount][itemProperty]={
+	{itemCategoryNone, 0}, {itemCategoryMelee, 2},
+    {itemCategoryRanged, 2}, {itemCategoryMelee, 2},
+    {itemCategoryMelee,100}};
 
-char itemName[itemCount][itemNameLength] = { "None", "Basic Knife", "Basic Laser", "MonsterDebug", "SUPER KNIFE"};
+char itemName[itemCount][itemNameLength] = {
+	"None", "Basic Knife", "Basic Laser", "MonsterDebug", "SUPER KNIFE"
+};
 
-// Pos 0 is melee, Pos 1 is ranged, Pos 3 is utility
 int playerInventory[inventorySize]={1,0,0,3,2,4};
 
+int getItemDamage(int id) {
+	return item[id][itemDamage];
+}
 
+int getItemCategory(int id) {
+	return item[id][itemCategory];
+}
 
+int getMeleeWeapon(int actorID) {
+	if (isActorPlayer(actorID)) {
+		return playerInventory[slotMelee];
+	} else {
+		int actorType = actors[actorID][actorTypeID];
+		int actorWeapon = actorTypes[actorType][actorTypeWeaponID];
+		return getItemCategory(actorWeapon) == itemCategoryMelee ? actorWeapon : itemNone;
+	}
+}
 
-int getInventoryProperty(int actorID, int slotNum, int type) {
-  int actorType=actors[actorID][actorTypeID];
-  
-  if (actorType == 1) { //checks if actor the call is for is the player
-    switch (type) {
-      case 0: // ID number
-        return playerInventory[slotNum];
-        break;
-      case 1: // first property
-        return item[playerInventory[slotNum]][0];
-        break;
-      case 2: // second property
-        return item[playerInventory[slotNum]][1];
-        break;
-      default:
-        break;
-    }
-  } else {
-    int actorWeapon=monsterProperty[actorType][weaponID];
-    
-    switch (type) {
-      case 0: // ID number
-        return actorWeapon;
-        break;
-      case 1: // first property
-        return item[actorWeapon][0];
-        break;
-      case 2: // second property
-        return item[actorWeapon][1];
-        break;
-      default:
-        break;
-    }
-  }
+int getRangedWeapon(int actorID) {
+	if (isActorPlayer(actorID)) {
+		return playerInventory[slotRanged];
+	} else {
+		int actorType = actors[actorID][actorTypeID];
+		int actorWeapon = actorTypes[actorType][actorTypeWeaponID];
+		return getItemCategory(actorWeapon) == itemCategoryRanged ? actorWeapon : itemNone;
+	}
 }
 
 
@@ -64,7 +51,7 @@ void manageInventory() {
 	
 	do {
 		if (keyCode[0] == 'e' && slotSelected > 2) {
-			slotType=getInventoryProperty(0, slotSelected, 1);
+			slotType = getItemCategory(playerInventory[slotSelected]);
 			if (slotType >= 0) {
 				playerInventory[slotType]=playerInventory[slotType]^playerInventory[slotSelected];
 				playerInventory[slotSelected]=playerInventory[slotType]^playerInventory[slotSelected];

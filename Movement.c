@@ -14,7 +14,7 @@ void moveActor(int actorNum, int dir) {
     } else {
       actors[actorNum][actorMoveCool] = 0;
     }
-      attackDone = Attack(dir,xpos,ypos,actorNum);
+      attackDone = meleeAttack(dir,xpos,ypos,actorNum);
       if ( attackDone == 0 ) {
         
         // Move in direction

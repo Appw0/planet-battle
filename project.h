@@ -19,12 +19,10 @@
 #define west 2
 #define south 3
 
-// Actor Properties Things
+// Actor Matrix
 #define actorCount 16
 #define actorProperty 8
-#define actorTypes 4
 
-// Actor Property IDs
 #define actorTypeID 0
 #define actorX 1
 #define actorY 2
@@ -33,20 +31,31 @@
 #define actorHealth 5
 #define actorShield 6 // ???
 
-// Monster Properties
-#define monsterPropertyCount 5
-#define monsterTypes 5
+//Actor Type Matrix
+#define actorTypeCount 5
+#define actorTypeProperty 8
 
-#define spawnPoints 0
-#define icon 1
-#define health 2
-#define moveCool 3
-#define weaponID 4
+#define actorTypeSpawnPoints 0
+#define actorTypeHealth 1
+#define actorTypeMoveCool 2
+#define actorTypeWeaponID 3
 
 // Items 
 #define itemCount 5
 #define itemProperty 2
+#define itemNone 0 // this is the "None" item, with category "None"
+#define itemCategory 0
+#define itemCategoryNone -1
+#define itemCategoryMelee 0
+#define itemCategoryRanged 1
+#define itemCategoryUtility 2
+#define itemDamage 1
 #define itemNameLength 17 //16 Chars with 1 for null
+
+//Inventory
+#define slotMelee 0
+#define slotRanged 1
+#define slotUtil 2
 #define inventorySize 13 //10 slots plus 3 equipped
 
 // Lasers
@@ -110,10 +119,10 @@ extern int playerInventory[inventorySize];
 
 extern int tileColors[tileTypes][2];
 extern char tileChars[tileTypes];
-extern int actorColors[monsterTypes][2];
-extern char actorChars[monsterTypes];
+extern int actorColors[actorTypeCount][2];
+extern char actorChars[actorTypeCount];
 
-extern int monsterProperty[monsterTypes][monsterPropertyCount];
+extern int actorTypes[actorTypeCount][actorTypeProperty];
 
 extern char sideText[];
 extern char topText[]; 

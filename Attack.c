@@ -2,34 +2,42 @@
 
 // this will be the most barebones of code
 
-int Attack(int dir, int xpos, int ypos, int actorID) {
-  int targetActorID, dX, dY;
-  targetActorID=-1;
-  
-  directionToXY(dir, &dX, &dY);
-  targetActorID = getActorsAt(xpos+dX, ypos+dY, 0);
-  
-  // so monsters dont kill each other
-  if ((actors[targetActorID][actorTypeID] > 1)&&(actors[actorID][actorTypeID] > 1)) {
-    return 0;
-  }
-  
-  printf("%d",targetActorID);
-  if (targetActorID>=0) {
-    actors[targetActorID][actorHealth]=actors[targetActorID][actorHealth]-getInventoryProperty(actorID, 0, 2);
-    if (actors[targetActorID][actorHealth]<1) {
-      actors[targetActorID][actorTypeID]=0;
-    }
-    return 1;
-  }
-  return 0;
+void damageActor(int actorID, int amount) {
+	actors[actorID][actorHealth] -= amount;
+	if (actors[actorID][actorHealth] < 1) {
+		actors[actorID][actorTypeID] = 0;
+	}
+}
+
+int meleeAttack(int dir, int xpos, int ypos, int actorID) {
+	int targetActorID, dX, dY;
+	
+	directionToXY(dir, &dX, &dY);
+	targetActorID = getActorAt(xpos + dX, ypos + dY);
+	
+	int itemID = getMeleeWeapon(actorID);
+	if (itemID != itemNone && targetActorID != -1) {
+		damageActor(targetActorID, getItemDamage(itemID));
+		return 1;
+	}
+	return 0;
 }
 
 void playerAimLaser() {
 	char keyCode[8];
-	//TODO: write function lol
+	
+	do {
+		if (keyCode[0] == 'w' || strcmp(keyCode, "\e[A") == 0) {
+		} else if (keyCode[0] == 'a' || strcmp(keyCode, "\e[D") == 0) {
+			
+		} else if (keyCode[0] == 's' || strcmp(keyCode, "\e[B") == 0) {
+			
+		} else if (keyCode[0] == 'd' || strcmp(keyCode, "\e[C") == 0) {
+			
+		}
+	} while (readKey(keyCode, 8));
 }
 
-void shootLaser() {
+void actorShootLaser(int actorID) {
 	//TODO: yeah. the whole thing
 }

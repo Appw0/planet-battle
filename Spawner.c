@@ -1,21 +1,5 @@
 #include "project.h"
-
-// spawnPoints 0
-// icon 1
-// health 2
-// moveCool 3
-// weaponID 4
-int monsterProperty[monsterTypes][monsterPropertyCount] = {{0,0,0,0,0},  // this is dead, leave as such (for now)
-                                                           {0,1,0,0,0},  // this is player, leave as such (for now)
-                                                           {1,2,4,0,3},
-                                                           {2,3,6,2,3},
-                                                           {5,4,10,1,3}};
-                                                           
-                                                           
-                                                           
-                                                           
-                                                           
-                                                           
+                                             
 void spawnEnemies(int totalPoints, int maxCount) {
   int xguess, yguess, chooseType, i, valid;
   int spawnpointTotal=totalPoints;
@@ -27,14 +11,14 @@ void spawnEnemies(int totalPoints, int maxCount) {
       valid = map[yguess][xguess] > Barrier ? 1 : 0;
     } while(valid != 1);  
     
-    chooseType = rand()%(monsterTypes-2)+2;
-    spawnpointTotal -= monsterProperty[chooseType][spawnPoints];
+    chooseType = rand()%(actorTypeCount-2)+2;
+    spawnpointTotal -= actorTypes[chooseType][actorTypeSpawnPoints];
     
     actors[i][actorTypeID]=chooseType;
     actors[i][actorX]=xguess;
     actors[i][actorY]=yguess;
-    actors[i][actorMoveCool]=monsterProperty[chooseType][moveCool];
-    actors[i][actorHealth]=monsterProperty[chooseType][health];
+    actors[i][actorMoveCool]=actorTypes[chooseType][actorTypeMoveCool];
+    actors[i][actorHealth]=actorTypes[chooseType][actorTypeHealth];
     
     if (spawnpointTotal<=0) break;
      

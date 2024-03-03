@@ -14,9 +14,13 @@ void drawTile(int id) {
 	printf("%c", tileChars[id]);
 }
 
-void drawActor(int id) {
-	printColorBg(actorColors[ monsterProperty[id][icon] ][0], actorColors[ monsterProperty[id][icon] ][1]);
+void drawActorByType(int id) {
+	printColorBg(actorColors[id][0], actorColors[id][1]);
 	printf("%c", actorChars[id]);
+}
+
+void drawActor(int id) {
+	drawActorByType(actors[id][actorTypeID]);
 }
 
 void drawLaser(int id) {
@@ -25,9 +29,12 @@ void drawLaser(int id) {
 }
 
 int drawActorsAt(int x, int y) {;
-  int val = getActorsAt(x,y,1);
-  if (val > 0) drawActor(val);
-  return val;
+	int id = getActorAt(x, y);
+	if (id > -1) {
+		drawActor(id);
+		return 1;
+	}
+	return 0;
 }
 
 int drawLasersAt(int x, int y) {

@@ -12,28 +12,22 @@ void sleepMs(int millis) {
     nanosleep(&requested, &remaining);
 }
 
-int getActorsAt(int x, int y, int type) {
-  int i;
-  for (i=0; i<actorCount; i++) { 
-    if ((actors[i][actorTypeID]>0) && ((actors[i][actorX]==x) && (actors[i][actorY]==y))) {
-      switch (type) {
-        case 1:
-          return actors[i][actorTypeID];
-          break;
-        default:
-          return i;
-          break;
-      }
-    }
-  }
-  switch (type) {
-    case 1:
-      return 0;
-      break;
-    default:
-      return -1;
-      break;
-  }
+int getActorAt(int x, int y) {
+	int id;
+	for (id = 0; id < actorCount; id++) { 
+		if (!isActorDead(id) && actors[id][actorX] == x && actors[id][actorY] == y) {
+			return id;
+		}
+	}
+	return -1;
+}
+
+int isActorPlayer(int actorID) {
+	return actors[actorID][actorTypeID] == 1;
+}
+
+int isActorDead(int actorID) {
+	return actors[actorID][actorTypeID] == 0;
 }
 
 int percent(int num, int outOf) {
