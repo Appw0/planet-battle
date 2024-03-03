@@ -29,9 +29,19 @@
 #define actorX 1
 #define actorY 2
 #define actorMoveCool 3
-#define actorWeaponID 4
+#define actorWeaponID 4 // Unused
 #define actorHealth 5
 #define actorShield 6 // ???
+
+// Monster Properties
+#define monsterPropertyCount 5
+#define monsterTypes 4
+
+#define spawnPoints 0
+#define icon 1
+#define health 2
+#define moveCool 3
+#define weaponID 4
 
 // Items 
 #define itemCount 5
@@ -102,6 +112,8 @@ extern int tileColors[tileTypes][2];
 extern char tileChars[tileTypes];
 extern int actorColors[actorTypes][2];
 extern char actorChars[actorTypes];
+
+extern int monsterProperty[monsterTypes][monsterPropertyCount];
 
 extern char sideText[];
 extern char topText[]; 
