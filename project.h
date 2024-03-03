@@ -35,7 +35,7 @@
 
 // Monster Properties
 #define monsterPropertyCount 5
-#define monsterTypes 4
+#define monsterTypes 5
 
 #define spawnPoints 0
 #define icon 1
@@ -110,8 +110,8 @@ extern int playerInventory[inventorySize];
 
 extern int tileColors[tileTypes][2];
 extern char tileChars[tileTypes];
-extern int actorColors[actorTypes][2];
-extern char actorChars[actorTypes];
+extern int actorColors[monsterTypes][2];
+extern char actorChars[monsterTypes];
 
 extern int monsterProperty[monsterTypes][monsterPropertyCount];
 
