@@ -39,6 +39,18 @@
 #define itemNameLength 17 //16 Chars with 1 for null
 #define inventorySize 13 //10 slots plus 3 equipped
 
+// Lasers
+#define laserCount 16
+#define laserProperty 8
+#define laserNeedsRender 0
+#define laserChar 1
+#define laserColor 2
+#define laserBgColor 3
+#define laserX 4
+#define laserY 5
+#define laserDirection 6
+#define laserDistance 7
+
 // Colors
 #define black 30
 #define red 31
@@ -79,6 +91,7 @@ char *getInventoryName(int slotNum);
 
 extern int map[maph][mapw];
 extern int actors[actorCount][actorProperty];
+extern int laserEffects[laserCount][laserProperty];
 
 extern int item[itemCount][itemProperty];
 extern char itemName[itemCount][itemNameLength];
@@ -89,3 +102,6 @@ extern int tileColors[tileTypes][2];
 extern char tileChars[tileTypes];
 extern int actorColors[actorTypes][2];
 extern char actorChars[actorTypes];
+
+extern char sideText[];
+extern char topText[]; 

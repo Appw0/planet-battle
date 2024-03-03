@@ -19,7 +19,7 @@ void moveActor(int actorNum, int dir) {
         
         // Move in direction
 		directionToXY(dir, &dX, &dY);
-		if (map[ypos + dY][xpos + dX] > Barrier) {
+		if (!isTileSolid(xpos + dX, ypos + dY)) {
 			actors[actorNum][actorX] += dX;
 			actors[actorNum][actorY] += dY;
 		}
@@ -31,33 +31,35 @@ void moveActor(int actorNum, int dir) {
  
 }
 
-void move(char c) {
+int isTileSolid(int x, int y) {
+	return map[y][x] <= Barrier;
+}
 
-  int dir = -1;
-  
-  if (c=='w') {
-  	dir=north;
- 	}
-  if (c=='a') {
-  	dir=west;
- 	}
-  if (c=='s') {
-  	dir=south;
- 	}
-  if (c=='d') {
-  	dir=east;
- 	}
-  
-  // This is not good. This function should be split into AI and player movement, and not take a char as input.
-  if (dir != -1) moveActor(0,dir);
-  
+void moveAI() {
   int i;
   for (i=1; i<actorCount; i++) {
-    if (actors[i][actorTypeID]>1) {
+    if (actors[i][actorTypeID]>1) {   
       moveActor(i,pathfind(i));
       
     }
   }
+}
+
+int playerMovement(char keyCode[8]) {
+	if (keyCode[0] == 'w' || strcmp(keyCode, "\e[A") == 0) {
+		moveActor(0, north);
+		return 1;
+	} else if (keyCode[0] == 'a' || strcmp(keyCode, "\e[D") == 0) {
+		moveActor(0, west);
+		return 1;
+	} else if (keyCode[0] == 's' || strcmp(keyCode, "\e[B") == 0) {
+		moveActor(0, south);
+		return 1;
+	} else if (keyCode[0] == 'd' || strcmp(keyCode, "\e[C") == 0) {
+		moveActor(0, east);
+		return 1;
+	}
+	return 0;
 }
 
 // Just a straight line walk towards player

@@ -24,3 +24,12 @@ int Attack(int dir, int xpos, int ypos, int actorID) {
   }
   return 0;
 }
+
+void playerAimLaser() {
+	char keyCode[8];
+	//TODO: write function lol
+}
+
+void shootLaser() {
+	//TODO: yeah. the whole thing
+}

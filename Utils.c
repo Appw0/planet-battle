@@ -60,3 +60,23 @@ int directionToXY(int direction, int* x, int* y) {
 			printf("\nINVALID DIRECTION!\n");
 	}
 }
+
+
+// Computes the number of tiles a laser goes before hitting a wall.
+int laserRaycast(int x, int y, int direction) {
+	int i, dX, dY;
+	directionToXY(direction, &dX, &dY);
+	for (i = 0; i < 100; i++) {
+		if (isTileSolid(x, y)) break;
+		x += dX;
+		y += dY;
+	}
+	return i;
+}
+
+int laserRaycastByID(int laserID) {
+	return laserRaycast(laserEffects[laserID][laserX],
+						laserEffects[laserID][laserY],
+						laserEffects[laserID][laserDirection]
+	);
+}

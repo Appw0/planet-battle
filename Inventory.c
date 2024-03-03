@@ -57,28 +57,24 @@ int getInventoryProperty(int actorID, int slotNum, int type) {
 char *getInventoryName(int slotNum) {
       return itemName[playerInventory[slotNum]];
 }
-int slotType;
 
-int manageInventory(char c, int slotSelected) {
-
-  if ((c=='w')||(c=='s')) {
-    if (c=='w') {
-    	slotSelected--;
-   	}
-    if (c=='s') {
-    	slotSelected++;
-   	}
-  
-    if (slotSelected < 0) slotSelected=inventorySize-1;
-    if (slotSelected > inventorySize-1) slotSelected=0;
-  
-  } else if ((c=='e')&&(slotSelected>2)) {
-    slotType=getInventoryProperty(0, slotSelected, 1);
-    if (slotType >= 0) {
-      playerInventory[slotType]=playerInventory[slotType]^playerInventory[slotSelected];
-      playerInventory[slotSelected]=playerInventory[slotType]^playerInventory[slotSelected];
-      playerInventory[slotType]=playerInventory[slotType]^playerInventory[slotSelected];
-    }
-  }
-  return slotSelected;
+void manageInventory() {
+	int slotType, slotSelected = 0;
+	char keyCode[8];
+	
+	do {
+		if (keyCode[0] == 'e' && slotSelected > 2) {
+			slotType=getInventoryProperty(0, slotSelected, 1);
+			if (slotType >= 0) {
+				playerInventory[slotType]=playerInventory[slotType]^playerInventory[slotSelected];
+				playerInventory[slotSelected]=playerInventory[slotType]^playerInventory[slotSelected];
+				playerInventory[slotType]=playerInventory[slotType]^playerInventory[slotSelected];
+			}
+		} else if (keyCode[0] == 'i') {
+			return;
+		}
+		
+		drawScreen();
+		drawInventory(slotSelected);
+	} while (readKey(keyCode, 8) && menuHandleInput(&slotSelected, keyCode, inventorySize, 1));
 }

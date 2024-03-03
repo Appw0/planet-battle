@@ -6,13 +6,36 @@
 
 // Map array
 int map[maph][mapw];
+int laserMap[maph][mapw];
+int laserEffects[laserCount][laserProperty];
 
-// Checks if actors need to be rendered first
-// this needs to be cleaned up
+void drawTile(int id) {
+	printColorBg(tileColors[id][0], tileColors[id][1]);
+	printf("%c", tileChars[id]);
+}
+
+void drawActor(int id) {
+	printColorBg(actorColors[id][0], actorColors[id][1]);
+	printf("%c", actorChars[id]);
+}
+
+void drawLaser(int id) {
+	printColorBg(laserEffects[id][laserColor], laserEffects[id][laserBgColor]);
+	printf("%c", laserEffects[id][laserChar]);
+}
+
 int drawActorsAt(int x, int y) {;
   int val = getActorsAt(x,y,1);
   if (val > 0) drawActor(val);
   return val;
+}
+
+int drawLasersAt(int x, int y) {
+	if (laserMap[y][x] > -1){
+		drawLaser(laserMap[y][x]);
+		return 1;
+	}
+	return 0;
 }
 
 // Prints text with padding and wrapping (if put in a loop)
@@ -40,12 +63,41 @@ int printText(char text[], int width, int start) {
         }
 }
 
+void drawLaserToLaserMap(int laserID) {
+	int i, dX, dY;
+	int x = laserEffects[laserID][laserX];
+	int y = laserEffects[laserID][laserY];
+	directionToXY(laserEffects[laserID][laserDirection], &dX, &dY);
+	for (i = 0; i < laserEffects[laserID][laserDistance]; i++) {
+		laserMap[y][x] = laserID;
+		x += dX;
+		y += dY;
+	}
+}
+
+void computeLaserMap() {
+	int i;
+	memset(laserMap, -1, sizeof(laserMap));
+	for (i = 0; i < laserCount; i++) {
+		if (laserEffects[i][laserNeedsRender]) {
+			drawLaserToLaserMap(i);
+		}
+	}
+}
+
+void setLasersRendered() {
+	int i;
+	for (i = 0; i < laserCount; i++) {
+		laserEffects[i][laserNeedsRender] = 0;
+	}
+}
+
 void drawPlayerEquipped() {
   printf("M: %-16s R: %-16s U: %-16s",getInventoryName(0),getInventoryName(1),getInventoryName(2));
 }
 
 // Primary Drawing Function
-void drawScreen(char topText[] , char sideText[]) {
+void drawScreen() {
     int x, y;
     int i=0;
     
@@ -65,7 +117,11 @@ void drawScreen(char topText[] , char sideText[]) {
         for (x=0; x<mapw; x++) {
 			// Attempt to draw actors at this tile
 			// If none are drawn here, draw the map tile instead.
-			if (drawActorsAt(x, y) == 0) drawTile(map[y][x]);
+			if (drawActorsAt(x, y) == 0) {
+				if (drawLasersAt(x, y) == 0) {
+					drawTile(map[y][x]);
+				}
+			}
         }
 		resetColor();
         printf("|");

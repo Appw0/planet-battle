@@ -1,53 +1,45 @@
 #include "project.h"
 
+char sideText[]="This is a test level for development while actual maps get created.";
+char topText[]="Test Level"; 
+
 int main()
 {
-    int inventoryMode=0, slot;
+	int playerHadTurn = 0;
 
-    char sideText[]="This is a test level for development while actual maps get created.";
-    char topText[]="Test Level"; 
+    
     tempGenArray(map);
     srand(time(NULL));
     tempGenActors(actors);
     
-    printf("\n");
-    drawScreen(topText, sideText);
-    printf("\n");
-    
-	char c = '\0';
+	char keyCode[8];
 	
 	enableRawMode();
+	computeLaserMap();
+	drawScreen(topText, sideText);
 	
   do {
-     
-    if (c=='i') {
-      inventoryMode=inventoryMode^1;
-      slot=0;
-    }
-    
-    if (inventoryMode==1) {
-      
-      slot=manageInventory(c, slot);
-      drawScreen(topText, sideText);
-      drawInventory(slot);
-    } else {
-      if ((c=='w')||(c=='a')||(c=='s')||(c=='d')||(c=='.')) {
-        move(c);
-      }
-      drawScreen(topText, sideText);
-    }
-    
-    
-    
-    
-    
-		//if (iscntrl(c)) {
-		//	printf("%d\n", c);
-		//} else {
-		//	printf("%d ('%c')\n", c, c);
-		//}
+	  
+	 playerHadTurn = 0;
+	 if (keyCode[0] == 'i') {
+		 manageInventory();
+		 drawScreen();
+	 } else if (keyCode[0] == '.') {
+		 playerHadTurn = 1; // pass time
+	 } else if (keyCode[0] == 'f') {
+		 playerAimLaser();
+	 } else if (playerMovement(keyCode)) {
+		 playerHadTurn = 1;
+	 }
+	 
+	 if (playerHadTurn) {
+		 moveAI();
+		 computeLaserMap();
+		 setLasersRendered();
+		 drawScreen();
+	 }
    
-	} while (read(STDIN_FILENO, &c, 1) == 1 && c != 'q');
+	} while (readKey(keyCode, 8));
     
     return 0;
 }

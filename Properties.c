@@ -22,13 +22,3 @@ int actorColors[actorTypes][2] = {
 	red, black
 };
 char actorChars[actorTypes] = " @Xo";
-
-void drawTile(int id) {
-	printColorBg(tileColors[id][0], tileColors[id][1]);
-	printf("%c", tileChars[id]);
-}
-
-void drawActor(int id) {
-	printColorBg(actorColors[id][0], actorColors[id][1]);
-	printf("%c", actorChars[id]);
-}
