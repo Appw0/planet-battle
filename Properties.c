@@ -15,10 +15,11 @@ char tileChars[tileTypes] = " #..";
 
 // Matrix of actor colors by actor type ID
 // Foreground, Background
-int actorColors[actorTypes][2] = {
+int actorColors[monsterTypes][2] = {
 	black, black,
 	yellow, black,
 	red, black,
-	red, black
+	red, black,
+  black, red
 };
-char actorChars[actorTypes] = " @oX";
+char actorChars[monsterTypes] = " @oXX";
