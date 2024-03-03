@@ -21,4 +21,4 @@ int actorColors[actorTypes][2] = {
 	red, black,
 	red, black
 };
-char actorChars[actorTypes] = " @Xo";
+char actorChars[actorTypes] = " @oX";
