@@ -6,9 +6,10 @@
 // moveCool 3
 // weaponID 4
 int monsterProperty[monsterTypes][monsterPropertyCount] = {{0,0,0,0,0},  // this is dead, leave as such (for now)
-                                                           {0,0,0,0,0},  // this is player, leave as such (for now)
+                                                           {0,1,0,0,0},  // this is player, leave as such (for now)
                                                            {1,2,4,0,3},
-                                                           {2,3,6,2,3}};
+                                                           {2,3,6,2,3},
+                                                           {5,4,10,1,3}};
                                                            
                                                            
                                                            
@@ -39,3 +40,4 @@ void spawnEnemies(int totalPoints, int maxCount) {
      
   }
 }
+
