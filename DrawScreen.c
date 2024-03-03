@@ -30,7 +30,7 @@ void drawLaser(int id) {
 
 int drawActorsAt(int x, int y) {;
 	int id = getActorAt(x, y);
-	if (id > -1) {
+	if (isValidActorID(id)) {
 		drawActor(id);
 		return 1;
 	}

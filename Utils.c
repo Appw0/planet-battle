@@ -30,6 +30,10 @@ int isActorDead(int actorID) {
 	return actors[actorID][actorTypeID] == 0;
 }
 
+int isValidActorID(int actorID) {
+	return actorID > -1;
+}
+
 int percent(int num, int outOf) {
   return roundf(((float)num/(float)outOf)*(float)100);
 }
@@ -56,21 +60,22 @@ int directionToXY(int direction, int* x, int* y) {
 }
 
 
-// Computes the number of tiles a laser goes before hitting a wall.
-int laserRaycast(int x, int y, int direction) {
-	int i, dX, dY;
+// Computes the number of tiles a laser goes before hitting a wall, and finds all the actors on the way.
+int laserRaycast(int x, int y, int direction, int actorHitIDs[], int maxHits) {
+	int actorsHit = 0, i, dX, dY;
 	directionToXY(direction, &dX, &dY);
 	for (i = 0; i < 100; i++) {
-		if (isTileSolid(x, y)) break;
+		if (isTileSolid(x, y)) {
+			break;
+		} else if (actorsHit < maxHits) {
+			int actorID = getActorAt(x, y);
+			if (isValidActorID(actorID)) {
+				actorHitIDs[actorsHit] = actorID;
+				actorsHit++;
+			}
+		}
 		x += dX;
 		y += dY;
 	}
 	return i;
-}
-
-int laserRaycastByID(int laserID) {
-	return laserRaycast(laserEffects[laserID][laserX],
-						laserEffects[laserID][laserY],
-						laserEffects[laserID][laserDirection]
-	);
 }

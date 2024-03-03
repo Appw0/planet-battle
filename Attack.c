@@ -16,7 +16,7 @@ int meleeAttack(int dir, int xpos, int ypos, int actorID) {
 	targetActorID = getActorAt(xpos + dX, ypos + dY);
 	
 	int itemID = getMeleeWeapon(actorID);
-	if (itemID != itemNone && targetActorID != -1) {
+	if (itemID != itemNone && isValidActorID(targetActorID)) {
 		damageActor(targetActorID, getItemDamage(itemID));
 		return 1;
 	}
@@ -38,6 +38,6 @@ void playerAimLaser() {
 	} while (readKey(keyCode, 8));
 }
 
-void actorShootLaser(int actorID) {
-	//TODO: yeah. the whole thing
+void actorShootLaser(int actorID, int direction) {
+	
 }
