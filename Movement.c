@@ -62,18 +62,19 @@ void move(char c) {
 
 // Just a straight line walk towards player
 int pathfind(int actorID) {  
-  int difx, dify, choose, x, y, dir;
+  int difx, dify, choose, x, y, dir, absDist;
   
   difx = actors[0][actorX]-actors[actorID][actorX];
   dify = actors[0][actorY]-actors[actorID][actorY];
   
-  choose=rand()%4;
+  absDist=(int)round(sqrt(pow((double)difx,2)+pow((double)dify,2)));
+  choose=rand()%3;
   
-  if (choose==0) {
+  if ((choose==0)&&(absDist>6)) {
     return rand()%4+1;
   } else {
-    x = difx > 0 ? 4 : 2; 
-    y = dify > 0 ? 3 : 1;
+    x = difx > 0 ? east : west; 
+    y = dify > 0 ? south : north;
     dir = abs(difx) > abs(dify) ? x : y;
     return dir;
   }
