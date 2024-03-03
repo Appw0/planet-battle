@@ -15,7 +15,7 @@ int main()
 	
 	enableRawMode();
 	computeLaserMap();
-	drawScreen(topText, sideText);
+	drawScreen();
 	
   do {
 	  
@@ -28,16 +28,13 @@ int main()
 	 } else if (keyCode[0] == '.') {
 		 playerHadTurn = 1; // pass time
 	 } else if (keyCode[0] == 'f') {
-		 playerAimLaser();
-		 computeLaserMap();
-		 drawScreen();
-		 sleepMs(500);
+		 playerHadTurn = playerAimLaser();
 	 } else if (playerMovement(keyCode)) {
 		 playerHadTurn = 1;
 	 }
 	 
 	 if (playerHadTurn) {
-		 moveAI();
+		 doAI();
 		 computeLaserMap();
 		 setLasersRendered();
 		 drawScreen();

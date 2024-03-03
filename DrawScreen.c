@@ -99,6 +99,30 @@ void setLasersRendered() {
 	}
 }
 
+int nextLaserEffectID() {
+	int i;
+	for (i = 0; i < laserCount; i++) {
+		if (!laserEffects[i][laserNeedsRender]) {
+			return i;
+		}
+	}
+	printf($lred "Too many lasers!");
+	return 0;
+}
+
+void createLaserEffect(char lChar, int lColor, int lBgColor, int x, int y, int direction, int distance) {
+	int id = nextLaserEffectID();
+	
+	laserEffects[id][laserNeedsRender] = 1;
+	laserEffects[id][laserChar] = lChar;
+	laserEffects[id][laserColor] = lColor;
+	laserEffects[id][laserBgColor] = lBgColor;
+	laserEffects[id][laserX] = x;
+	laserEffects[id][laserY] = y;
+	laserEffects[id][laserDirection] = direction;
+	laserEffects[id][laserDistance] = distance;
+}
+
 void drawPlayerEquipped() {
   printf("M: %-16s R: %-16s U: %-16s",getInventoryName(0),getInventoryName(1),getInventoryName(2));
 }

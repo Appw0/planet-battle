@@ -1,32 +1,30 @@
 #include "project.h"
 
-void moveActor(int actorNum, int dir) {
+void moveActorAndAttack(int actorID, int dir) {
 
-  int xpos=actors[actorNum][actorX];
-  int ypos=actors[actorNum][actorY];
+  int xpos = actors[actorID][actorX];
+  int ypos = actors[actorID][actorY];
   int dX, dY;
-  int attackDone;
   
   // Dec the actor move cooldown
-  if (actors[actorNum][actorMoveCool] == 0) {
-    if (actorNum > 0) {
-      actors[actorNum][actorMoveCool]=rand()%2+1;
+  if (actors[actorID][actorMoveCool] == 0) {
+    if (!isActorPlayer(actorID)) {
+      actors[actorID][actorMoveCool]=rand()%2+1;
     } else {
-      actors[actorNum][actorMoveCool] = 0;
+      actors[actorID][actorMoveCool] = 0;
     }
-      attackDone = meleeAttack(dir,xpos,ypos,actorNum);
-      if ( attackDone == 0 ) {
+      if (!meleeAttack(dir, xpos, ypos, actorID)) {
         
         // Move in direction
 		directionToXY(dir, &dX, &dY);
 		if (!isTileSolid(xpos + dX, ypos + dY)) {
-			actors[actorNum][actorX] += dX;
-			actors[actorNum][actorY] += dY;
+			actors[actorID][actorX] += dX;
+			actors[actorID][actorY] += dY;
 		}
        
       }
     } else {
-      actors[actorNum][actorMoveCool]=actors[actorNum][actorMoveCool]-1;
+      actors[actorID][actorMoveCool] -= 1;
     }
  
 }
@@ -35,28 +33,40 @@ int isTileSolid(int x, int y) {
 	return map[y][x] <= Barrier;
 }
 
-void moveAI() {
-  int i;
-  for (i=1; i<actorCount; i++) {
-    if (actors[i][actorTypeID]>1) {   
-      moveActor(i,pathfind(i));
-      
-    }
-  }
+void doActorAI(int actorID) {
+	int dir, x, y, dX, dY, nearbyActorID;
+	dir = pathfind(actorID); // Where we want to go to get to the player
+	directionToXY(dir, &dX, &dY);
+	getActorPosition(actorID, &x, &y);
+	
+	nearbyActorID = getActorAt(x + dX, y + dY);
+	// If there isn't anything there, or there is and it's not another NPC, then move and attack!
+	if (!isValidActorID(nearbyActorID) || isValidActorID(nearbyActorID) && !actorHasAI(nearbyActorID)) {
+		moveActorAndAttack(actorID, dir);
+	}
+}
+
+void doAI() {
+	int i;
+	for (i = 0; i < actorCount; i++) {
+		if (actorHasAI(i)) {
+			doActorAI(i);
+		}
+	}
 }
 
 int playerMovement(char keyCode[8]) {
 	if (keyCode[0] == 'w' || strcmp(keyCode, "\e[A") == 0) {
-		moveActor(0, north);
+		moveActorAndAttack(playerID, north);
 		return 1;
 	} else if (keyCode[0] == 'a' || strcmp(keyCode, "\e[D") == 0) {
-		moveActor(0, west);
+		moveActorAndAttack(playerID, west);
 		return 1;
 	} else if (keyCode[0] == 's' || strcmp(keyCode, "\e[B") == 0) {
-		moveActor(0, south);
+		moveActorAndAttack(playerID, south);
 		return 1;
 	} else if (keyCode[0] == 'd' || strcmp(keyCode, "\e[C") == 0) {
-		moveActor(0, east);
+		moveActorAndAttack(playerID, east);
 		return 1;
 	}
 	return 0;
@@ -66,8 +76,8 @@ int playerMovement(char keyCode[8]) {
 int pathfind(int actorID) {  
   int difx, dify, choose, x, y, dir, absDist;
   
-  difx = actors[0][actorX]-actors[actorID][actorX];
-  dify = actors[0][actorY]-actors[actorID][actorY];
+  difx = actors[playerID][actorX] - actors[actorID][actorX];
+  dify = actors[playerID][actorY] - actors[actorID][actorY];
   
   absDist=(int)round(sqrt(pow((double)difx,2)+pow((double)dify,2)));
   choose=rand()%3;

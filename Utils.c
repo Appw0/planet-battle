@@ -22,12 +22,25 @@ int getActorAt(int x, int y) {
 	return -1;
 }
 
+void getActorPosition(int actorID, int* x, int* y) {
+	(*x) = actors[actorID][actorX];
+	(*y) = actors[actorID][actorY];
+}
+
+void getAdjacentTile(int direction, int* x, int* y) {
+	
+}
+
 int isActorPlayer(int actorID) {
-	return actors[actorID][actorTypeID] == 1;
+	return actors[actorID][actorTypeID] == playerTypeID;
 }
 
 int isActorDead(int actorID) {
-	return actors[actorID][actorTypeID] == 0;
+	return actors[actorID][actorTypeID] == deadTypeID;
+}
+
+int actorHasAI(int actorID) {
+	return !isActorPlayer(actorID) && !isActorDead(actorID);
 }
 
 int isValidActorID(int actorID) {
@@ -62,6 +75,7 @@ int directionToXY(int direction, int* x, int* y) {
 
 // Computes the number of tiles a laser goes before hitting a wall, and finds all the actors on the way.
 int laserRaycast(int x, int y, int direction, int actorHitIDs[], int maxHits) {
+	memset(actorHitIDs, -1, maxHits * sizeof(int));
 	int actorsHit = 0, i, dX, dY;
 	directionToXY(direction, &dX, &dY);
 	for (i = 0; i < 100; i++) {

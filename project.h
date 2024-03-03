@@ -27,9 +27,11 @@
 #define actorX 1
 #define actorY 2
 #define actorMoveCool 3
-#define actorWeaponID 4 // Unused
+//#define actorWeaponID 4 // Unused
 #define actorHealth 5
 #define actorShield 6 // ???
+
+#define playerID 0
 
 //Actor Type Matrix
 #define actorTypeCount 5
@@ -39,6 +41,9 @@
 #define actorTypeHealth 1
 #define actorTypeMoveCool 2
 #define actorTypeWeaponID 3
+
+#define deadTypeID 0
+#define playerTypeID 1
 
 // Items 
 #define itemCount 5
