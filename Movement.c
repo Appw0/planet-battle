@@ -15,7 +15,6 @@ void moveActor(int actorNum, int dir) {
       actors[actorNum][actorMoveCool] = 0;
     }
       attackDone = Attack(dir,xpos,ypos,actorNum);
-      printf("%d",attackDone);
       if ( attackDone == 0 ) {
         
         // Move in direction
@@ -54,9 +53,28 @@ void move(char c) {
   
   int i;
   for (i=1; i<actorCount; i++) {
-    if (actors[i][actorTypeID]>1) {   
-      moveActor(i,rand()%4);
+    if (actors[i][actorTypeID]>1) {
+      moveActor(i,pathfind(i));
       
     }
+  }
+}
+
+// Just a straight line walk towards player
+int pathfind(int actorID) {  
+  int difx, dify, choose, x, y, dir;
+  
+  difx = actors[0][actorX]-actors[actorID][actorX];
+  dify = actors[0][actorY]-actors[actorID][actorY];
+  
+  choose=rand()%4;
+  
+  if (choose==0) {
+    return rand()%4+1;
+  } else {
+    x = difx > 0 ? 4 : 2; 
+    y = dify > 0 ? 3 : 1;
+    dir = abs(difx) > abs(dify) ? x : y;
+    return dir;
   }
 }
