@@ -15,7 +15,7 @@ void drawTile(int id) {
 }
 
 void drawActor(int id) {
-	printColorBg(actorColors[id][0], actorColors[id][1]);
+	printColorBg(actorColors[ monsterProperty[id][icon] ][0], actorColors[ monsterProperty[id][icon] ][1]);
 	printf("%c", actorChars[id]);
 }
 
@@ -175,3 +175,8 @@ void drawHelp() {
   printf("W A S D or arrow keys to move\n");
   printf("Ctrl C to quit\n");
 }
+
+
+
+
+
