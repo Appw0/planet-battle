@@ -132,7 +132,7 @@ void drawScreen() {
     }
     
     // Needs some padding equation here
-    printf("Health: %3d%%   Shield: %3d%%             |", percent(actors[0][actorHealth],10) , actors[0][4] );
+    printf("Health: %3d%%   Shield: %3d%%     h: Help |", percent(actors[0][actorHealth],10) , actors[0][4] );
     printText(sideText, 15, i);
     printf("\n");
     drawPlayerEquipped();
@@ -164,4 +164,14 @@ void drawInventory(int selected) {
     printf(selected == i ? " <\n" : "\n");
     
   }
+}
+
+// Draws keybind list
+void drawHelp() {
+
+  printf("\nHelp\n");
+  
+  printf("Movement:\n");
+  printf("W A S D or arrow keys to move\n");
+  printf("Ctrl C to quit\n");
 }
