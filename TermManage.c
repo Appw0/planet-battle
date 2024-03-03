@@ -57,7 +57,7 @@ int menuHandleInput(int* selected, char keyCode[], int optionNum, int vertical) 
 
 int askWithTextMenu(char text[], char options[][32], char moreInfo[][512], int optionNum, int vertical) {
 	int i, selected = 0;
-	char keyCode[8];
+	char keyCode[8] = "\0";
 	
 	enableRawMode();
 	do {
@@ -82,7 +82,7 @@ int askWithTextMenu(char text[], char options[][32], char moreInfo[][512], int o
 // TODO: Update/make new function to use item/sprite IDs instead of passing an entire array
 int askWithSpriteMenu(char text[], char sprites[][5][6], char moreInfo[][512], int optionNum) {
 	int x, y, selected = 0;
-	char keyCode[8];
+	char keyCode[8] = "\0";
 	
 	enableRawMode();
 	do {

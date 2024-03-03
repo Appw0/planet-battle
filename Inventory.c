@@ -60,7 +60,7 @@ char *getInventoryName(int slotNum) {
 
 void manageInventory() {
 	int slotType, slotSelected = 0;
-	char keyCode[8];
+	char keyCode[8] = "\0";
 	
 	do {
 		if (keyCode[0] == 'e' && slotSelected > 2) {
