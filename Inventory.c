@@ -34,7 +34,7 @@ int getInventoryProperty(int actorID, int slotNum, int type) {
         break;
     }
   } else {
-    int actorWeapon=actors[actorID][actorWeaponID];
+    int actorWeapon=monsterProperty[actorType][weaponID];
     
     switch (type) {
       case 0: // ID number
