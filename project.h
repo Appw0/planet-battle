@@ -20,7 +20,7 @@
 #define south 3
 
 // Actor Matrix
-#define actorCount 16
+#define actorCount 32
 #define actorProperty 8
 
 #define actorTypeID 0
@@ -129,5 +129,5 @@ extern char actorChars[actorTypeCount];
 
 extern int actorTypes[actorTypeCount][actorTypeProperty];
 
-extern char sideText[];
+extern char sideText[330];
 extern char topText[]; 
