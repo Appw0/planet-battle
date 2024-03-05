@@ -140,7 +140,7 @@ void drawScreen() {
     printf("PlanetBattle - ");
     printText(topText, 17, 0);
     printf(" |");
-    i = printText(sideText, 15, i);
+    i = printText(sideText, 25, i);
     printf("\n");
     
     // Loops through every "pixel" to determine what to print
@@ -158,13 +158,13 @@ void drawScreen() {
         printf("|");
         
         // Print Side Bar Text Line
-        i = printText(sideText, 15, i);
+        i = printText(sideText, 25, i);
         printf("\n");
     }
     
     // Needs some padding equation here
     printf("Health: %3d%%   Shield: %3d%%     h: Help |", percent(actors[0][actorHealth],10) , actors[0][4] );
-    printText(sideText, 15, i);
+    printText(sideText, 25, i);
     printf("\n");
     drawPlayerEquipped();
     
@@ -207,7 +207,28 @@ void drawHelp() {
   printf("Ctrl C to quit\n");
 }
 
+void updateSideText(char newText[]) {
+  int len;
+  if ((strlen(sideText)+strlen(newText)+1)>330) {
+    len=strlen(newText)+1;
+    int i;
+    for (i = 0; i<len; i++) {
+      leftShift(sideText,strlen(sideText)+1);
+    }
+  }
+  strcat(sideText, newText);
+  strcat(sideText, " ");
+  drawScreen();
+  
+}
 
-
-
-
+int leftShift(char *words, int len)
+{
+    int i;
+    for(i = 1; i < len; i++)
+    {
+        words[i - 1] = words[i];
+    }
+    len--;
+    return len;
+}
