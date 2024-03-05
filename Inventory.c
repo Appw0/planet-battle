@@ -2,7 +2,7 @@
 
 int item[itemCount][itemProperty]={
 	{itemCategoryNone, 0}, {itemCategoryMelee, 2},
-    {itemCategoryRanged, 2}, {itemCategoryMelee, 2},
+    {itemCategoryRanged, 1}, {itemCategoryMelee, 2},
     {itemCategoryMelee,100}};
 
 char itemName[itemCount][itemNameLength] = {
@@ -53,9 +53,15 @@ void manageInventory() {
 		if (keyCode[0] == 'e' && slotSelected > 2) {
 			slotType = getItemCategory(playerInventory[slotSelected]);
 			if (slotType >= 0) {
+        char text[100] = "Equipped "; 
+        strcat(text, getInventoryName(slotSelected));
+        strcat(text, ".");
+        updateSideText(text);
+      
 				playerInventory[slotType]=playerInventory[slotType]^playerInventory[slotSelected];
 				playerInventory[slotSelected]=playerInventory[slotType]^playerInventory[slotSelected];
 				playerInventory[slotType]=playerInventory[slotType]^playerInventory[slotSelected];
+        
 			}
 		} else if (keyCode[0] == 'i') {
 			return;
