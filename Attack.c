@@ -2,6 +2,15 @@
 
 void damageActor(int actorID, int amount) {
 	actors[actorID][actorHealth] -= amount;
+  char text[100];
+  
+  if (actorID == 0) {
+    sprintf(text,"Got hit for %d.", amount);
+  } else {
+    sprintf(text,"Hit enemy for %d.", amount);
+  }
+  updateSideText(text);  
+ 
 	if (actors[actorID][actorHealth] < 1) {
 		actors[actorID][actorTypeID] = 0;
 	}
