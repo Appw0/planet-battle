@@ -1,6 +1,6 @@
 #include "project.h"
 
-char sideText[]="This is a test level for development while actual maps get created.";
+char sideText[330]="This is a test level for development while actual maps get created. ";
 char topText[]="Test Level"; 
 
 int main()
@@ -9,7 +9,7 @@ int main()
     
     tempGenArray(map);
     srand(time(NULL));
-    spawnEnemies(10,4);
+    spawnEnemies(10,8);
     
 	char keyCode[8];
 	
