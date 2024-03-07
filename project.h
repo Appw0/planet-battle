@@ -6,56 +6,24 @@
 #include <termios.h>
 #include <math.h>
 
-// Screen Width and Height, this should be a global value passed in when this is
-// Turned into a function
-#define mapw 40
-#define maph 16
-
-// Map Properties
-#define Barrier 1
-#define tileTypes 4
+// Map
 #define east 0
 #define north 1
 #define west 2
 #define south 3
+#define tileMaxTypes 32
+#define mapMaxHeight 64
+#define mapMaxWidth 64
 
-// Actor Matrix
-#define actorCount 32
-#define actorProperty 8
+// Actors
+#define actorMaxCount 32
+#define actorMaxTypes 32
+#define actorMaxNameLength 32
+#define actorMaxRandomPositions 32
 
-#define actorTypeID 0
-#define actorX 1
-#define actorY 2
-#define actorMoveCool 3
-//#define actorWeaponID 4 // Unused
-#define actorHealth 5
-#define actorShield 6 // ???
-
-#define playerID 0
-
-//Actor Type Matrix
-#define actorTypeCount 5
-#define actorTypeProperty 8
-
-#define actorTypeSpawnPoints 0
-#define actorTypeHealth 1
-#define actorTypeMoveCool 2
-#define actorTypeWeaponID 3
-
-#define deadTypeID 0
-#define playerTypeID 1
-
-// Items 
-#define itemCount 5
-#define itemProperty 2
-#define itemNone 0 // this is the "None" item, with category "None"
-#define itemCategory 0
-#define itemCategoryNone -1
-#define itemCategoryMelee 0
-#define itemCategoryRanged 1
-#define itemCategoryUtility 2
-#define itemDamage 1
-#define itemNameLength 17 //16 Chars with 1 for null
+// Items
+#define itemMaxTypes 32
+#define itemMaxNameLength 17
 
 //Inventory
 #define slotMelee 0
@@ -74,6 +42,14 @@
 #define laserY 5
 #define laserDirection 6
 #define laserDistance 7
+
+// INI Constants
+#define iniMaxKeys 256
+#define iniMaxKeyLength 256 // sscanf's need to be updated manually!
+#define iniMaxValueLength 256 // sscanf's need to be updated manually!
+#define iniMaxNameLength 32 // sscanf's need to be updated manually!
+#define iniMaxLineLength 256
+#define iniMaxListLength 32
 
 // Colors
 #define black 30
@@ -110,24 +86,58 @@
 #define $lcyan "\033[96m"
 #define $white "\033[97m"
 
+struct position {
+	int x, y;
+};
 
-char *getInventoryName(int slotNum);
+struct tileTypeData {
+	char name[iniMaxNameLength];
+	char tile;
+	int color;
+	int bgColor;
+};
 
-extern int map[maph][mapw];
+struct itemTypeData {
+	char name[iniMaxNameLength];
+	char displayName[itemMaxNameLength];
+	int category;
+	int damage;
+};
+
+struct actorTypeData {
+	char name[iniMaxNameLength];
+	char displayName[actorMaxNameLength];
+	char tile;
+	int color;
+	int bgColor;
+	int spawnPoints;
+	int health;
+	struct itemTypeData* weapon;
+};
+
+extern int map[mapMaxHeight][mapMaxWidth];
+extern int mapHeight;
+extern int mapWidth;
+
 extern int actors[actorCount][actorProperty];
 extern int laserEffects[laserCount][laserProperty];
 
-extern int item[itemCount][itemProperty];
-extern char itemName[itemCount][itemNameLength];
+extern struct tileTypeData tiles[tileMaxTypes];
+extern int tilesCreated;
+
+extern struct itemTypeData items[itemMaxTypes];
+extern int itemsCreated;
+
+extern struct actorTypeData actorTypes[actorMaxTypes];
+extern int actorTypesCreated;
 
 extern int playerInventory[inventorySize];
-
-extern int tileColors[tileTypes][2];
-extern char tileChars[tileTypes];
-extern int actorColors[actorTypeCount][2];
-extern char actorChars[actorTypeCount];
-
-extern int actorTypes[actorTypeCount][actorTypeProperty];
-
 extern char sideText[330];
 extern char topText[]; 
+
+char *getInventoryName(int slotNum);
+struct itemTypeData* getItemPtr(char name[]);
+struct actorTypeData* getActorTypePtr(char name[]);
+struct tileTypeData* getTileTypePtr(char name[]);
+int getTileTypeIndex(struct tileTypeData* tileTypePtr);
+void createActorType(char name[], char displayName[], char tile, int color, int bgColor, int spawnPoints, int health, struct itemTypeData* weapon);

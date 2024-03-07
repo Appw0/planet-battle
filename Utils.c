@@ -93,3 +93,57 @@ int laserRaycast(int x, int y, int direction, int actorHitIDs[], int maxHits) {
 	}
 	return i;
 }
+
+int evalColor(char color[]) {
+	if (strcmp(color, "black") == 0) {
+		return black;
+	} else if (strcmp(color, "red") == 0) {
+		return red;
+	} else if (strcmp(color, "green") == 0) {
+		return green;
+	} else if (strcmp(color, "yellow") == 0) {
+		return yellow;
+	} else if (strcmp(color, "blue") == 0) {
+		return blue;
+	} else if (strcmp(color, "magenta") == 0) {
+		return magenta;
+	} else if (strcmp(color, "cyan") == 0) {
+		return cyan;
+	} else if (strcmp(color, "lgray") == 0) {
+		return lgray;
+	} else if (strcmp(color, "gray") == 0) {
+		return gray;
+	} else if (strcmp(color, "lred") == 0) {
+		return lred;
+	} else if (strcmp(color, "lgreen") == 0) {
+		return lgreen;
+	} else if (strcmp(color, "lyellow") == 0) {
+		return lyellow;
+	} else if (strcmp(color, "lblue") == 0) {
+		return lblue;
+	} else if (strcmp(color, "lmagenta") == 0) {
+		return lmagenta;
+	} else if (strcmp(color, "lcyan") == 0) {
+		return lcyan;
+	} else if (strcmp(color, "white") == 0) {
+		return white;
+	} else {
+		printf("Invalid color '%s'\n", color);
+		return black;
+	}
+}
+
+int evalItemCategory(char category[]) {
+	if (strcmp(category, "none") == 0) {
+		return itemCategoryNone;
+	} else if (strcmp(category, "melee") == 0) {
+		return itemCategoryMelee;
+	} else if (strcmp(category, "ranged") == 0) {
+		return itemCategoryRanged;
+	} else if (strcmp(category, "utility") == 0) {
+		return itemCategoryUtility;
+	} else {
+		printf("Invalid category '%s'\n", category);
+		return itemCategoryNone;
+	}
+}

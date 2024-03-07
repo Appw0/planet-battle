@@ -5,8 +5,7 @@
 #include "project.h"
 
 // Map array
-int map[maph][mapw];
-int laserMap[maph][mapw];
+int laserMap[mapMaxHeight][mapMaxWidth];
 int laserEffects[laserCount][laserProperty];
 
 void drawTile(int id) {
