@@ -2,44 +2,49 @@
 
 void moveActorAndAttack(int actorID, int dir) {
 
-  int xpos = actors[actorID][actorX];
-  int ypos = actors[actorID][actorY];
+  int xpos = actors[actorID].x;
+  int ypos = actors[actorID].y;
   int dX, dY;
   
   // Dec the actor move cooldown
-  if (actors[actorID][actorMoveCool] == 0) {
+  if (actors[actorID].moveCooldown == 0) {
     if (!isActorPlayer(actorID)) {
-      actors[actorID][actorMoveCool]=rand()%2+1;
+      actors[actorID].moveCooldown=rand()%2+1; // TODO: Change this!
     } else {
-      actors[actorID][actorMoveCool] = 0;
+      actors[actorID].moveCooldown = 0;
     }
       if (!meleeAttack(dir, xpos, ypos, actorID)) {
         
         // Move in direction
 		directionToXY(dir, &dX, &dY);
-		if (!isTileSolid(xpos + dX, ypos + dY)) {
-			actors[actorID][actorX] += dX;
-			actors[actorID][actorY] += dY;
+		
+		if (isTileWalkable(xpos + dX, ypos + dY)) {
+			actors[actorID].x += dX;
+			actors[actorID].y += dY;
 		}
        
       }
     } else {
-      actors[actorID][actorMoveCool] -= 1;
+      actors[actorID].moveCooldown -= 1;
     }
  
 }
 
-int isTileSolid(int x, int y) {
-	return map[y][x] <= Barrier;
+int isTileWalkable(int x, int y) {
+	return !tiles[map[y][x]].blockMove;
+}
+
+int tileBlocksLasers(int x, int y) {
+	return tiles[map[y][x]].blockLaser;
 }
 
 void doActorAI(int actorID) {
 	int dir, x, y, dX, dY, nearbyActorID;
 	dir = pathfind(actorID); // Where we want to go to get to the player
 	directionToXY(dir, &dX, &dY);
-	getActorPosition(actorID, &x, &y);
+	getActorXY(actorID, &x, &y);
 	
-	nearbyActorID = getActorAt(x + dX, y + dY);
+	nearbyActorID = getActorAtXY(x + dX, y + dY);
 	// If there isn't anything there, or there is and it's not another NPC, then move and attack!
 	if (!isValidActorID(nearbyActorID) || isValidActorID(nearbyActorID) && !actorHasAI(nearbyActorID)) {
 		moveActorAndAttack(actorID, dir);
@@ -48,7 +53,7 @@ void doActorAI(int actorID) {
 
 void doAI() {
 	int i;
-	for (i = 0; i < actorCount; i++) {
+	for (i = 0; i < actorsCreated; i++) {
 		if (actorHasAI(i)) {
 			doActorAI(i);
 		}
@@ -56,6 +61,7 @@ void doAI() {
 }
 
 int playerMovement(char keyCode[8]) {
+	int playerID = getPlayerID();
 	if (keyCode[0] == 'w' || strcmp(keyCode, "\e[A") == 0) {
 		moveActorAndAttack(playerID, north);
 		return 1;
@@ -76,8 +82,8 @@ int playerMovement(char keyCode[8]) {
 int pathfind(int actorID) {  
   int difx, dify, choose, x, y, dir, absDist;
   
-  difx = actors[playerID][actorX] - actors[actorID][actorX];
-  dify = actors[playerID][actorY] - actors[actorID][actorY];
+  difx = actors[getPlayerID()].x - actors[actorID].x;
+  dify = actors[getPlayerID()].y - actors[actorID].y;
   
   absDist=(int)round(sqrt(pow((double)difx,2)+pow((double)dify,2)));
   choose=rand()%3;

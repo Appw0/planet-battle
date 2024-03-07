@@ -1,15 +1,18 @@
 #include "project.h"
 
 char sideText[330]="This is a test level for development while actual maps get created. ";
-char topText[]="Test Level"; 
+char topText[topTextLength];
 
 int main()
 {
 	int playerHadTurn = 0;
     
-    tempGenArray(map);
+    //tempGenArray(map);
     srand(time(NULL));
-    spawnEnemies(10,8);
+	
+	loadData();
+	loadLevel("TestLevel");
+    //spawnEnemies(10,8);
     
 	char keyCode[8];
 	
@@ -35,6 +38,7 @@ int main()
 	 
 	 if (playerHadTurn) {
 		 doAI();
+		 //createLaserEffect('|', lred, blue, 5, 5, south, 10);
 		 computeLaserMap();
 		 setLasersRendered();
 		 drawScreen();

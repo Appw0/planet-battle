@@ -8,18 +8,18 @@
 int laserMap[mapMaxHeight][mapMaxWidth];
 int laserEffects[laserCount][laserProperty];
 
-void drawTile(int id) {
-	printColorBg(tileColors[id][0], tileColors[id][1]);
-	printf("%c", tileChars[id]);
+void drawTile(int tileID) {
+	printColorBg(tiles[tileID].color, tiles[tileID].bgColor);
+	printf("%c", tiles[tileID].tile);
 }
 
-void drawActorByType(int id) {
-	printColorBg(actorColors[id][0], actorColors[id][1]);
-	printf("%c", actorChars[id]);
+void drawActorByType(struct actorTypeData actorType) {
+	printColorBg(actorType.color, actorType.bgColor);
+	printf("%c", actorType.tile);
 }
 
-void drawActor(int id) {
-	drawActorByType(actors[id][actorTypeID]);
+void drawActor(int actorID) {
+	drawActorByType(*(actors[actorID].type));
 }
 
 void drawLaser(int id) {
@@ -27,8 +27,8 @@ void drawLaser(int id) {
 	printf("%c", laserEffects[id][laserChar]);
 }
 
-int drawActorsAt(int x, int y) {;
-	int id = getActorAt(x, y);
+int drawActorsAt(int x, int y) {
+	int id = getActorAtXY(x, y);
 	if (isValidActorID(id)) {
 		drawActor(id);
 		return 1;
@@ -75,9 +75,14 @@ void drawLaserToLaserMap(int laserID) {
 	int y = laserEffects[laserID][laserY];
 	directionToXY(laserEffects[laserID][laserDirection], &dX, &dY);
 	for (i = 0; i < laserEffects[laserID][laserDistance]; i++) {
-		laserMap[y][x] = laserID;
-		x += dX;
-		y += dY;
+		if (isXYOnMap(x, y)) {
+			laserMap[y][x] = laserID;
+			x += dX;
+			y += dY;
+		} else {
+			break;
+		}
+		
 	}
 }
 
@@ -111,7 +116,6 @@ int nextLaserEffectID() {
 
 void createLaserEffect(char lChar, int lColor, int lBgColor, int x, int y, int direction, int distance) {
 	int id = nextLaserEffectID();
-	
 	laserEffects[id][laserNeedsRender] = 1;
 	laserEffects[id][laserChar] = lChar;
 	laserEffects[id][laserColor] = lColor;
@@ -123,7 +127,7 @@ void createLaserEffect(char lChar, int lColor, int lBgColor, int x, int y, int d
 }
 
 void drawPlayerEquipped() {
-  printf("M: %-16s R: %-16s U: %-16s",getInventoryName(0),getInventoryName(1),getInventoryName(2));
+  printf("M: %-16s R: %-16s U: %-16s", getMeleeWeapon(getPlayerID()).displayName, getRangedWeapon(getPlayerID()).displayName, getUtilItem(getPlayerID()).displayName);
 }
 
 // Primary Drawing Function
@@ -143,8 +147,8 @@ void drawScreen() {
     printf("\n");
     
     // Loops through every "pixel" to determine what to print
-    for (y=0; y<maph; y++) {
-        for (x=0; x<mapw; x++) {
+    for (y = 0; y < mapHeight; y++) {
+        for (x = 0; x < mapWidth; x++) {
 			// Attempt to draw actors at this tile
 			// If none are drawn here, draw the map tile instead.
 			if (drawActorsAt(x, y) == 0) {
@@ -160,9 +164,16 @@ void drawScreen() {
         i = printText(sideText, 25, i);
         printf("\n");
     }
+	
+	// for (y = 0; y < mapHeight; y++) {
+        // for (x = 0; x < mapWidth; x++) {
+			// printf("%d", laserMap[y][x]);
+		// }
+        // printf("\n");
+    // }
     
     // Needs some padding equation here
-    printf("Health: %3d%%   Shield: %3d%%     h: Help |", percent(actors[0][actorHealth],10) , actors[0][4] );
+    printf("Health: %3d%%   Shield: %3d%%     h: Help |", percent(actors[getPlayerID()].health, 10), actors[getPlayerID()].shield);
     printText(sideText, 25, i);
     printf("\n");
     drawPlayerEquipped();
@@ -178,19 +189,19 @@ void drawInventory(int selected) {
   int i;
   printf("Equipped Items\n");
   
-  printf("Melee  : %s",getInventoryName(0));
+  printf("Melee  : %s", getMeleeWeapon(getPlayerID()).displayName);
   printf(selected == 0 ? " <\n" : "\n");
   
-  printf("Ranged : %s",getInventoryName(1));
+  printf("Ranged : %s", getRangedWeapon(getPlayerID()).displayName);
   printf(selected == 1 ? " <\n" : "\n");
   
-  printf("Utility: %s",getInventoryName(2));
+  printf("Utility: %s", getUtilItem(getPlayerID()).displayName);
   printf(selected == 2 ? " <\n" : "\n");
   
   printf("\n");
 
   for (i=3; i<inventorySize; i++) {
-    printf("Slot %2d: %s",i-2,getInventoryName(i));
+    printf("Slot %2d: %s",i-2, items[playerInventory[i]].displayName);
     printf(selected == i ? " <\n" : "\n");
     
   }

@@ -1,8 +1,7 @@
 #include "project.h"
 
-// actorCount, can go as high as needed (zero id monsters do nothing)
-int actors[actorCount][actorProperty]={{1,10,5,0,0,10}};
-
+struct actorData actors[actorMaxCount];
+int actorsCreated = 0;
 int map[mapMaxHeight][mapMaxWidth];
 int mapHeight = mapMaxHeight;
 int mapWidth = mapMaxWidth;
@@ -72,12 +71,14 @@ int getTileTypeIndex(struct tileTypeData* tileTypePtr) {
 	return 0;
 }
 
-void createTileType(char name[], char tile, int color, int bgColor) {
+void createTileType(char name[], char tile, int color, int bgColor, int blockMove, int blockLaser) {
 	if (tilesCreated < tileMaxTypes) {
 		strncpy(tiles[tilesCreated].name, name, iniMaxNameLength);
 		tiles[tilesCreated].tile = tile;
 		tiles[tilesCreated].color = color;
 		tiles[tilesCreated].bgColor = bgColor;
+		tiles[tilesCreated].blockMove = blockMove;
+		tiles[tilesCreated].blockLaser = blockLaser;
 		tilesCreated++;
 	} else {
 		printf("Too many tiles!\n");
@@ -110,20 +111,4 @@ void createActorType(char name[], char displayName[], char tile, int color, int 
 	} else {
 		printf("Too many actor types!\n");
 	}
-}
-
-void createPlayer(int x, int y) {
-	printf("TODO: Create player at %dx and %dy\n", x, y);
-}
-
-void createPortal(int x, int y, char level[]) {
-	printf("TODO: Create portal at %dx and %dy going to %s\n", x, y, level);
-}
-
-void createActorRandomPos(struct actorTypeData* type, struct position pos[], int posCount) {
-	printf("TODO: Create actor at any of %d positions\n", posCount);
-}
-
-void createActors(struct actorTypeData* types[], int numTypes, struct position pos[], int posCount) {
-	printf("TODO: Create random actors from %d types in %d positions\n", numTypes, posCount);
 }

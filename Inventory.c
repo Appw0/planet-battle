@@ -1,48 +1,27 @@
 #include "project.h"
 
-int item[itemCount][itemProperty]={
-	{itemCategoryNone, 0}, {itemCategoryMelee, 2},
-    {itemCategoryRanged, 1}, {itemCategoryMelee, 2},
-    {itemCategoryMelee,100}};
-
-char itemName[itemCount][itemNameLength] = {
-	"None", "Basic Knife", "Basic Laser", "MonsterDebug", "SUPER KNIFE"
-};
-
 int playerInventory[inventorySize]={1,0,0,3,2,4};
 
-int getItemDamage(int id) {
-	return item[id][itemDamage];
-}
-
-int getItemCategory(int id) {
-	return item[id][itemCategory];
-}
-
-int getMeleeWeapon(int actorID) {
+struct itemTypeData getMeleeWeapon(int actorID) {
 	if (isActorPlayer(actorID)) {
-		return playerInventory[slotMelee];
+		return items[playerInventory[slotMelee]];
 	} else {
-		int actorType = actors[actorID][actorTypeID];
-		int actorWeapon = actorTypes[actorType][actorTypeWeaponID];
-		return getItemCategory(actorWeapon) == itemCategoryMelee ? actorWeapon : itemNone;
+		struct itemTypeData itemType = *(actors[actorID].type->weapon);
+		//return itemType.category == itemCategoryMelee ? itemType : getItem("none");
 	}
 }
 
-int getRangedWeapon(int actorID) {
+struct itemTypeData getRangedWeapon(int actorID) {
 	if (isActorPlayer(actorID)) {
-		return playerInventory[slotRanged];
+		return items[playerInventory[slotRanged]];
 	} else {
-		int actorType = actors[actorID][actorTypeID];
-		int actorWeapon = actorTypes[actorType][actorTypeWeaponID];
-		return getItemCategory(actorWeapon) == itemCategoryRanged ? actorWeapon : itemNone;
+		struct itemTypeData itemType = *(actors[actorID].type->weapon);
+		//return itemType.category == itemCategoryRanged ? itemType : getItem("none");
 	}
 }
 
-
-// This passes back a pointer, make sure its handled properly
-char *getInventoryName(int slotNum) {
-      return itemName[playerInventory[slotNum]];
+struct itemTypeData getUtilItem(int actorID) {
+	return items[playerInventory[slotUtil]];
 }
 
 void manageInventory() {
@@ -51,10 +30,10 @@ void manageInventory() {
 	
 	do {
 		if (keyCode[0] == 'e' && slotSelected > 2) {
-			slotType = getItemCategory(playerInventory[slotSelected]);
+			slotType = items[playerInventory[slotSelected]].category;
 			if (slotType >= 0) {
         char text[100] = "Equipped "; 
-        strcat(text, getInventoryName(slotSelected));
+        strcat(text, items[playerInventory[slotSelected]].displayName);
         strcat(text, ".");
         updateSideText(text);
       

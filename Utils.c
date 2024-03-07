@@ -12,31 +12,63 @@ void sleepMs(int millis) {
     nanosleep(&requested, &remaining);
 }
 
-int getActorAt(int x, int y) {
+struct position posFromXY(int x, int y) {
+	struct position pos;
+	pos.x = x;
+	pos.y = y;
+	return pos;
+}
+
+int itemNameIs(struct itemTypeData type, char name[]) {
+	return strcmp(type.name, name) == 0;
+}
+
+int getActorAtXY(int x, int y) {
 	int id;
-	for (id = 0; id < actorCount; id++) { 
-		if (!isActorDead(id) && actors[id][actorX] == x && actors[id][actorY] == y) {
+	for (id = 0; id < actorsCreated; id++) { 
+		if (!isActorDead(id) && actors[id].x == x && actors[id].y == y) {
 			return id;
 		}
 	}
 	return -1;
 }
 
-void getActorPosition(int actorID, int* x, int* y) {
-	(*x) = actors[actorID][actorX];
-	(*y) = actors[actorID][actorY];
+int getActorAt(struct position pos) {
+	return getActorAtXY(pos.x, pos.y);
+}
+
+void getActorXY(int actorID, int* x, int* y) {
+	(*x) = actors[actorID].x;
+	(*y) = actors[actorID].y;
+}
+
+struct position getActorPosition(int actorID) {
+	struct position pos;
+	getActorXY(actorID, &pos.x, &pos.y);
+	return pos;
 }
 
 void getAdjacentTile(int direction, int* x, int* y) {
 	
 }
 
+int getPlayerID() {
+	int i;
+	for (i = 0; i < actorsCreated; i++) {
+		if (isActorPlayer(i)) {
+			return i;
+		}
+	}
+	printf($lred "PLAYER ACTOR DOES NOT EXIST!!!\n");
+	return 0;
+}
+
 int isActorPlayer(int actorID) {
-	return actors[actorID][actorTypeID] == playerTypeID;
+	return actors[actorID].type == getActorTypePtr("player");
 }
 
 int isActorDead(int actorID) {
-	return actors[actorID][actorTypeID] == deadTypeID;
+	return actors[actorID].type == getActorTypePtr("dead");
 }
 
 int actorHasAI(int actorID) {
@@ -51,27 +83,42 @@ int percent(int num, int outOf) {
   return roundf(((float)num/(float)outOf)*(float)100);
 }
 
-int directionToXY(int direction, int* x, int* y) {
-	(*x) = 0;
-	(*y) = 0;
+struct position directionToPos(int direction) {
+	struct position pos;
+	pos.x = 0;
+	pos.y = 0;
 	switch (direction) {
 		case north:
-			(*y) = -1;
+			pos.y = -1;
 			break;
 		case east:
-			(*x) = 1;
+			pos.x = 1;
 			break;
 		case south:
-			(*y) = 1;
+			pos.y = 1;
 			break;
 		case west:
-			(*x) = -1;
+			pos.x = -1;
 			break;
 		default:
-			printf("\nINVALID DIRECTION!\n");
+			printf($lred "INVALID DIRECTION!\n");
 	}
+	return pos;
 }
 
+int directionToXY(int direction, int* x, int* y) {
+	struct position pos = directionToPos(direction);
+	(*x) = pos.x;
+	(*y) = pos.y;
+}
+
+int isXYOnMap(int x, int y) {
+	return x > 0 && x < mapWidth && y > 0 && y < mapHeight;
+}
+
+int isPosOnMap(struct position pos) {
+	return isXYOnMap(pos.x, pos.y);
+}
 
 // Computes the number of tiles a laser goes before hitting a wall, and finds all the actors on the way.
 int laserRaycast(int x, int y, int direction, int actorHitIDs[], int maxHits) {
@@ -79,10 +126,10 @@ int laserRaycast(int x, int y, int direction, int actorHitIDs[], int maxHits) {
 	int actorsHit = 0, i, dX, dY;
 	directionToXY(direction, &dX, &dY);
 	for (i = 0; i < 100; i++) {
-		if (isTileSolid(x, y)) {
+		if (!isXYOnMap(x, y) || tileBlocksLasers(x, y)) {
 			break;
 		} else if (actorsHit < maxHits) {
-			int actorID = getActorAt(x, y);
+			int actorID = getActorAtXY(x, y);
 			if (isValidActorID(actorID)) {
 				actorHitIDs[actorsHit] = actorID;
 				actorsHit++;
@@ -128,7 +175,7 @@ int evalColor(char color[]) {
 	} else if (strcmp(color, "white") == 0) {
 		return white;
 	} else {
-		printf("Invalid color '%s'\n", color);
+		printf($lred "Invalid color '%s'\n", color);
 		return black;
 	}
 }
@@ -143,7 +190,7 @@ int evalItemCategory(char category[]) {
 	} else if (strcmp(category, "utility") == 0) {
 		return itemCategoryUtility;
 	} else {
-		printf("Invalid category '%s'\n", category);
+		printf($lred "Invalid category '%s'\n", category);
 		return itemCategoryNone;
 	}
 }

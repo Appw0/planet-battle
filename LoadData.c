@@ -107,13 +107,15 @@ int readTileTypes(struct iniEntry data, int index, char key[], struct tileTypeDa
 
 void readTileINI(struct iniEntry data) {
 	char tile = ' ';
-	int i, color = black, bgColor = black;
+	int i, color = black, bgColor = black, blockLaser = 0, blockMove = 0;
 	for (i = 0; i < data.numKeys; i++) {
 		readChar(data, i, "tile", &tile);
 		readColor(data, i, "color", &color);
 		readColor(data, i, "bgColor", &bgColor);
+		readInt(data, i, "blockMove", &blockMove);
+		readInt(data, i, "blockLaser", &blockLaser);
 	}
-	createTileType(data.name, tile, color, bgColor);
+	createTileType(data.name, tile, color, bgColor, blockMove, blockLaser);
 }
 
 void readItemINI(struct iniEntry data) {
@@ -144,13 +146,11 @@ void readActorTypeINI(struct iniEntry data) {
 }
 
 void readLevelInfo(struct iniEntry data) {
-	char levelName[32] = "LEVEL NAME MISSING"; // This should be swapped for a global
-	int i, spawnPoints = 0; // So should this
+	int i;
 	for (i = 0; i < data.numKeys; i++) {
-		readStr(data, i, "name", levelName, 32);
-		readInt(data, i, "spawnPoints", &spawnPoints);
+		readStr(data, i, "name", topText, topTextLength);
+		readInt(data, i, "spawnPoints", &levelSpawnPoints);
 	}
-	printf("Level '%s' with %d points\n", levelName, spawnPoints);
 }
 
 void readLevelMap(struct iniEntry data) {
@@ -172,8 +172,6 @@ void readLevelMap(struct iniEntry data) {
 			}
 		}
 	}
-	
-	printf("Level is %dx%d\n", mapHeight, mapWidth);
 }
 
 void readLevelActor(struct iniEntry data) {
@@ -189,7 +187,7 @@ void readLevelActor(struct iniEntry data) {
 	}
 	
 	posCount = getAndSwapPlaceholderTiles(placeholder, replace, pos, actorMaxRandomPositions);
-	createActorRandomPos(type, pos, posCount);
+	createActorRandomPos(type, pos, posCount, 1);
 }
 
 void readLevelActors(struct iniEntry data) {
@@ -207,7 +205,7 @@ void readLevelActors(struct iniEntry data) {
 	}
 	
 	posCount = getAndSwapPlaceholderTiles(placeholder, replace, pos, actorMaxRandomPositions);
-	createActors(types, readTypes, pos, posCount);
+	createActors(types, readTypes, pos, posCount, 1);
 }
 
 void readLevelPlayer(struct iniEntry data) {
@@ -268,7 +266,7 @@ void readINI(char fileName[], void(*readData)(struct iniEntry)) {
 	FILE* fileID = fopen(fileName, "r");
 	
 	if (fileID == NULL) {
-		printf("FILE '%s' NOT FOUND!\n", fileName);
+		printf($lred "FILE '%s' NOT FOUND!\n", fileName);
 		return;
 	}
 	
@@ -290,7 +288,7 @@ void readINI(char fileName[], void(*readData)(struct iniEntry)) {
 				memset(data.keys, '\0', sizeof(data.keys));
 				memset(data.values, '\0', sizeof(data.keys));
 				if (sscanf(line, "[%32[^]\r\n]", data.name) == 0) {
-					printf("INVALID INI NAME! FILE COULD NOT BE READ!\n");
+					printf($lred "INVALID INI NAME! FILE COULD NOT BE READ!\n");
 					return;
 				};
 				break;
@@ -303,7 +301,7 @@ void readINI(char fileName[], void(*readData)(struct iniEntry)) {
 					}
 					data.numKeys++;
 				} else {
-					printf("Too many keys!\n");
+					printf($lred "Too many keys!\n");
 				}
 		}
 	}
@@ -311,7 +309,7 @@ void readINI(char fileName[], void(*readData)(struct iniEntry)) {
 	if (readFirstValue) {
 		readData(data);
 	} else {
-		printf("NO READABLE DATA IN INI FILE!\n");
+		printf($lred "NO READABLE DATA IN INI FILE!\n");
 	}
 	
 	fclose(fileID);
@@ -320,14 +318,14 @@ void readINI(char fileName[], void(*readData)(struct iniEntry)) {
 
 // Name should never be bigger than iniMaxNameLength
 void loadLevel(char name[]) {
-	char path[iniMaxNameLength + 16] = "\0"; //= "/data/";
+	char path[iniMaxNameLength + 16] = "./data/";
 	strcat(path, name);
 	strcat(path, ".ini");
 	readINI(path, readLevelINI);
 }
 
 void loadData() {
-	readINI("Tiles.ini", readTileINI);
-	readINI("Items.ini", readItemINI);
-	readINI("Actors.ini", readActorTypeINI);
+	readINI("./data/Tiles.ini", readTileINI);
+	readINI("./data/Items.ini", readItemINI);
+	readINI("./data/Actors.ini", readActorTypeINI);
 }

@@ -1,18 +1,22 @@
 #include "project.h"
 
 void damageActor(int actorID, int amount) {
-	actors[actorID][actorHealth] -= amount;
-  char text[100];
+	actors[actorID].health -= amount;
+	char text[100];
   
-  if (actorID == 0) {
+  // TODO: Move this to a seperate function for logging damage.
+  // And then call it from meleeAttack or actorShootLaser
+  // This way we have access to the full context, and can print out
+  // the name of what is being hit and what is doing the damage.
+  if (isActorPlayer(actorID)) {
     sprintf(text,"Got hit for %d.", amount);
   } else {
     sprintf(text,"Hit enemy for %d.", amount);
   }
   updateSideText(text);  
  
-	if (actors[actorID][actorHealth] < 1) {
-		actors[actorID][actorTypeID] = 0;
+	if (actors[actorID].health < 1) {
+		actors[actorID].type = getActorTypePtr("dead");
 	}
 }
 
@@ -28,11 +32,12 @@ int meleeAttack(int dir, int xpos, int ypos, int actorID) {
 	int targetActorID, dX, dY;
 	
 	directionToXY(dir, &dX, &dY);
-	targetActorID = getActorAt(xpos + dX, ypos + dY);
+	targetActorID = getActorAtXY(xpos + dX, ypos + dY);
 	
-	int itemID = getMeleeWeapon(actorID);
-	if (itemID != itemNone && isValidActorID(targetActorID)) {
-		damageActor(targetActorID, getItemDamage(itemID));
+	struct itemTypeData itemType = getMeleeWeapon(actorID);
+	printf("hitting with %s, which does %d\n", itemType.name, itemType.damage);
+	if (!itemNameIs(itemType, "none") && isValidActorID(targetActorID)) {
+		damageActor(targetActorID, itemType.damage);
 		return 1;
 	}
 	return 0;
@@ -40,15 +45,15 @@ int meleeAttack(int dir, int xpos, int ypos, int actorID) {
 
 // Shoots a laser weapon held by an actor in a direction. This assumes this actor actually has a laser weapon!
 void actorShootLaser(int actorID, int direction) {
-	int weaponID = getRangedWeapon(actorID);
+	struct itemTypeData weapon = getRangedWeapon(actorID);
 	int hitIDs[8], dist, dX, dY, x, y;
 	
-	getActorPosition(actorID, &x, &y);
+	getActorXY(actorID, &x, &y);
 	directionToXY(direction, &dX, &dY);
 	
 	dist = laserRaycast(x + dX, y + dY, direction, hitIDs, 8);
 	
-	damageActors(hitIDs, 8, getItemDamage(weaponID));
+	damageActors(hitIDs, 8, weapon.damage);
 	
 	// Temporary settings
 	// TODO: actually have some sort of array that maps weapons to laser colors and stuff
@@ -57,10 +62,10 @@ void actorShootLaser(int actorID, int direction) {
 
 // Lets the player aim a laser weapon, and returns if they actually shot it.
 int playerAimLaser() {
-	int shotLaser = 0;
+	int shotLaser = 0, playerID = getPlayerID();
 	char keyCode[8] = "\0";
 	
-	if (getRangedWeapon(playerID) == itemNone) {
+	if (itemNameIs(getRangedWeapon(playerID), "none")) {
 		// TODO: inform player they don't actually have a laser weapon equipped
 		return 0;
 	}
