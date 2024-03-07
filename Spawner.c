@@ -58,7 +58,7 @@ void createActorRandomPos(struct actorTypeData* type, struct position pos[], int
 			return;
 		}
 	}
-	printf("Can't spawn actor %s! Tried to many times!\n", type->name);
+	printf($lred "Can't spawn actor %s! Tried to many times!\n", type->name);
 }
 
 void createActors(struct actorTypeData* types[], int numTypes, struct position pos[], int posCount, int ignoreWalkable) {
