@@ -7,7 +7,7 @@ struct itemTypeData getMeleeWeapon(int actorID) {
 		return items[playerInventory[slotMelee]];
 	} else {
 		struct itemTypeData itemType = *(actors[actorID].type->weapon);
-		//return itemType.category == itemCategoryMelee ? itemType : getItem("none");
+		return itemType.category == itemCategoryMelee ? itemType : getItem("none");
 	}
 }
 
@@ -16,7 +16,7 @@ struct itemTypeData getRangedWeapon(int actorID) {
 		return items[playerInventory[slotRanged]];
 	} else {
 		struct itemTypeData itemType = *(actors[actorID].type->weapon);
-		//return itemType.category == itemCategoryRanged ? itemType : getItem("none");
+		return itemType.category == itemCategoryRanged ? itemType : getItem("none");
 	}
 }
 

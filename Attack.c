@@ -35,7 +35,6 @@ int meleeAttack(int dir, int xpos, int ypos, int actorID) {
 	targetActorID = getActorAtXY(xpos + dX, ypos + dY);
 	
 	struct itemTypeData itemType = getMeleeWeapon(actorID);
-	printf("hitting with %s, which does %d\n", itemType.name, itemType.damage);
 	if (!itemNameIs(itemType, "none") && isValidActorID(targetActorID)) {
 		damageActor(targetActorID, itemType.damage);
 		return 1;

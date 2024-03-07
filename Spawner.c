@@ -44,6 +44,9 @@ void createActor(struct actorTypeData* type, struct position pos) {
 void createPlayer(int x, int y) {
 	struct position pos = posFromXY(x, y);
 	createActor(getActorTypePtr("player"), pos);
+	actors[actorsCreated - 1].health = 10;
+	// TODO: implement a better way of setting the player's health
+	// It's a bit more difficult than a monster as this health is not cosntant.
 }
 
 void createActorRandomPos(struct actorTypeData* type, struct position pos[], int posCount, int ignoreWalkable) {
