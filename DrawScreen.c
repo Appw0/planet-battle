@@ -127,7 +127,9 @@ void createLaserEffect(char lChar, int lColor, int lBgColor, int x, int y, int d
 }
 
 void drawPlayerEquipped() {
-  printf("M: %-16s R: %-16s U: %-16s", getMeleeWeapon(getPlayerID()).displayName, getRangedWeapon(getPlayerID()).displayName, getUtilItem(getPlayerID()).displayName);
+  printf("M: %-16s ", getMeleeWeapon(getPlayerID()).displayName);
+  printf("R: %-16s ", getRangedWeapon(getPlayerID()).displayName);
+  printf("U: %-16s", getUtilItem(getPlayerID()).displayName );
 }
 
 // Primary Drawing Function
