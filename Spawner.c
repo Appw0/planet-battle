@@ -2,31 +2,6 @@
 
 int levelSpawnPoints = 0;
 
-// void spawnEnemies(int totalPoints, int maxCount) {
-  // int xguess, yguess, chooseType, i, valid;
-  // int spawnpointTotal=totalPoints;
-  
-  // for(i=1; i<maxCount+1; i++) {
-    // do {
-      // xguess=rand()%(mapw)+1;
-      // yguess=rand()%(maph)+1;
-      // valid = map[yguess][xguess] > Barrier ? 1 : 0;
-    // } while(valid != 1);  
-    
-    // chooseType = rand()%(actorTypeCount-2)+2;
-    // spawnpointTotal -= actorTypes[chooseType][actorTypeSpawnPoints];
-    
-    // actors[i][actorTypeID]=chooseType;
-    // actors[i][actorX]=xguess;
-    // actors[i][actorY]=yguess;
-    // actors[i][actorMoveCool]=actorTypes[chooseType][actorTypeMoveCool];
-    // actors[i][actorHealth]=actorTypes[chooseType][actorTypeHealth];
-    
-    // if (spawnpointTotal<=0) break;
-     
-  // }
-// }
-
 void createActor(struct actorTypeData* type, struct position pos) {
 	if (actorsCreated < actorMaxCount) {
 		actors[actorsCreated].type = type;
@@ -53,7 +28,7 @@ void createActorRandomPos(struct actorTypeData* type, struct position pos[], int
 	int i, posIndex;
 	for (i = 0; i < 500; i++) {
 		posIndex = rand()%posCount;
-		if (!isValidActorID(getActorAtXY()) && (ignoreWalkable || isTileWalkable(pos[posIndex].x, pos[posIndex].y))) {
+		if (!isValidActorID(getActorAt(pos[posIndex])) && (ignoreWalkable || isTileWalkable(pos[posIndex].x, pos[posIndex].y))) {
 			createActor(type, pos[posIndex]);
 			return;
 		}
@@ -65,7 +40,7 @@ void createActors(struct actorTypeData* types[], int numTypes, struct position p
 	int i;
 	for (i = 0; i < actorMaxCount - actorsCreated; i++) {
 		struct actorTypeData* randomType = types[rand()%numTypes];
-		createActorRandomPos(randomType, pos, posCount, 1);
+		createActorRandomPos(randomType, pos, posCount, ignoreWalkable);
 		levelSpawnPoints -= randomType->spawnPoints;
 		if (levelSpawnPoints < 1) {
 			break;

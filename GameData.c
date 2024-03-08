@@ -22,7 +22,7 @@ struct itemTypeData* getItemPtr(char name[]) {
 			return &items[i];
 		}
 	}
-	printf("ITEM '%s' NOT FOUND!\n", name);
+	printf($lred "ITEM '%s' NOT FOUND!\n", name);
 	return &items[0];
 }
 
@@ -37,7 +37,7 @@ struct actorTypeData* getActorTypePtr(char name[]) {
 			return &actorTypes[i];
 		}
 	}
-	printf("ACTOR TYPE '%s' NOT FOUND!\n", name);
+	printf($lred "ACTOR TYPE '%s' NOT FOUND!\n", name);
 	return &actorTypes[0];
 }
 
@@ -52,7 +52,7 @@ struct tileTypeData* getTileTypePtr(char name[]) {
 			return &tiles[i];
 		}
 	}
-	printf("TILE TYPE '%s' NOT FOUND!\n", name);
+	printf($lred "TILE TYPE '%s' NOT FOUND!\n", name);
 	return &tiles[0];
 }
 
@@ -67,7 +67,7 @@ int getTileTypeIndex(struct tileTypeData* tileTypePtr) {
 			return i;
 		}
 	}
-	printf("TILE TYPE '%s' NOT FOUND!\n", (*tileTypePtr).name);
+	printf($lred "TILE TYPE '%s' NOT FOUND!\n", (*tileTypePtr).name);
 	return 0;
 }
 
@@ -81,7 +81,7 @@ void createTileType(char name[], char tile, int color, int bgColor, int blockMov
 		tiles[tilesCreated].blockLaser = blockLaser;
 		tilesCreated++;
 	} else {
-		printf("Too many tiles!\n");
+		printf($lred "Too many tiles!\n");
 	}
 }
 
@@ -93,7 +93,7 @@ void createItemType(char name[], char displayName[], int category, int damage) {
 		items[itemsCreated].damage = damage;
 		itemsCreated++;
 	} else {
-		printf("Too many items!\n");
+		printf($lred "Too many items!\n");
 	}
 }
 
@@ -109,6 +109,6 @@ void createActorType(char name[], char displayName[], char tile, int color, int 
 		actorTypes[actorTypesCreated].weapon = weapon;
 		actorTypesCreated++;
 	} else {
-		printf("Too many actor types!\n");
+		printf($lred "Too many actor types!\n");
 	}
 }
