@@ -2,26 +2,38 @@
 
 int playerInventory[inventorySize]={1,0,0,3,2,4};
 
-struct itemTypeData getMeleeWeapon(int actorID) {
+struct itemTypeData* getMeleeWeaponPtr(int actorID) {
 	if (isActorPlayer(actorID)) {
-		return items[playerInventory[slotMelee]];
+		return &items[playerInventory[slotMelee]];
+		} else {
+			struct itemTypeData* itemType = actors[actorID].type->weapon;
+			return itemType->category == itemCategoryMelee ? itemType : getItemPtr("none");
+			}
+}
+
+struct itemTypeData getMeleeWeapon(int actorID) {
+	return *(getMeleeWeaponPtr(actorID));
+}
+
+struct itemTypeData* getRangedWeaponPtr(int actorID) {
+	if (isActorPlayer(actorID)) {
+		return &items[playerInventory[slotRanged]];
 	} else {
-		struct itemTypeData itemType = *(actors[actorID].type->weapon);
-		return itemType.category == itemCategoryMelee ? itemType : getItem("none");
+		struct itemTypeData* itemType = actors[actorID].type->weapon;
+		return itemType->category == itemCategoryRanged ? itemType : getItemPtr("none");
 	}
 }
 
 struct itemTypeData getRangedWeapon(int actorID) {
-	if (isActorPlayer(actorID)) {
-		return items[playerInventory[slotRanged]];
-	} else {
-		struct itemTypeData itemType = *(actors[actorID].type->weapon);
-		return itemType.category == itemCategoryRanged ? itemType : getItem("none");
-	}
+	return *(getRangedWeaponPtr(actorID));
+}
+
+struct itemTypeData* getUtilItemPtr(int actorID) {
+	return &items[playerInventory[slotUtil]];
 }
 
 struct itemTypeData getUtilItem(int actorID) {
-	return items[playerInventory[slotUtil]];
+	return *(getUtilItemPtr(actorID));
 }
 
 void manageInventory() {

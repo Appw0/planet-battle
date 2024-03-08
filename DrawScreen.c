@@ -127,9 +127,9 @@ void createLaserEffect(char lChar, int lColor, int lBgColor, int x, int y, int d
 }
 
 void drawPlayerEquipped() {
-  printf("M: %-16s ", getMeleeWeapon(getPlayerID()).displayName);
-  printf("R: %-16s ", getRangedWeapon(getPlayerID()).displayName);
-  printf("U: %-16s", getUtilItem(getPlayerID()).displayName );
+	printf("M: %-16s ", getMeleeWeaponPtr(getPlayerID())->displayName);
+	printf("R: %-16s ", getRangedWeaponPtr(getPlayerID())->displayName);
+	printf("U: %-16s", getUtilItemPtr(getPlayerID())->displayName );
 }
 
 // Primary Drawing Function
@@ -191,13 +191,13 @@ void drawInventory(int selected) {
   int i;
   printf("Equipped Items\n");
   
-  printf("Melee  : %s", getMeleeWeapon(getPlayerID()).displayName);
+  printf("Melee  : %s", getMeleeWeaponPtr(getPlayerID())->displayName);
   printf(selected == 0 ? " <\n" : "\n");
   
-  printf("Ranged : %s", getRangedWeapon(getPlayerID()).displayName);
+  printf("Ranged : %s", getRangedWeaponPtr(getPlayerID())->displayName);
   printf(selected == 1 ? " <\n" : "\n");
   
-  printf("Utility: %s", getUtilItem(getPlayerID()).displayName);
+  printf("Utility: %s", getUtilItemPtr(getPlayerID())->displayName);
   printf(selected == 2 ? " <\n" : "\n");
   
   printf("\n");

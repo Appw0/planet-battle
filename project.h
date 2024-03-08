@@ -147,8 +147,11 @@ extern char topText[topTextLength];
 struct position posFromXY(int x, int y);
 
 // Inventory.c
+struct itemTypeData* getMeleeWeaponPtr(int actorID);
 struct itemTypeData getMeleeWeapon(int actorID);
+struct itemTypeData* getRangedWeaponPtr(int actorID);
 struct itemTypeData getRangedWeapon(int actorID);
+struct itemTypeData* getUtilItemPtr(int actorID);
 struct itemTypeData getUtilItem(int actorID);
 extern int playerInventory[inventorySize];
 
