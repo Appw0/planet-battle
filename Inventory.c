@@ -5,10 +5,10 @@ int playerInventory[inventorySize]={1,0,0,3,2,4};
 struct itemTypeData* getMeleeWeaponPtr(int actorID) {
 	if (isActorPlayer(actorID)) {
 		return &items[playerInventory[slotMelee]];
-		} else {
-			struct itemTypeData* itemType = actors[actorID].type->weapon;
-			return itemType->category == itemCategoryMelee ? itemType : getItemPtr("none");
-			}
+	} else {
+		struct itemTypeData* itemType = actors[actorID].type->weapon;
+		return itemType->category == itemCategoryMelee ? itemType : getItemPtr("none");
+	}
 }
 
 struct itemTypeData getMeleeWeapon(int actorID) {
