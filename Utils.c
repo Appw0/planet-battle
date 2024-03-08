@@ -106,6 +106,10 @@ struct position directionToPos(int direction) {
 	return pos;
 }
 
+int randomDirection() {
+	return rand()%numDirections;
+}
+
 int directionToXY(int direction, int* x, int* y) {
 	struct position pos = directionToPos(direction);
 	(*x) = pos.x;

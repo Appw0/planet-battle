@@ -89,11 +89,12 @@ int pathfind(int actorID) {
   choose=rand()%3;
   
   if ((choose==0)&&(absDist>6)) {
-    return rand()%4+1;
+    return randomDirection();
   } else {
     x = difx > 0 ? east : west; 
     y = dify > 0 ? south : north;
     dir = abs(difx) > abs(dify) ? x : y;
+	printf("DIR %d\n", dir);
     return dir;
   }
 }

@@ -7,6 +7,7 @@
 #include <math.h>
 
 // Map
+#define numDirections 4
 #define east 0
 #define north 1
 #define west 2
