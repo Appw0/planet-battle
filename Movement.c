@@ -6,10 +6,10 @@ void moveActorAndAttack(int actorID, int dir) {
   int ypos = actors[actorID].y;
   int dX, dY;
   
-  // Dec the actor move cooldown
-  if (actors[actorID].moveCooldown == 0) {
+  actors[actorID].moveCooldown -= 1;
+  if (actors[actorID].moveCooldown <= 0) {
     if (!isActorPlayer(actorID)) {
-      actors[actorID].moveCooldown=rand()%2+1; // TODO: Change this!
+      actors[actorID].moveCooldown = actors[actorID].type->slowness;
     } else {
       actors[actorID].moveCooldown = 0;
     }
@@ -24,8 +24,6 @@ void moveActorAndAttack(int actorID, int dir) {
 		}
        
       }
-    } else {
-      actors[actorID].moveCooldown -= 1;
     }
  
 }

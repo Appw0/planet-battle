@@ -131,7 +131,7 @@ void readItemINI(struct iniEntry data) {
 
 void readActorTypeINI(struct iniEntry data) {
 	char displayName[actorMaxNameLength] = "???", tile = ' ';
-	int i, color = black, bgColor = black, spawnPoints = 0, health = 0;
+	int i, color = black, bgColor = black, spawnPoints = 0, health = 0, slowness = 0;
 	struct itemTypeData* weapon = &items[0];
 	for (i = 0; i < data.numKeys; i++) {
 		readStr(data, i, "name", displayName, actorMaxNameLength);
@@ -140,9 +140,10 @@ void readActorTypeINI(struct iniEntry data) {
 		readColor(data, i, "bgColor", &bgColor);
 		readInt(data, i, "spawnPoints", &spawnPoints);
 		readInt(data, i, "health", &health);
+		readInt(data, i, "slowness", &slowness);
 		readItemType(data, i, "weapon", &weapon);
 	}
-	createActorType(data.name, displayName, tile, color, bgColor, spawnPoints, health, weapon);
+	createActorType(data.name, displayName, tile, color, bgColor, spawnPoints, health, slowness, weapon);
 }
 
 void readLevelInfo(struct iniEntry data) {

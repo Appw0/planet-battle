@@ -97,7 +97,7 @@ void createItemType(char name[], char displayName[], int category, int damage) {
 	}
 }
 
-void createActorType(char name[], char displayName[], char tile, int color, int bgColor, int spawnPoints, int health, struct itemTypeData* weapon) {
+void createActorType(char name[], char displayName[], char tile, int color, int bgColor, int spawnPoints, int health, int slowness, struct itemTypeData* weapon) {
 	if (actorTypesCreated < actorMaxTypes) {
 		strncpy(actorTypes[actorTypesCreated].name, name, iniMaxNameLength);
 		strncpy(actorTypes[actorTypesCreated].displayName, displayName, actorMaxNameLength);
@@ -106,6 +106,7 @@ void createActorType(char name[], char displayName[], char tile, int color, int 
 		actorTypes[actorTypesCreated].bgColor = bgColor;
 		actorTypes[actorTypesCreated].spawnPoints = spawnPoints;
 		actorTypes[actorTypesCreated].health = health;
+		actorTypes[actorTypesCreated].slowness = slowness;
 		actorTypes[actorTypesCreated].weapon = weapon;
 		actorTypesCreated++;
 	} else {

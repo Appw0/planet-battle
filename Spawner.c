@@ -9,6 +9,7 @@ void createActor(struct actorTypeData* type, struct position pos) {
 		actors[actorsCreated].y = pos.y;
 		actors[actorsCreated].moveCooldown = 0;
 		actors[actorsCreated].health = type->health;
+		actors[actorsCreated].moveCooldown = rand()%(type->slowness + 1); // Adds a little spice!
 		actors[actorsCreated].shield = 0;
 		actorsCreated++;
 	} else {

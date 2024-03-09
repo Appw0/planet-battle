@@ -119,6 +119,7 @@ struct actorTypeData {
 	int bgColor;
 	int spawnPoints;
 	int health;
+	int slowness;
 	struct itemTypeData* weapon;
 };
 
@@ -171,7 +172,7 @@ struct actorTypeData getActorType(char name[]);
 struct tileTypeData* getTileTypePtr(char name[]);
 struct tileTypeData getTileType(char name[]);
 int getTileTypeIndex(struct tileTypeData* tileTypePtr);
-void createActorType(char name[], char displayName[], char tile, int color, int bgColor, int spawnPoints, int health, struct itemTypeData* weapon);
+void createActorType(char name[], char displayName[], char tile, int color, int bgColor, int spawnPoints, int health, int slowness, struct itemTypeData* weapon);
 
 extern int map[mapMaxHeight][mapMaxWidth];
 extern int mapHeight;
