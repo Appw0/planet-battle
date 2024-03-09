@@ -18,7 +18,7 @@ void createActor(struct actorTypeData* type, struct position pos) {
 }
 
 void createPlayer(int x, int y) {
-	struct position pos = posFromXY(x, y);
+	struct position pos = {x, y};
 	createActor(getActorTypePtr("player"), pos);
 	actors[actorsCreated - 1].health = 10;
 	// TODO: implement a better way of setting the player's health

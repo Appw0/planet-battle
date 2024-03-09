@@ -65,9 +65,15 @@ int playerAimLaser() {
 	char keyCode[8] = "\0";
 	
 	if (itemNameIs(getRangedWeapon(playerID), "none")) {
-		// TODO: inform player they don't actually have a laser weapon equipped
+		printColor(lred);
+		printf("You don't have a ranged weapon!\n");
 		return 0;
 	}
+	
+	computeLaserMap();
+	drawScreen();
+	printColor(lyellow);
+	printf("Press a direction key to fire!\n");
 	
 	while (!shotLaser && readKey(keyCode, 8)) {
 		// TODO: consolidate these funny repeated checks into a keyCodeToDirection function

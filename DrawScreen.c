@@ -36,6 +36,15 @@ int drawActorsAt(int x, int y) {
 	return 0;
 }
 
+int drawDeadActorsAt(int x, int y) {
+	int id = getAnyActorAtXY(x, y, 1);
+	if (isValidActorID(id) && isActorDead(id)) {
+		drawActor(id);
+		return 1;
+	}
+	return 0;
+}
+
 int drawLasersAt(int x, int y) {
 	if (laserMap[y][x] > -1){
 		drawLaser(laserMap[y][x]);
@@ -137,7 +146,9 @@ void drawScreen() {
     int x, y;
     int i=0;
     
+	resetColor();
     clearTerm();
+	
     // Top line printing
     // Must be exactly this length to work for current board size
     
@@ -155,7 +166,9 @@ void drawScreen() {
 			// If none are drawn here, draw the map tile instead.
 			if (drawActorsAt(x, y) == 0) {
 				if (drawLasersAt(x, y) == 0) {
-					drawTile(map[y][x]);
+					if (drawDeadActorsAt(x, y) == 0) {
+						drawTile(map[y][x]);
+					}
 				}
 			}
         }

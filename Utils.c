@@ -12,25 +12,22 @@ void sleepMs(int millis) {
     nanosleep(&requested, &remaining);
 }
 
-struct position posFromXY(int x, int y) {
-	struct position pos;
-	pos.x = x;
-	pos.y = y;
-	return pos;
-}
-
 int itemNameIs(struct itemTypeData type, char name[]) {
 	return strcmp(type.name, name) == 0;
 }
 
-int getActorAtXY(int x, int y) {
+int getAnyActorAtXY(int x, int y, int deadAllowed) {
 	int id;
 	for (id = 0; id < actorsCreated; id++) { 
-		if (!isActorDead(id) && actors[id].x == x && actors[id].y == y) {
+		if ((deadAllowed | !isActorDead(id)) && actors[id].x == x && actors[id].y == y) {
 			return id;
 		}
 	}
 	return -1;
+}
+
+int getActorAtXY(int x, int y) {
+	return getAnyActorAtXY(x, y, 0);
 }
 
 int getActorAt(struct position pos) {
@@ -46,10 +43,6 @@ struct position getActorPosition(int actorID) {
 	struct position pos;
 	getActorXY(actorID, &pos.x, &pos.y);
 	return pos;
-}
-
-void getAdjacentTile(int direction, int* x, int* y) {
-	
 }
 
 int getPlayerID() {
