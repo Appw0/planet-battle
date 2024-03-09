@@ -3,18 +3,19 @@
 char sideText[330]="This is a test level for development while actual maps get created. ";
 char topText[topTextLength];
 
-int main()
-{
-	int playerHadTurn = 0;
-    
-    //tempGenArray(map);
+int main(int argCount, char* args[]) {
     srand(time(NULL));
 	
-	loadData();
-	loadLevel("TestLevel");
-    //spawnEnemies(10,8);
+	if (!loadData()) return 1;
+	
+	if (argCount > 1) {
+		if (!loadLevel(args[1])) return 1;
+	} else {
+		if (!loadLevel("TestLevel")) return 1;
+	}
     
-	char keyCode[8];
+	int playerHadTurn = 0;
+	char keyCode[8] = "\0";
 	
 	enableRawMode();
 	computeLaserMap();
@@ -38,7 +39,6 @@ int main()
 	 
 	 if (playerHadTurn) {
 		 doAI();
-		 //createLaserEffect('|', lred, blue, 5, 5, south, 10);
 		 computeLaserMap();
 		 setLasersRendered();
 		 drawScreen();

@@ -94,7 +94,6 @@ int pathfind(int actorID) {
     x = difx > 0 ? east : west; 
     y = dify > 0 ? south : north;
     dir = abs(difx) > abs(dify) ? x : y;
-	printf("DIR %d\n", dir);
     return dir;
   }
 }

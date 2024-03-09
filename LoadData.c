@@ -258,7 +258,7 @@ void readLevelINI(struct iniEntry data) {
 	}
 }
 
-void readINI(char fileName[], void(*readData)(struct iniEntry)) {
+int readINI(char fileName[], void(*readData)(struct iniEntry)) {
 	struct iniEntry data;
 	char line[iniMaxLineLength];
 	int readFirstValue = 0;
@@ -267,7 +267,7 @@ void readINI(char fileName[], void(*readData)(struct iniEntry)) {
 	
 	if (fileID == NULL) {
 		printf($lred "FILE '%s' NOT FOUND!\n", fileName);
-		return;
+		return 0;
 	}
 	
 	while (!feof(fileID)) {
@@ -289,7 +289,7 @@ void readINI(char fileName[], void(*readData)(struct iniEntry)) {
 				memset(data.values, '\0', sizeof(data.keys));
 				if (sscanf(line, "[%32[^]\r\n]", data.name) == 0) {
 					printf($lred "INVALID INI NAME! FILE COULD NOT BE READ!\n");
-					return;
+					return 0;
 				};
 				break;
 			default:
@@ -310,22 +310,30 @@ void readINI(char fileName[], void(*readData)(struct iniEntry)) {
 		readData(data);
 	} else {
 		printf($lred "NO READABLE DATA IN INI FILE!\n");
+		return 0;
 	}
 	
 	fclose(fileID);
+	return 1;
 }
 
 
 // Name should never be bigger than iniMaxNameLength
-void loadLevel(char name[]) {
+int loadLevel(char name[]) {
 	char path[iniMaxNameLength + 16] = "./data/";
+	if (strlen(name) > iniMaxNameLength) {
+		printf($lred "Level name '%s' is too long!\n", name);
+		return 0;
+	}
 	strcat(path, name);
 	strcat(path, ".ini");
-	readINI(path, readLevelINI);
+	return readINI(path, readLevelINI);
 }
 
-void loadData() {
-	readINI("./data/Tiles.ini", readTileINI);
-	readINI("./data/Items.ini", readItemINI);
-	readINI("./data/Actors.ini", readActorTypeINI);
+int loadData() {
+	int success = 1;
+	success &= readINI("./data/Tiles.ini", readTileINI);
+	success &= readINI("./data/Items.ini", readItemINI);
+	success &= readINI("./data/Actors.ini", readActorTypeINI);
+	return success;
 }
