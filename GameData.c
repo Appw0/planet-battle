@@ -5,6 +5,8 @@ int actorsCreated = 0;
 int map[mapMaxHeight][mapMaxWidth];
 int mapHeight = mapMaxHeight;
 int mapWidth = mapMaxWidth;
+struct portalData portals[portalMaxCount];
+int portalsCreated = 0;
 
 struct tileTypeData tiles[tileMaxTypes];
 int tilesCreated = 0;

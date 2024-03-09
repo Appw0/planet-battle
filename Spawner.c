@@ -50,5 +50,12 @@ void createActors(struct actorTypeData* types[], int numTypes, struct position p
 }
 
 void createPortal(int x, int y, char level[]) {
-	printf("TODO: Create portal at %dx and %dy going to %s\n", x, y, level);
+	if (portalsCreated < portalMaxCount) {
+		strncpy(portals[portalsCreated].level, level, iniMaxNameLength);
+		portals[portalsCreated].x = x;
+		portals[portalsCreated].y = y;
+		portalsCreated++;
+	} else {
+		printf($lred "Too many portals!\n");
+	}
 }

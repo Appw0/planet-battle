@@ -76,6 +76,16 @@ int playerMovement(char keyCode[8]) {
 	return 0;
 }
 
+int playerCheckPortals() {
+	int i, playerID = getPlayerID();
+	for (i = 0; i < portalsCreated; i++) {
+		if (portals[i].x == actors[playerID].x && portals[playerID].y == actors[i].y) {
+			// TODO: More fanfare! Maybe also ask to confirm...
+			loadLevel(portals[i].level);
+		}
+	}
+}
+
 // Just a straight line walk towards player
 int pathfind(int actorID) {  
   int difx, dify, choose, x, y, dir, absDist;

@@ -35,6 +35,7 @@ int main(int argCount, char* args[]) {
 	 } else if (keyCode[0] == 'f') {
 		 playerHadTurn = playerAimLaser();
 	 } else if (playerMovement(keyCode)) {
+		 //playerCheckPortals(); Currently quite buggy
 		 playerHadTurn = 1;
 	 }
 	 

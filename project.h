@@ -17,6 +17,7 @@
 #define tileMaxTypes 32
 #define mapMaxHeight 64
 #define mapMaxWidth 64
+#define portalMaxCount 8
 
 // Actors
 #define actorMaxCount 32
@@ -140,6 +141,12 @@ struct actorData {
 	int health;
 	int shield;
 };
+
+struct portalData {
+	char level[iniMaxKeyLength];
+	int x, y;
+};
+
 extern int laserEffects[laserCount][laserProperty];
 
 extern struct tileTypeData tiles[tileMaxTypes];
@@ -184,9 +191,14 @@ struct tileTypeData getTileType(char name[]);
 int getTileTypeIndex(struct tileTypeData* tileTypePtr);
 void createActorType(char name[], char displayName[], char tile, int color, int bgColor, int spawnPoints, int health, int slowness, struct itemTypeData* weapon);
 
+
+// GameData.c Map Data
 extern int map[mapMaxHeight][mapMaxWidth];
 extern int mapHeight;
 extern int mapWidth;
 
 extern struct actorData actors[actorMaxCount];
 extern int actorsCreated;
+
+extern struct portalData portals[portalMaxCount];
+extern int portalsCreated;
