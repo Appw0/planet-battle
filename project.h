@@ -1,3 +1,5 @@
+// Terminal escapes from https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -90,6 +92,14 @@
 #define $lmagenta "\033[95m"
 #define $lcyan "\033[96m"
 #define $white "\033[97m"
+
+// Non-Color Escapes Supported by MobaXTerm
+#define reset 0
+#define bold 1
+#define faint 2
+#define underline 4
+#define blink 5
+#define crossedout 9
 
 struct position {
 	int x, y;

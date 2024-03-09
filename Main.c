@@ -12,6 +12,7 @@ int main(int argCount, char* args[]) {
 		if (!loadLevel(args[1])) return 1;
 	} else {
 		if (!loadLevel("TestLevel")) return 1;
+		introMovie();
 	}
     
 	int playerHadTurn = 0;

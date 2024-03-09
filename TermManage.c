@@ -21,8 +21,12 @@ void enableRawMode() {
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &newTermSettings);
 }
 
+void printColorBgExtras(int color, int bgColor, int extra) {
+	printf("\033[%d;%d;%dm", extra, color, bgColor + 10);
+}
+
 void printColorBg(int color, int bgColor) {
-	printf("\033[%d;%dm", color, bgColor + 10);
+	printColorBgExtras(color, bgColor, reset);
 }
 
 void printColor(int color) {
