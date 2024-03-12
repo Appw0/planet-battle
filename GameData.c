@@ -17,6 +17,30 @@ int itemsCreated = 0;
 struct actorTypeData actorTypes[actorMaxTypes];
 int actorTypesCreated = 0;
 
+struct actorData playerCopy;
+int playerDied = 0;
+
+void setupDefaultPlayer() {
+	playerCopy.type = getActorTypePtr("player");
+	playerCopy.health = 10;
+}
+
+// Reset the actors, but save a copy of the player for later
+void resetActors() {
+	int i;
+	for (i = 0; i < actorsCreated; i++) {
+		if (isActorPlayer(i)) {
+			playerCopy = actors[i];
+		}
+		actors[i].type = getActorTypePtr("dead");
+	}
+	actorsCreated = 0;
+}
+
+void resetPortals() {
+	portalsCreated = 0;
+}
+
 struct itemTypeData* getItemPtr(char name[]) {
 	int i;
 	for (i = 0; i < itemsCreated; i++) {

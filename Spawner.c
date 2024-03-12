@@ -18,11 +18,15 @@ void createActor(struct actorTypeData* type, struct position pos) {
 }
 
 void createPlayer(int x, int y) {
-	struct position pos = {x, y};
-	createActor(getActorTypePtr("player"), pos);
-	actors[actorsCreated - 1].health = 10;
-	// TODO: implement a better way of setting the player's health
-	// It's a bit more difficult than a monster as this health is not cosntant.
+	if (actorsCreated < actorMaxCount) {
+		actors[actorsCreated] = playerCopy;
+		actors[actorsCreated].x = x;
+		actors[actorsCreated].y = y;
+		actorsCreated++;
+	} else {
+		// This should never happen, but if it somehow does the game will yell at you instead of immediately segfaulting
+		printf($lred "Too many actors! Can't create the player!\n");
+	}
 }
 
 void createActorRandomPos(struct actorTypeData* type, struct position pos[], int posCount, int ignoreWalkable) {

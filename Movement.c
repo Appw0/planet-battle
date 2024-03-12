@@ -79,8 +79,10 @@ int playerMovement(char keyCode[8]) {
 int playerCheckPortals() {
 	int i, playerID = getPlayerID();
 	for (i = 0; i < portalsCreated; i++) {
-		if (portals[i].x == actors[playerID].x && portals[playerID].y == actors[i].y) {
+		if (portals[i].x == actors[playerID].x && portals[i].y == actors[playerID].y) {
 			// TODO: More fanfare! Maybe also ask to confirm...
+			resetPortals();
+			resetActors();
 			loadLevel(portals[i].level);
 		}
 	}
@@ -88,20 +90,21 @@ int playerCheckPortals() {
 
 // Just a straight line walk towards player
 int pathfind(int actorID) {  
-  int difx, dify, choose, x, y, dir, absDist;
-  
-  difx = actors[getPlayerID()].x - actors[actorID].x;
-  dify = actors[getPlayerID()].y - actors[actorID].y;
-  
-  absDist=(int)round(sqrt(pow((double)difx,2)+pow((double)dify,2)));
-  choose=rand()%3;
-  
-  if ((choose==0)&&(absDist>6)) {
-    return randomDirection();
-  } else {
-    x = difx > 0 ? east : west; 
-    y = dify > 0 ? south : north;
-    dir = abs(difx) > abs(dify) ? x : y;
-    return dir;
-  }
+	int difx, dify, choose = 0, x, y, dir, absDist = 100;
+	
+	if (!playerDied) {
+		difx = actors[getPlayerID()].x - actors[actorID].x;
+		dify = actors[getPlayerID()].y - actors[actorID].y;
+		absDist = (int)round(sqrt(pow((double)difx, 2) + pow((double)dify, 2)));
+		choose = rand()%3;
+	}
+	
+	if (choose == 0 && absDist > 6) {
+		return randomDirection();
+	} else {
+		x = difx > 0 ? east : west; 
+		y = dify > 0 ? south : north;
+		dir = abs(difx) > abs(dify) ? x : y;
+		return dir;
+	}
 }

@@ -8,6 +8,9 @@ int main(int argCount, char* args[]) {
 	
 	if (!loadData()) return 1;
 	
+	// This function is temporary and should be replaced with loading save data
+	setupDefaultPlayer();
+	
 	if (argCount > 1) {
 		if (!loadLevel(args[1])) return 1;
 	} else {
@@ -35,7 +38,7 @@ int main(int argCount, char* args[]) {
 	 } else if (keyCode[0] == 'f') {
 		 playerHadTurn = playerAimLaser();
 	 } else if (playerMovement(keyCode)) {
-		 //playerCheckPortals(); Currently quite buggy
+		 playerCheckPortals();
 		 playerHadTurn = 1;
 	 }
 	 
@@ -44,6 +47,11 @@ int main(int argCount, char* args[]) {
 		 computeLaserMap();
 		 setLasersRendered();
 		 drawScreen();
+	 }
+	 
+	 if (playerDied) {
+		 printf($lred "\nYou ded\n"); // TODO: actually roll back the game to a saved state
+		 break;
 	 }
    
 	} while (readKey(keyCode, 8));

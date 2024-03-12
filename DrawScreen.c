@@ -179,19 +179,14 @@ void drawScreen() {
         i = printText(sideText, 25, i);
         printf("\n");
     }
-	
-	// for (y = 0; y < mapHeight; y++) {
-        // for (x = 0; x < mapWidth; x++) {
-			// printf("%d", laserMap[y][x]);
-		// }
-        // printf("\n");
-    // }
     
-    // Needs some padding equation here
-    printf("Health: %3d%%   Shield: %3d%%     h: Help |", percent(actors[getPlayerID()].health, 10), actors[getPlayerID()].shield);
-    printText(sideText, 25, i);
-    printf("\n");
-    drawPlayerEquipped();
+	if (!playerDied) {
+		// Needs some padding equation here
+		printf("Health: %3d%%   Shield: %3d%%     h: Help |", percent(actors[getPlayerID()].health, 10), actors[getPlayerID()].shield);
+		printText(sideText, 25, i);
+		printf("\n");
+		drawPlayerEquipped();
+	}
     
     printf("\n");
 }

@@ -202,3 +202,6 @@ extern int actorsCreated;
 
 extern struct portalData portals[portalMaxCount];
 extern int portalsCreated;
+
+extern struct actorData playerCopy;
+extern int playerDied;

@@ -16,6 +16,9 @@ void damageActor(int actorID, int amount) {
   updateSideText(text);  
  
 	if (actors[actorID].health < 1) {
+		if (isActorPlayer(actorID)) {
+			playerDied = 1;
+		}
 		actors[actorID].type = getActorTypePtr("dead");
 	}
 }
