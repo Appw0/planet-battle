@@ -3,6 +3,8 @@
 char sideText[330]="This is a test level for development while actual maps get created. ";
 char topText[topTextLength];
 
+char testBuf[8192];
+
 int main(int argCount, char* args[]) {
     srand(time(NULL));
 	
@@ -22,6 +24,9 @@ int main(int argCount, char* args[]) {
 	char keyCode[8] = "\0";
 	
 	enableRawMode();
+	
+	printf("setvbuf returns %d\n", setvbuf(stdout, testBuf, _IOLBF, 8192));
+	
 	computeLaserMap();
 	drawScreen();
 	

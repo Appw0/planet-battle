@@ -8,14 +8,47 @@
 int laserMap[mapMaxHeight][mapMaxWidth];
 int laserEffects[laserCount][laserProperty];
 
+char renderBuffer[8192]; // 8192
+int renderBufferIndex = 0;
+
+void bufferChar(char c) {
+	if (renderBufferIndex < 8191) {
+		renderBuffer[renderBufferIndex] = c;
+		renderBuffer[renderBufferIndex + 1] = '\0';
+		renderBufferIndex++;
+	} else {
+		printf($lred "Render buffer overflow!");
+	}
+}
+
+void bufferStr(char text[]) {
+	int textLength = strlen(text);
+	if (textLength + renderBufferIndex < 8191) {
+		strncpy(&renderBuffer[renderBufferIndex], text, textLength);
+		renderBufferIndex += textLength;
+	} else {
+		printf($lred "Render buffer overflow!");
+	}
+}
+
+void bufferColorBgExtras(int color, int bgColor, int extra) {
+	char colorBuffer[16];
+	snprintf(colorBuffer, 16, "\033[%d;%d;%dm", extra, color, bgColor + 10);
+	bufferStr(colorBuffer);
+}
+
 void drawTile(int tileID) {
-	printColorBg(tiles[tileID].color, tiles[tileID].bgColor);
-	printf("%c", tiles[tileID].tile);
+	bufferColorBgExtras(tiles[tileID].color, tiles[tileID].bgColor, reset);
+	bufferChar(tiles[tileID].tile);
+	//printColorBg(tiles[tileID].color, tiles[tileID].bgColor);
+	//printf("%c", tiles[tileID].tile);
 }
 
 void drawActorByType(struct actorTypeData actorType) {
-	printColorBg(actorType.color, actorType.bgColor);
-	printf("%c", actorType.tile);
+	bufferColorBgExtras(actorType.color, actorType.bgColor, reset);
+	bufferChar(actorType.tile);
+	//printColorBg(actorType.color, actorType.bgColor);
+	//printf("%c", actorType.tile);
 }
 
 void drawActor(int actorID) {
@@ -23,8 +56,9 @@ void drawActor(int actorID) {
 }
 
 void drawLaser(int id) {
-	printColorBg(laserEffects[id][laserColor], laserEffects[id][laserBgColor]);
-	printf("%c", laserEffects[id][laserChar]);
+	bufferChar(laserEffects[id][laserChar]);
+	//printColorBg(laserEffects[id][laserColor], laserEffects[id][laserBgColor]);
+	//printf("%c", laserEffects[id][laserChar]);
 }
 
 int drawActorsAt(int x, int y) {
@@ -58,11 +92,11 @@ int printText(char text[], int width, int start) {
     int overflow = 5;
     int c,i;
     for (c=start; c<strlen(text); c++) {
-            printf("%c", text[c]);
+			bufferChar(text[c]);
             
             if (c==strlen(text)-1) {
                 for (i=(c-start); i<=width+overflow; i++) {
-                    printf(" ");
+                    bufferChar(' ');
                 }
                 return ++c;
                 break;
@@ -70,7 +104,7 @@ int printText(char text[], int width, int start) {
             
             if (((text[c]==32)&&((c-start)>width))||((c-start)>(width+overflow))) {
                 for (i=(c-start); i<=width+overflow; i++) {
-                    printf(" ");
+                    bufferChar(' ');
                 }
                 return ++c;
                 break;
@@ -146,18 +180,18 @@ void drawScreen() {
     int x, y;
     int i=0;
     
-	resetColor();
-    clearTerm();
+	
 	
     // Top line printing
     // Must be exactly this length to work for current board size
-    
-    
-    printf("PlanetBattle - ");
+    renderBufferIndex = 0;
+    bufferStr("PlanetBattle - ");
     printText(topText, 17, 0);
-    printf(" |");
+    bufferStr(" |");
     i = printText(sideText, 25, i);
-    printf("\n");
+    bufferChar('\n');
+	
+	
     
     // Loops through every "pixel" to determine what to print
     for (y = 0; y < mapHeight; y++) {
@@ -172,18 +206,25 @@ void drawScreen() {
 				}
 			}
         }
-		resetColor();
-        printf("|");
-        
-        // Print Side Bar Text Line
+		bufferStr("\033[0m");
+		//resetColor();
+		bufferChar('|');
+		// Print Side Bar Text Line
         i = printText(sideText, 25, i);
-        printf("\n");
+		bufferChar('\n');
     }
+	
+	resetColor();
+    clearTerm();
+	
+	
+	fputs(renderBuffer, stdout);
+	printf("Buffer at: %d\n", renderBufferIndex);
     
 	if (!playerDied) {
 		// Needs some padding equation here
 		printf("Health: %3d%%   Shield: %3d%%     h: Help |", percent(actors[getPlayerID()].health, 10), actors[getPlayerID()].shield);
-		printText(sideText, 25, i);
+		//printText(sideText, 25, i);
 		printf("\n");
 		drawPlayerEquipped();
 	}
