@@ -28,6 +28,26 @@ void moveActorAndAttack(int actorID, int dir) {
  
 }
 
+void moveActorAndRangeAttack(int actorID, struct position movement, int shootDir) {
+	struct position pos = getActorPosition(actorID), newPos;
+	newPos = posAdd(pos, movement);
+	
+	actors[actorID].moveCooldown -= 1;
+	
+	if (actors[actorID].moveCooldown <= 0) {
+		actors[actorID].moveCooldown = actors[actorID].type->slowness;
+		
+		if (isTileWalkable(newPos.x, newPos.y)) {
+			actors[actorID].x = newPos.x;
+			actors[actorID].y = newPos.y;
+		}
+		
+		if (shootDir != -1) {
+			actorShootLaser(actorID, shootDir);
+		}
+	}
+}
+
 int isTileWalkable(int x, int y) {
 	return !tiles[map[y][x]].blockMove;
 }
@@ -49,11 +69,28 @@ void doActorAI(int actorID) {
 	}
 }
 
+void doRangedActorAI(int actorID) {
+	int nearbyActorID, shootDir;
+	struct position movement = directionToPos(rangedPathfind(actorID, &shootDir)), pos = getActorPosition(actorID);
+	
+	nearbyActorID = getActorAt(posAdd(movement, pos));
+	
+	if (!isValidActorID(nearbyActorID)) {
+		moveActorAndRangeAttack(actorID, movement, shootDir);
+	}
+}
+
 void doAI() {
-	int i;
-	for (i = 0; i < actorsCreated; i++) {
-		if (actorHasAI(i)) {
-			doActorAI(i);
+	int id;
+	for (id = 0; id < actorsCreated; id++) {
+		struct itemTypeData rangedWeapon = getRangedWeapon(id);
+		
+		if (actorHasAI(id)) {
+			if (itemNameIs(rangedWeapon, "none")) {
+				doActorAI(id);
+			} else {
+				doRangedActorAI(id);
+			}
 		}
 	}
 }
@@ -106,5 +143,26 @@ int pathfind(int actorID) {
 		y = dify > 0 ? south : north;
 		dir = abs(difx) > abs(dify) ? x : y;
 		return dir;
+	}
+}
+
+int rangedPathfind(int actorID, int* shootDirection) {
+	struct position dif = {0, 0}, pos = getActorPosition(actorID), playerPos = getActorPosition(getPlayerID());
+	dif = posSubtract(pos, playerPos);
+	
+	if (dif.x != 0 && dif.y != 0) {
+		if (abs(dif.x) < abs(dif.y)) {
+			(*shootDirection) = -1;
+			return dif.x > 0 ? west : east;
+		} else {
+			(*shootDirection) = -1;
+			return dif.y > 0 ? north : south;
+		}
+	} else if (dif.x == 0) {
+		(*shootDirection) = dif.y > 0 ? north : south;
+		return dif.y < 0 ? north : south;
+	} else {
+		(*shootDirection) = dif.x > 0 ? west : east;
+		return dif.x < 0 ? west : east;
 	}
 }

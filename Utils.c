@@ -76,6 +76,24 @@ int percent(int num, int outOf) {
   return roundf(((float)num/(float)outOf)*(float)100);
 }
 
+struct position posAdd(struct position pos1, struct position pos2) {
+	struct position sum = {0, 0};
+	sum.x = pos1.x + pos2.x;
+	sum.y = pos1.y + pos2.y;
+	return sum;
+}
+
+struct position posSubtract(struct position pos1, struct position pos2) {
+	pos2.x = -pos2.x;
+	pos2.y = -pos2.y;
+	return posAdd(pos1, pos2);
+}
+
+float posDistance(struct position pos1, struct position pos2) {
+	struct position dif = posSubtract(pos1, pos2);
+	return sqrt(pow(dif.x, 2) + pow(dif.y, 2));
+}
+
 struct position directionToPos(int direction) {
 	struct position pos;
 	pos.x = 0;

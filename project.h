@@ -164,6 +164,10 @@ extern char topText[topTextLength];
 
 // Utils.c
 struct position posFromXY(int x, int y);
+struct position posAdd(struct position pos1, struct position pos2);
+struct position posSubtract(struct position pos1, struct position pos2);
+struct position getActorPosition(int actorID);
+struct position directionToPos(int direction);
 
 // Inventory.c
 struct itemTypeData* getMeleeWeaponPtr(int actorID);
