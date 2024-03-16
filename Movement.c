@@ -119,10 +119,9 @@ int playerCheckPortals() {
 	for (i = 0; i < portalsCreated; i++) {
 		if (portals[i].x == actors[playerID].x && portals[i].y == actors[playerID].y) {
 			// TODO: More fanfare! Maybe also ask to confirm...
-			// TODO: fix possible overflow with this
-			snprintf(text, 64, $lmagenta "Moved to %s", portals[i].level);
-			updateSideText(text);
 			loadLevel(portals[i].level);
+			snprintf(text, 64, $lmagenta "Moved to %s\n", topText);
+			updateSideText(text);
 		}
 	}
 }

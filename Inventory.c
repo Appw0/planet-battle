@@ -79,7 +79,7 @@ void manageInventory() {
 			if (slotType >= 0) {
         char text[100] = "Equipped "; 
         strcat(text, items[playerInventory[slotSelected]].displayName);
-        strcat(text, ".");
+        strcat(text, ".\n");
         updateSideText(text);
       
 				playerInventory[slotType]=playerInventory[slotType]^playerInventory[slotSelected];
