@@ -53,6 +53,16 @@ int drawLasersAt(int x, int y) {
 	return 0;
 }
 
+int drawItemAt(int x, int y) {
+	int id = getDroppedItemAtXY(x, y);
+	if (isValidDroppedItemID(id)) {
+		printColorBg(yellow, black);
+		printf("!");
+		return 1;
+	}
+	return 0;
+}
+
 // Prints text with padding and wrapping (if put in a loop)
 int printText(char text[], int width, int start) {
     int overflow = 5;
@@ -167,7 +177,9 @@ void drawScreen() {
 			if (drawActorsAt(x, y) == 0) {
 				if (drawLasersAt(x, y) == 0) {
 					if (drawDeadActorsAt(x, y) == 0) {
-						drawTile(map[y][x]);
+						if (drawItemAt(x, y) == 0) {
+							drawTile(map[y][x]);
+						}
 					}
 				}
 			}

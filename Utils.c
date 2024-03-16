@@ -16,6 +16,28 @@ int itemNameIs(struct itemTypeData type, char name[]) {
 	return strcmp(type.name, name) == 0;
 }
 
+int getDroppedItemAtXY(int x, int y) {
+	int id;
+	for (id = 0; id < droppedItemsMaxCount; id++) {
+		if (!itemNameIs(*droppedItems[id].type, "none") && droppedItems[id].x == x && droppedItems[id].y == y) {
+			return id;
+		}
+	}
+	return -1;
+}
+
+int getNextDroppedItemID() {
+	int id;
+	for (id = 0; id < droppedItemsMaxCount; id++) {
+		if (itemNameIs(*droppedItems[id].type, "none")) {
+			return id;
+		}
+	}
+	printf($lred "Too many dropped items!");
+	return -1;
+}
+
+
 int getAnyActorAtXY(int x, int y, int deadAllowed) {
 	int id;
 	for (id = 0; id < actorsCreated; id++) { 
@@ -69,7 +91,11 @@ int actorHasAI(int actorID) {
 }
 
 int isValidActorID(int actorID) {
-	return actorID > -1;
+	return actorID > -1 && actorID < actorsCreated;
+}
+
+int isValidDroppedItemID(int id) {
+	return id > -1 && id < droppedItemsMaxCount;
 }
 
 int percent(int num, int outOf) {

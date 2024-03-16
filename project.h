@@ -32,6 +32,8 @@
 #define itemCategoryMelee 0
 #define itemCategoryRanged 1
 #define itemCategoryUtility 2
+#define droppedItemsMaxCount 32
+#define droppedItemMaxRandomPositions 32
 
 //Inventory
 #define slotMelee 0
@@ -147,6 +149,11 @@ struct portalData {
 	int x, y;
 };
 
+struct droppedItemData {
+	struct itemTypeData* type;
+	int x, y;
+};
+
 extern int laserEffects[laserCount][laserProperty];
 
 extern struct tileTypeData tiles[tileMaxTypes];
@@ -206,6 +213,8 @@ extern int actorsCreated;
 
 extern struct portalData portals[portalMaxCount];
 extern int portalsCreated;
+
+extern struct droppedItemData droppedItems[droppedItemsMaxCount];
 
 extern struct actorData playerCopy;
 extern int playerDied;

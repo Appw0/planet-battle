@@ -36,6 +36,37 @@ struct itemTypeData getUtilItem(int actorID) {
 	return *(getUtilItemPtr(actorID));
 }
 
+int addToInventory(struct itemTypeData* type) {
+	char text[64];
+	int i, id = type - items; // this is cursed, but is a result of playerInventory not containing pointers :(
+	// TODO: make playerInventory contain pointers...
+	
+	for (i = 3; i < inventorySize; i++) { // This is also bad, we shouldn't randomly start at 3 to skip special slots, they should be separate
+		if (playerInventory[i] == 0) { // Again, this is bad and i hate it. Magic numbers bad.
+			playerInventory[i] = id;
+			snprintf(text, 64, "Picked up a %s.", type->displayName);
+			updateSideText(text);
+			return 1;
+		}
+	}
+	return 0; // Your inventory was full.
+}
+
+void playerPickupItems() {
+	struct position pos = getActorPosition(getPlayerID());
+	int droppedItemID = getDroppedItemAtXY(pos.x, pos.y);
+	
+	while (isValidDroppedItemID(droppedItemID)) {
+		if (addToInventory(droppedItems[droppedItemID].type)) {
+			droppedItems[droppedItemID].type = getItemPtr("none");
+			droppedItemID = getDroppedItemAtXY(pos.x, pos.y);
+		} else {
+			printf($lyellow "Inventory full!\n");
+			break;
+		}
+	}
+}
+
 void manageInventory() {
 	int slotType, slotSelected = 0;
 	char keyCode[8] = "\0";

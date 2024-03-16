@@ -7,6 +7,7 @@ int mapHeight = mapMaxHeight;
 int mapWidth = mapMaxWidth;
 struct portalData portals[portalMaxCount];
 int portalsCreated = 0;
+struct droppedItemData droppedItems[droppedItemsMaxCount];
 
 struct tileTypeData tiles[tileMaxTypes];
 int tilesCreated = 0;
@@ -39,6 +40,14 @@ void resetActors() {
 
 void resetPortals() {
 	portalsCreated = 0;
+}
+
+void resetDroppedItems() {
+	struct itemTypeData* noneType = getItemPtr("none");
+	int id;
+	for (id = 0; id < droppedItemsMaxCount; id++) {
+		droppedItems[id].type = noneType;
+	}
 }
 
 struct itemTypeData* getItemPtr(char name[]) {

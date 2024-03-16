@@ -69,6 +69,20 @@ void readItemType(struct iniEntry data, int index, char key[], struct itemTypeDa
 	if (key == NULL || strcmp(data.keys[index], key) == 0) (*value) = getItemPtr(data.values[index]);
 }
 
+int readItemTypes(struct iniEntry data, int index, char key[], struct itemTypeData* types[], int number, int* typesFound) {
+	int i = 0;
+	if (key == NULL || strcmp(data.keys[index], key) == 0) {
+		char* itemName = strtok(data.values[index], " ,");
+		while(itemName != NULL && i < number) {
+			types[i] = getItemPtr(itemName);
+			itemName = strtok(NULL, " ,");
+			i++;
+		}
+		(*typesFound) = i;
+	}
+	return i;
+}
+
 void readActorType(struct iniEntry data, int index, char key[], struct actorTypeData** value) {
 	if (key == NULL || strcmp(data.keys[index], key) == 0) (*value) = getActorTypePtr(data.values[index]);
 }
@@ -241,6 +255,42 @@ void readLevelTiles(struct iniEntry data) {
 	}
 }
 
+void readLevelItem(struct iniEntry data) {
+	int i, posCount = 0;
+	char placeholder = 'X', replace = '.';
+	struct position pos[droppedItemMaxRandomPositions];
+	struct itemTypeData* type = &items[0];
+	
+	for (i = 0; i < data.numKeys; i++) {
+		readItemType(data, i, "item", &type);
+		readChar(data, i, "leave", &replace);
+		readChar(data, i, "where", &placeholder);
+	}
+	
+	posCount = getAndSwapPlaceholderTiles(placeholder, replace, pos, droppedItemMaxRandomPositions);
+	createDroppedItemRandomPos(type, pos, posCount);
+}
+
+void readLevelItems(struct iniEntry data) {
+	int i, posCount = 0, readTypes = 0, minCount = 1, maxCount = 1;
+	char placeholder = 'X', replace = '.';
+	struct position pos[droppedItemMaxRandomPositions];
+	
+	struct itemTypeData* types[iniMaxListLength];
+	memset(types, 0, sizeof(types));
+	
+	for (i = 0; i < data.numKeys; i++) {
+		readItemTypes(data, i, "items", types, iniMaxListLength, &readTypes);
+		readChar(data, i, "leave", &replace);
+		readChar(data, i, "where", &placeholder);
+		readInt(data, i, "countMin", &minCount);
+		readInt(data, i, "countMax", &maxCount);
+	}
+	
+	posCount = getAndSwapPlaceholderTiles(placeholder, replace, pos, droppedItemMaxRandomPositions);
+	createDroppedItems(types, readTypes, pos, posCount, maxCount, minCount);
+}
+
 void readLevelINI(struct iniEntry data) {
 	if (strcmp(data.name, "info") == 0) {
 		readLevelInfo(data);
@@ -256,6 +306,10 @@ void readLevelINI(struct iniEntry data) {
 		readLevelPortal(data);
 	} else if (strcmp(data.name, "player") == 0) {
 		readLevelPlayer(data);
+	} else if (strcmp(data.name, "item") == 0) {
+		readLevelItem(data);
+	} else if (strcmp(data.name, "itemRandom") == 0) {
+		readLevelItems(data);
 	}
 }
 
@@ -328,6 +382,10 @@ int loadLevel(char name[]) {
 	}
 	strcat(path, name);
 	strcat(path, ".ini");
+	
+	resetDroppedItems();
+	resetPortals();
+	resetActors();
 	return readINI(path, readLevelINI);
 }
 

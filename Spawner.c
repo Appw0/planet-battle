@@ -63,3 +63,32 @@ void createPortal(int x, int y, char level[]) {
 		printf($lred "Too many portals!\n");
 	}
 }
+
+void createDroppedItem(struct itemTypeData* type, struct position pos) {
+	int id = getNextDroppedItemID();
+	if (isValidDroppedItemID(id)) {
+		droppedItems[id].type = type;
+		droppedItems[id].x = pos.x;
+		droppedItems[id].y = pos.y;
+	} else {
+		printf($lred "Too many dropped items!\n");
+	}
+}
+
+void createDroppedItemRandomPos(struct itemTypeData* type, struct position pos[], int posCount) {
+	createDroppedItem(type, pos[rand()%posCount]);
+}
+
+void createDroppedItems(struct itemTypeData* types[], int numTypes, struct position pos[], int posCount, int maxCount, int minCount) {
+	int i, amount;
+	
+	if (maxCount == minCount) {
+		amount = maxCount;
+	} else {
+		amount = rand()%(maxCount - minCount + 1) + minCount;
+	}
+	
+	for (i = 0; i < amount; i++) {
+		createDroppedItemRandomPos(types[rand()%numTypes], pos, posCount);
+	}
+}

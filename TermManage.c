@@ -38,6 +38,7 @@ void resetColor() {
 }
 
 void clearTerm() {
+	//printf("\e[;H");
 	printf("\e[1;1H\e[2J"); // Clear Screen
 }
 

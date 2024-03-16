@@ -118,8 +118,6 @@ int playerCheckPortals() {
 	for (i = 0; i < portalsCreated; i++) {
 		if (portals[i].x == actors[playerID].x && portals[i].y == actors[playerID].y) {
 			// TODO: More fanfare! Maybe also ask to confirm...
-			resetPortals();
-			resetActors();
 			loadLevel(portals[i].level);
 		}
 	}
