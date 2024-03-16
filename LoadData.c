@@ -320,7 +320,7 @@ void readDatapadINI(struct iniEntry data) {
 	for (i = 0; i < data.numKeys; i++) {
 		if (data.values[i][0] == '`') {
 			data.values[i][0] = '\n';
-		} else if (i < data.numKeys - 1 && strlen(data.values[i]) < iniMaxValueLength - 1) {
+		} else if (i < data.numKeys && strlen(data.values[i]) < iniMaxValueLength - 1) {
 			strcat(text, "\n");
 		}
 		

@@ -206,6 +206,8 @@ void createActorRandomPos(struct actorTypeData* type, struct position pos[], int
 void createActors(struct actorTypeData* types[], int numTypes, struct position pos[], int posCount, int ignoreWalkable);
 
 // GameData.c
+struct datapadData* getDatapadPtr(char name[]);
+struct datapadData getDatapad(char name[]);
 struct itemTypeData* getItemPtr(char name[]);
 struct itemTypeData getItem(char name[]);
 struct actorTypeData* getActorTypePtr(char name[]);

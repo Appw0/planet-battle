@@ -76,7 +76,12 @@ void manageInventory() {
 	do {
 		if (keyCode[0] == 'e' && slotSelected > 2) {
 			slotType = items[playerInventory[slotSelected]].category;
-			if (slotType >= 0) {
+			if (slotType == itemCategoryDatapad) {
+				// TODO: find a better solution for displaying this
+				puts($lcyan "\nThis datapad reads:");
+				puts(getDatapadPtr(items[playerInventory[slotSelected]].name)->text);
+				continue;
+			} else if (slotType >= 0) {
         char text[100] = "Equipped "; 
         strcat(text, items[playerInventory[slotSelected]].displayName);
         strcat(text, ".\n");

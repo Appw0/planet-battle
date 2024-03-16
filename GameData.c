@@ -19,7 +19,7 @@ struct actorTypeData actorTypes[actorMaxTypes];
 int actorTypesCreated = 0;
 
 struct datapadData datapads[datapadMaxCount];
-int datapadsCreated;
+int datapadsCreated = 0;
 
 struct actorData playerCopy;
 int playerDied = 0;
@@ -51,6 +51,21 @@ void resetDroppedItems() {
 	for (id = 0; id < droppedItemsMaxCount; id++) {
 		droppedItems[id].type = noneType;
 	}
+}
+
+struct datapadData* getDatapadPtr(char name[]) {
+	int i;
+	for (i = 0; i < datapadsCreated; i++) {
+		if (strcmp(datapads[i].name, name) == 0) {
+			return &datapads[i];
+		}
+	}
+	printf($lred "DATAPAD '%s' NOT FOUND!\n", name);
+	return &datapads[0];
+}
+
+struct datapadData getDatapad(char name[]) {
+	return *getDatapadPtr(name);
 }
 
 struct itemTypeData* getItemPtr(char name[]) {
@@ -154,9 +169,10 @@ void createActorType(char name[], char displayName[], char tile, int color, int 
 
 void createDatapad(char name[], char text[]) {
 	if (datapadsCreated < datapadMaxCount && itemsCreated < itemMaxTypes) {
-		strncpy(datapads[actorTypesCreated].name, name, iniMaxNameLength);
-		strncpy(datapads[actorTypesCreated].text, text, datapadTextMaxLength);
+		strncpy(datapads[datapadsCreated].name, name, iniMaxNameLength);
+		strncpy(datapads[datapadsCreated].text, text, datapadTextMaxLength);
 		createItemType(name, "Datapad", itemCategoryDatapad, 0);
+		datapadsCreated++;
 	} else if (datapadsCreated < datapadMaxCount) {
 		printf($lred "Can't create any more datapads because there are too many items!\n");
 	} else {
