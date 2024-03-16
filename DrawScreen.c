@@ -56,19 +56,44 @@ int drawLasersAt(int x, int y) {
 int drawItemAt(int x, int y) {
 	int id = getDroppedItemAtXY(x, y);
 	if (isValidDroppedItemID(id)) {
-		printColorBg(yellow, black);
-		printf("!");
+		// TODO: make itemCategory store this info instead of it being hard coded
+		switch(droppedItems[id].type->category) {
+			case itemCategoryMelee:
+				printColorBg(lyellow, black);
+				printf("!");
+				break;
+			case itemCategoryRanged:
+				printColorBg(lyellow, black);
+				printf("⌐");
+				break;
+			case itemCategoryUtility:
+				printColorBg(lyellow, black);
+				printf("☼");
+				break;
+			case itemCategoryDatapad:
+				printColorBg(lyellow, black);
+				printf("♦");
+				break;
+			default:
+				printColorBg(lyellow, black);
+				printf("¡");
+		}
 		return 1;
 	}
 	return 0;
 }
 
 // Prints text with padding and wrapping (if put in a loop)
+// TODO: rewrite to be more sensible and handle newlines better
 int printText(char text[], int width, int start) {
     int overflow = 5;
     int c,i;
     for (c=start; c<strlen(text); c++) {
-            printf("%c", text[c]);
+			if (text[c] != '\n') {
+				printf("%c", text[c]);
+			} else {
+				putchar(' ');
+			}
             
             if (c==strlen(text)-1) {
                 for (i=(c-start); i<=width+overflow; i++) {
@@ -78,7 +103,7 @@ int printText(char text[], int width, int start) {
                 break;
             }
             
-            if (((text[c]==32)&&((c-start)>width))||((c-start)>(width+overflow))) {
+            if (text[c] == '\n' || ((text[c]==32)&&((c-start)>width))||((c-start)>(width+overflow))) {
                 for (i=(c-start); i<=width+overflow; i++) {
                     printf(" ");
                 }

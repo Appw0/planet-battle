@@ -255,6 +255,7 @@ void readLevelTiles(struct iniEntry data) {
 	}
 }
 
+// TODO: levelItems should not load if the room has been cleared before
 void readLevelItem(struct iniEntry data) {
 	int i, posCount = 0;
 	char placeholder = 'X', replace = '.';
@@ -311,6 +312,21 @@ void readLevelINI(struct iniEntry data) {
 	} else if (strcmp(data.name, "itemRandom") == 0) {
 		readLevelItems(data);
 	}
+}
+
+void readDatapadINI(struct iniEntry data) {
+	char text[datapadTextMaxLength] = "\0";
+	int i;
+	for (i = 0; i < data.numKeys; i++) {
+		if (data.values[i][0] == '`') {
+			data.values[i][0] = '\n';
+		} else if (i < data.numKeys - 1 && strlen(data.values[i]) < iniMaxValueLength - 1) {
+			strcat(text, "\n");
+		}
+		
+		strncat(text, data.values[i], datapadTextMaxLength - strlen(text) - 1);
+	}
+	createDatapad(data.name, text);
 }
 
 int readINI(char fileName[], void(*readData)(struct iniEntry)) {
@@ -394,5 +410,6 @@ int loadData() {
 	success &= readINI("./data/Tiles.ini", readTileINI);
 	success &= readINI("./data/Items.ini", readItemINI);
 	success &= readINI("./data/Actors.ini", readActorTypeINI);
+	success &= readINI("./data/Datapads.ini", readDatapadINI);
 	return success;
 }

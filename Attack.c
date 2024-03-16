@@ -9,9 +9,9 @@ void damageActor(int actorID, int amount) {
   // This way we have access to the full context, and can print out
   // the name of what is being hit and what is doing the damage.
   if (isActorPlayer(actorID)) {
-    sprintf(text,"Got hit for %d.", amount);
+    sprintf(text, $red "Got hit for %d.\n", amount);
   } else {
-    sprintf(text,"Hit enemy for %d.", amount);
+    sprintf(text, $green "Hit enemy for %d.\n", amount);
   }
   updateSideText(text);  
  

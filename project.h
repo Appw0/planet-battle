@@ -32,6 +32,7 @@
 #define itemCategoryMelee 0
 #define itemCategoryRanged 1
 #define itemCategoryUtility 2
+#define itemCategoryDatapad 3
 #define droppedItemsMaxCount 32
 #define droppedItemMaxRandomPositions 32
 
@@ -52,6 +53,10 @@
 #define laserY 5
 #define laserDirection 6
 #define laserDistance 7
+
+// Datapads
+#define datapadMaxCount 32
+#define datapadTextMaxLength 1024
 
 // INI Constants
 #define iniMaxKeys 256
@@ -154,6 +159,11 @@ struct droppedItemData {
 	int x, y;
 };
 
+struct datapadData {
+	char name[iniMaxKeyLength];
+	char text[datapadTextMaxLength];
+};
+
 extern int laserEffects[laserCount][laserProperty];
 
 extern struct tileTypeData tiles[tileMaxTypes];
@@ -164,6 +174,9 @@ extern int itemsCreated;
 
 extern struct actorTypeData actorTypes[actorMaxTypes];
 extern int actorTypesCreated;
+
+extern struct datapadData datapads[datapadMaxCount];
+extern int datapadsCreated;
 
 extern char sideText[330];
 #define topTextLength 32

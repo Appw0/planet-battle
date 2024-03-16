@@ -18,6 +18,9 @@ int itemsCreated = 0;
 struct actorTypeData actorTypes[actorMaxTypes];
 int actorTypesCreated = 0;
 
+struct datapadData datapads[datapadMaxCount];
+int datapadsCreated;
+
 struct actorData playerCopy;
 int playerDied = 0;
 
@@ -146,5 +149,17 @@ void createActorType(char name[], char displayName[], char tile, int color, int 
 		actorTypesCreated++;
 	} else {
 		printf($lred "Too many actor types!\n");
+	}
+}
+
+void createDatapad(char name[], char text[]) {
+	if (datapadsCreated < datapadMaxCount && itemsCreated < itemMaxTypes) {
+		strncpy(datapads[actorTypesCreated].name, name, iniMaxNameLength);
+		strncpy(datapads[actorTypesCreated].text, text, datapadTextMaxLength);
+		createItemType(name, "Datapad", itemCategoryDatapad, 0);
+	} else if (datapadsCreated < datapadMaxCount) {
+		printf($lred "Can't create any more datapads because there are too many items!\n");
+	} else {
+		printf($lred "Too many datapads!\n");
 	}
 }

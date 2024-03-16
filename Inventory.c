@@ -44,7 +44,7 @@ int addToInventory(struct itemTypeData* type) {
 	for (i = 3; i < inventorySize; i++) { // This is also bad, we shouldn't randomly start at 3 to skip special slots, they should be separate
 		if (playerInventory[i] == 0) { // Again, this is bad and i hate it. Magic numbers bad.
 			playerInventory[i] = id;
-			snprintf(text, 64, "Picked up a %s.", type->displayName);
+			snprintf(text, 64, $lyellow "Picked up a %s.\n", type->displayName);
 			updateSideText(text);
 			return 1;
 		}
@@ -61,12 +61,14 @@ void playerPickupItems() {
 			droppedItems[droppedItemID].type = getItemPtr("none");
 			droppedItemID = getDroppedItemAtXY(pos.x, pos.y);
 		} else {
-			printf($lyellow "Inventory full!\n");
+			updateSideText($yellow "Inventory full!\n");
 			break;
 		}
 	}
 }
 
+
+// TODO: This code does not function with new itemCategories, it should be overhauled along with playerInventory
 void manageInventory() {
 	int slotType, slotSelected = 0;
 	char keyCode[8] = "\0";
