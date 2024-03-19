@@ -15,8 +15,8 @@
 #define west 2
 #define south 3
 #define tileMaxTypes 32
-#define mapMaxHeight 64
-#define mapMaxWidth 64
+#define mapMaxHeight 128
+#define mapMaxWidth 128
 #define portalMaxCount 8
 
 // Actors

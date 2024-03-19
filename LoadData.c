@@ -30,6 +30,9 @@ int getAndSwapPlaceholderTiles(char oldPlaceholder, char newPlaceholder, struct 
 					pos[i].x = x;
 					pos[i].y = y;
 					i++;
+				} else {
+					printf($lred "Too many spawn positions!\n");
+					return i;
 				}
 			}
 		}
@@ -179,7 +182,7 @@ void readLevelMap(struct iniEntry data) {
 	
 	for (y = 0; y < mapHeight; y++) {
 		for (x = 0; x < mapLargestPossibleWidth; x++) {
-			if (data.values[y][x] == 0) {
+			if (x == mapLargestPossibleWidth - 1 | data.values[y][x] == 0) {
 				mapWidth = mapWidth < x ? x : mapWidth;
 				break;
 			} else {
@@ -353,6 +356,7 @@ int readINI(char fileName[], void(*readData)(struct iniEntry)) {
 				if (!readFirstValue) {
 					readFirstValue = 1;
 				} else {
+					// TODO: get these functions to return success/failure
 					readData(data);
 				}
 				data.numKeys = 0;
