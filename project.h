@@ -179,7 +179,7 @@ extern int actorTypesCreated;
 extern struct datapadData datapads[datapadMaxCount];
 extern int datapadsCreated;
 
-extern char sideText[330];
+extern char sideText[1000];
 #define topTextLength 32
 extern char topText[topTextLength];
 
