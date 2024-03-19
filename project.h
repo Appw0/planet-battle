@@ -33,6 +33,7 @@
 #define itemCategoryRanged 1
 #define itemCategoryUtility 2
 #define itemCategoryDatapad 3
+#define itemCategorySingleUse 4 
 #define droppedItemsMaxCount 32
 #define droppedItemMaxRandomPositions 32
 
