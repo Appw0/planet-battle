@@ -83,34 +83,57 @@ int drawItemAt(int x, int y) {
 	return 0;
 }
 
+int getWordLength(char text[], int offset) {
+  int max=strlen(text);
+  int i=0;
+  
+  for(i=0; i<(max-offset); i++) {
+    if ((text[i+offset] == ' ')||(text[i+offset] == '\n')||(text[i+offset] == '.')) {
+        return i;
+    }
+  }
+}
+
+
 // Prints text with padding and wrapping (if put in a loop)
-// TODO: rewrite to be more sensible and handle newlines better
 int printText(char text[], int width, int start) {
-    int overflow = 5;
-    int c,i;
-    for (c=start; c<strlen(text); c++) {
-			if (text[c] != '\n') {
-				printf("%c", text[c]);
-			} else {
-				putchar(' ');
-			}
+    int i;
+    int max = strlen(text);
+    int wordLength;
+    
+    
+    if (start>max) {
+         for (i=0; i<width; i++) {
+             printf(" ");
+         }
+    } else {
+        for (i=0; i<width; i++) {
+            wordLength=getWordLength(text, start+i);
             
-            if (c==strlen(text)-1) {
-                for (i=(c-start); i<=width+overflow; i++) {
-                    printf(" ");
-                }
-                return ++c;
-                break;
+            if ((text[start+i]=='\n')&&(i<width)) {
+                return i+start+1;
             }
             
-            if (text[c] == '\n' || ((text[c]==32)&&((c-start)>width))||((c-start)>(width+overflow))) {
-                for (i=(c-start); i<=width+overflow; i++) {
-                    printf(" ");
-                }
-                return ++c;
-                break;
+            if ((text[start+i]==' ')&&(i>width-3)) {
+                return i+start+1;
+            }
+            
+            if (((wordLength)>width-i)&&(wordLength<width)) {
+                return i+start;
+            }
+            
+            if (!((i==0)&&((text[start+i]=='\n')||(text[start+i]==' ')))) {
+              if (i+start < max) {
+                  printf("%c",text[start+i], wordLength,i+start);
+              } else {
+                  printf(" ");
+              }
+            } else {
+              i++;
             }
         }
+    }
+    return i+start;
 }
 
 void drawLaserToLaserMap(int laserID) {
@@ -189,8 +212,17 @@ void drawScreen() {
     
     
     printf("PlanetBattle - ");
-    printText(topText, 17, 0);
-    printf(" |");
+    int screenWidth;
+    screenWidth = mapWidth < 40 ? 40 : mapWidth;
+    printText(topText, screenWidth-15, 0);
+    printf("│");
+    i = printText(sideText, 25, i);
+    printf("\n");
+    
+    for(x=0;x<screenWidth;x++) {
+      printf("─");
+    }
+    printf("┤");
     i = printText(sideText, 25, i);
     printf("\n");
     
@@ -209,18 +241,32 @@ void drawScreen() {
 				}
 			}
         }
+       if (mapWidth<40) {
+         for (x=mapWidth; x<40; x++) {
+           printf(" ");
+         }
+       }
+        
 		resetColor();
-        printf("|");
+        printf("│");
         
         // Print Side Bar Text Line
         i = printText(sideText, 25, i);
         printf("\n");
     }
     
+    for(x=0;x<screenWidth;x++) {
+      printf("─");
+    }
+    printf("┴");
+    for(x=0;x<25;x++) {
+      printf("─");
+    }
+    printf("\n");
+    
 	if (!playerDied) {
 		// Needs some padding equation here
-		printf("Health: %3d%%   Shield: %3d%%     h: Help |", percent(actors[getPlayerID()].health, 10), actors[getPlayerID()].shield);
-		printText(sideText, 25, i);
+		printf("Health: %3d%%   Shield: %3d%%     h: Help", percent(actors[getPlayerID()].health, 10), actors[getPlayerID()].shield);
 		printf("\n");
 		drawPlayerEquipped();
 	}
@@ -266,7 +312,7 @@ void drawHelp() {
 
 void updateSideText(char newText[]) {
   int len;
-  if ((strlen(sideText)+strlen(newText)+1)>330) {
+  if ((strlen(sideText)+strlen(newText)+1)>((mapHeight-2)*25)) {
     len=strlen(newText)+1;
     int i;
     for (i = 0; i<len; i++) {
@@ -274,7 +320,6 @@ void updateSideText(char newText[]) {
     }
   }
   strcat(sideText, newText);
-  strcat(sideText, " ");
   drawScreen();
   
 }
