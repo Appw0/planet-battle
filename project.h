@@ -204,7 +204,7 @@ extern int levelSpawnPoints;
 void createPlayer(int x, int y) ;
 void createPortal(int x, int y, char level[]);
 void createActorRandomPos(struct actorTypeData* type, struct position pos[], int posCount, int ignoreWalkable);
-void createActors(struct actorTypeData* types[], int numTypes, struct position pos[], int posCount, int ignoreWalkable);
+void createActors(struct actorTypeData* types[], int numTypes, struct position pos[], int posCount, int ignoreWalkable, int minCount, int maxCount, int spawnPoints);
 
 // GameData.c
 struct datapadData* getDatapadPtr(char name[]);

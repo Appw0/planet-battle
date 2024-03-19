@@ -209,7 +209,7 @@ void readLevelActor(struct iniEntry data) {
 }
 
 void readLevelActors(struct iniEntry data) {
-	int i, posCount = 0, readTypes = 0;
+	int i, posCount = 0, readTypes = 0, minCount = -1, maxCount = -1, spawnPoints = -1;
 	char placeholder = 'X', replace = '.';
 	struct position pos[actorMaxRandomPositions];
 	
@@ -220,10 +220,13 @@ void readLevelActors(struct iniEntry data) {
 		readActorTypes(data, i, "actors", types, iniMaxListLength, &readTypes);
 		readChar(data, i, "leave", &replace);
 		readChar(data, i, "where", &placeholder);
+		readInt(data, i, "countMin", &minCount);
+		readInt(data, i, "countMax", &maxCount);
+		readInt(data, i, "spawnPoints", &spawnPoints);
 	}
 	
 	posCount = getAndSwapPlaceholderTiles(placeholder, replace, pos, actorMaxRandomPositions);
-	createActors(types, readTypes, pos, posCount, 1);
+	createActors(types, readTypes, pos, posCount, 1, minCount, maxCount, spawnPoints);
 }
 
 void readLevelPlayer(struct iniEntry data) {

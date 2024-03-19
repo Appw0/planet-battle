@@ -41,14 +41,34 @@ void createActorRandomPos(struct actorTypeData* type, struct position pos[], int
 	printf($lred "Can't spawn actor %s! Tried to many times!\n", type->name);
 }
 
-void createActors(struct actorTypeData* types[], int numTypes, struct position pos[], int posCount, int ignoreWalkable) {
-	int i;
-	for (i = 0; i < actorMaxCount - actorsCreated; i++) {
+void createActors(struct actorTypeData* types[], int numTypes, struct position pos[], int posCount, int ignoreWalkable, int minCount, int maxCount, int spawnPoints) {
+	int i, createNum, createMax = actorMaxCount - actorsCreated;
+	int useGlobalPoints = spawnPoints <= -1;
+	
+	if (minCount > -1 && (minCount == maxCount || maxCount <= -1)) {
+		createNum = minCount;
+	} else if (maxCount > -1 && (minCount == maxCount || minCount <= -1)) {
+		createNum = maxCount;
+	} else if (minCount > maxCount) {
+		printf($lred "minCount is larger than maxCount!\n");
+		return;
+	} else if (minCount > -1 && maxCount > -1) {
+		createNum = rand()%(maxCount - minCount + 1) + minCount;
+	}
+	
+	createNum = createNum > createMax ? createMax : createNum;
+	
+	for (i = 0; i < createNum; i++) {
+		if (useGlobalPoints && levelSpawnPoints < 1 || !useGlobalPoints && spawnPoints < 1)
+			break;
+		
 		struct actorTypeData* randomType = types[rand()%numTypes];
 		createActorRandomPos(randomType, pos, posCount, ignoreWalkable);
-		levelSpawnPoints -= randomType->spawnPoints;
-		if (levelSpawnPoints < 1) {
-			break;
+		
+		if (useGlobalPoints) {
+			levelSpawnPoints -= randomType->spawnPoints;
+		} else {
+			spawnPoints -= randomType->spawnPoints;
 		}
 	}
 }
