@@ -1,6 +1,6 @@
 #include "project.h"
 
-char sideText[330]="This is a test level for development while actual maps get created.\n";
+char sideText[1000]="This is a test level for development while actual maps get created.\n";
 char topText[topTextLength];
 
 int main(int argCount, char* args[]) {
