@@ -230,6 +230,8 @@ int evalItemCategory(char category[]) {
 		return itemCategoryRanged;
 	} else if (strcmp(category, "utility") == 0) {
 		return itemCategoryUtility;
+	} else if (strcmp(category, "singleuse") == 0) {
+		return itemCategorySingleUse;
 	} else {
 		printf($lred "Invalid category '%s'\n", category);
 		return itemCategoryNone;
