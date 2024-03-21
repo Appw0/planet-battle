@@ -143,6 +143,21 @@ struct position directionToPos(int direction) {
 	return pos;
 }
 
+char directionToChar(int direction) {
+	switch (direction) {
+		case north:
+			return '^';
+		case east:
+			return '>';
+		case south:
+			return 'v';
+		case west:
+			return '<';
+		default:
+			return '?';
+	}
+}
+
 int randomDirection() {
 	return rand()%numDirections;
 }

@@ -8,6 +8,8 @@
 int laserMap[mapMaxHeight][mapMaxWidth];
 int laserEffects[laserCount][laserProperty];
 
+char dangerMap[mapMaxHeight][mapMaxWidth];
+
 void drawTile(int tileID) {
 	printColorBg(tiles[tileID].color, tiles[tileID].bgColor);
 	printf("%c", tiles[tileID].tile);
@@ -83,6 +85,16 @@ int drawItemAt(int x, int y) {
 	return 0;
 }
 
+int drawDangerAt(int x, int y) {
+	if (dangerMap[y][x] != '\0') {
+		printColorBg(lred, black);
+		printf("%c", dangerMap[y][x]);
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
 int getWordLength(char text[], int offset) {
   int max=strlen(text);
   int i=0;
@@ -124,7 +136,7 @@ int printText(char text[], int width, int start) {
             
             if (!((i==0)&&((text[start+i]=='\n')||(text[start+i]==' ')))) {
               if (i+start < max) {
-                  printf("%c",text[start+i], wordLength,i+start);
+                  printf("%c",text[start+i]);//, wordLength,i+start);
               } else {
                   printf(" ");
               }
@@ -193,6 +205,19 @@ void createLaserEffect(char lChar, int lColor, int lBgColor, int x, int y, int d
 	laserEffects[id][laserDistance] = distance;
 }
 
+void computeDangerMap() {
+	memset(dangerMap, 0, sizeof(dangerMap));
+	
+	int id;
+	for (id = 0; id < actorsCreated; id++) {
+		int dangerDir = actors[id].dangerDir;
+		if (dangerDir > -1 && !isActorDead(id)) {
+			struct position dangerPos = posAdd(getActorPosition(id), directionToPos(dangerDir));
+			dangerMap[dangerPos.y][dangerPos.x] = directionToChar(dangerDir);
+		}
+	}
+}
+
 void drawPlayerEquipped() {
 	printf("M: %-16s ", getMeleeWeaponPtr(getPlayerID())->displayName);
 	printf("R: %-16s ", getRangedWeaponPtr(getPlayerID())->displayName);
@@ -206,6 +231,7 @@ void drawScreen() {
     
 	resetColor();
     clearTerm();
+	computeDangerMap();
 	
     // Top line printing
     // Must be exactly this length to work for current board size
@@ -233,9 +259,11 @@ void drawScreen() {
 			// If none are drawn here, draw the map tile instead.
 			if (drawActorsAt(x, y) == 0) {
 				if (drawLasersAt(x, y) == 0) {
-					if (drawDeadActorsAt(x, y) == 0) {
-						if (drawItemAt(x, y) == 0) {
-							drawTile(map[y][x]);
+					if (drawDangerAt(x, y) == 0) {
+						if (drawDeadActorsAt(x, y) == 0) {
+							if (drawItemAt(x, y) == 0) {
+								drawTile(map[y][x]);
+							}
 						}
 					}
 				}

@@ -11,6 +11,7 @@ void createActor(struct actorTypeData* type, struct position pos) {
 		actors[actorsCreated].health = type->health;
 		actors[actorsCreated].moveCooldown = rand()%(type->slowness + 1); // Adds a little spice!
 		actors[actorsCreated].shield = 0;
+		actors[actorsCreated].dangerDir = -1;
 		actorsCreated++;
 	} else {
 		printf($lred "Too many actors!\n");
@@ -22,6 +23,7 @@ void createPlayer(int x, int y) {
 		actors[actorsCreated] = playerCopy;
 		actors[actorsCreated].x = x;
 		actors[actorsCreated].y = y;
+		actors[actorsCreated].dangerDir = -1;
 		actorsCreated++;
 	} else {
 		// This should never happen, but if it somehow does the game will yell at you instead of immediately segfaulting

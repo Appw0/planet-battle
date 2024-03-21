@@ -176,8 +176,10 @@ void readLevelMap(struct iniEntry data) {
 	
 	memset(map, 0, sizeof(map));
 	memset(tempMap, 0, sizeof(tempMap));
+	
 	mapHeight = data.numKeys > mapMaxHeight ? mapMaxHeight : data.numKeys;
 	mapWidth = 0;
+	
 	mapLargestPossibleWidth = iniMaxValueLength > mapMaxWidth ? mapMaxWidth : iniMaxValueLength;
 	
 	for (y = 0; y < mapHeight; y++) {

@@ -148,6 +148,7 @@ struct actorData {
 	int moveCooldown;
 	int health;
 	int shield;
+	int dangerDir;
 };
 
 struct portalData {

@@ -28,11 +28,12 @@ void moveActorAndAttack(int actorID, int dir) {
  
 }
 
-void moveActorAndRangeAttack(int actorID, struct position movement, int shootDir) {
+void moveActorAndRangeAttack(int actorID, struct position movement, int shootDir, int shouldFire) {
 	struct position pos = getActorPosition(actorID), newPos;
 	newPos = posAdd(pos, movement);
 	
 	actors[actorID].moveCooldown -= 1;
+	actors[actorID].dangerDir = -1;
 	
 	if (actors[actorID].moveCooldown <= 0) {
 		actors[actorID].moveCooldown = actors[actorID].type->slowness;
@@ -42,9 +43,11 @@ void moveActorAndRangeAttack(int actorID, struct position movement, int shootDir
 			actors[actorID].y = newPos.y;
 		}
 		
-		if (shootDir != -1) {
+		if (shootDir > -1 && shouldFire) {
 			actorShootLaser(actorID, shootDir);
 		}
+	} else if (actors[actorID].moveCooldown == 1) {
+		actors[actorID].dangerDir = shootDir;
 	}
 }
 
@@ -70,13 +73,15 @@ void doActorAI(int actorID) {
 }
 
 void doRangedActorAI(int actorID) {
-	int nearbyActorID, shootDir;
-	struct position movement = directionToPos(rangedPathfind(actorID, &shootDir)), pos = getActorPosition(actorID);
+	int nearbyActorID, shootDir, linedUp, moveDir = rangedPathfind(actorID, &shootDir, &linedUp);
+	struct position movement = directionToPos(moveDir), pos = getActorPosition(actorID);
 	
 	nearbyActorID = getActorAt(posAdd(movement, pos));
 	
 	if (!isValidActorID(nearbyActorID)) {
-		moveActorAndRangeAttack(actorID, movement, shootDir);
+		// TODO: replace rand() with an AI config thing specific to each actorType
+		// This will control how trigger-happy each enemy is
+		moveActorAndRangeAttack(actorID, movement, shootDir, rand()%2 == 0 ? 1 : linedUp);
 	}
 }
 
@@ -147,16 +152,18 @@ int pathfind(int actorID) {
 	}
 }
 
-int rangedPathfind(int actorID, int* shootDirection) {
+int rangedPathfind(int actorID, int* shootDirection, int* shotLinedUp) {
 	struct position dif = {0, 0}, pos = getActorPosition(actorID), playerPos = getActorPosition(getPlayerID());
 	dif = posSubtract(pos, playerPos);
+	(*shotLinedUp) = 1;
 	
 	if (dif.x != 0 && dif.y != 0) {
+		(*shotLinedUp) = 0;
 		if (abs(dif.x) < abs(dif.y)) {
-			(*shootDirection) = -1;
+			(*shootDirection) = dif.y > 0 ? north : south;
 			return dif.x > 0 ? west : east;
 		} else {
-			(*shootDirection) = -1;
+			(*shootDirection) = dif.x > 0 ? west : east;
 			return dif.y > 0 ? north : south;
 		}
 	} else if (dif.x == 0) {
