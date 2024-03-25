@@ -15,6 +15,11 @@ void drawTile(int tileID) {
 	printf("%c", tiles[tileID].tile);
 }
 
+int drawTileAt(int x, int y) {
+	drawTile(map[y][x]);
+	return 1;
+}
+
 void drawActorByType(struct actorTypeData actorType) {
 	printColorBg(actorType.color, actorType.bgColor);
 	printf("%c", actorType.tile);
@@ -224,9 +229,11 @@ void drawPlayerEquipped() {
 	printf("U: %-16s", getUtilItemPtr(getPlayerID())->displayName );
 }
 
+int(*drawOrder[])(int x, int y) = {drawActorsAt, drawLasersAt, drawDangerAt, drawDeadActorsAt, drawItemAt, drawTileAt};
+
 // Primary Drawing Function
 void drawScreen() {
-    int x, y;
+    int x, y, d;
     int i=0;
     
 	resetColor();
@@ -255,17 +262,10 @@ void drawScreen() {
     // Loops through every "pixel" to determine what to print
     for (y = 0; y < mapHeight; y++) {
         for (x = 0; x < mapWidth; x++) {
-			// Attempt to draw actors at this tile
-			// If none are drawn here, draw the map tile instead.
-			if (drawActorsAt(x, y) == 0) {
-				if (drawLasersAt(x, y) == 0) {
-					if (drawDangerAt(x, y) == 0) {
-						if (drawDeadActorsAt(x, y) == 0) {
-							if (drawItemAt(x, y) == 0) {
-								drawTile(map[y][x]);
-							}
-						}
-					}
+			// Attempt to draw things at this spot, by going through the order that they should be drawn
+			for (d = 0; d < sizeof(drawOrder)/sizeof(drawOrder[0]); d++) {
+				if (drawOrder[d](x, y)) {
+					break;
 				}
 			}
         }
