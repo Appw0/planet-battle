@@ -27,6 +27,9 @@ int playerDied = 0;
 void setupDefaultPlayer() {
 	playerCopy.type = getActorTypePtr("player");
 	playerCopy.health = 10;
+	clearInventory();
+	addToInventory(getItemPtr("knife1"), 1);
+	//addToInventory(getItemPtr("laser1"));
 }
 
 // Reset the actors, but save a copy of the player for later

@@ -305,26 +305,26 @@ void drawScreen() {
 // Draws inventory list, do not clear screen when drawing
 void drawInventory(int selected) {
 
-  printf("\nInventory\n");
+  printf($lyellow "\n---Inventory---\n\n");
   
   int i;
-  printf("Equipped Items\n");
   
-  printf("Melee  : %s", getMeleeWeaponPtr(getPlayerID())->displayName);
-  printf(selected == 0 ? " <\n" : "\n");
+  printf($yellow "Equipped Items\n" $white);
   
-  printf("Ranged : %s", getRangedWeaponPtr(getPlayerID())->displayName);
-  printf(selected == 1 ? " <\n" : "\n");
+  for (i = 0; i < equipmentSlots; i++) {
+	  printf("%-7s: ",  equipmentSlotNames[i]);
+	  printf("%c ", selected == i ? '>' : '\0');
+	  printf("%s", getEquippedItem(i).displayName);
+	  printf(selected == i ? " <\n" : "\n");
+  }
   
-  printf("Utility: %s", getUtilItemPtr(getPlayerID())->displayName);
-  printf(selected == 2 ? " <\n" : "\n");
-  
-  printf("\n");
+  printf($yellow "\nOther Items\n" $white);
 
-  for (i=3; i<inventorySize; i++) {
-    printf("Slot %2d: %s",i-2, items[playerInventory[i]].displayName);
-    printf(selected == i ? " <\n" : "\n");
-    
+  for (i = 0; i < inventorySize; i++) {
+    printf("Slot %2d: ", i + 1);
+	printf("%c ", selected == i + equipmentSlots ? '>' : '\0');
+	printf("%s", getInventoryItem(i).displayName);
+    printf(selected == i + equipmentSlots ? " <\n" : "\n");
   }
 }
 

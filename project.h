@@ -38,10 +38,11 @@
 #define droppedItemMaxRandomPositions 32
 
 //Inventory
+#define equipmentSlots 3
 #define slotMelee 0
 #define slotRanged 1
 #define slotUtil 2
-#define inventorySize 13 //10 slots plus 3 equipped
+#define inventorySize 10
 
 // Lasers
 #define laserCount 16
@@ -192,13 +193,18 @@ struct position getActorPosition(int actorID);
 struct position directionToPos(int direction);
 
 // Inventory.c
+struct itemTypeData* getInventoryItemPtr(int inventorySlot);
+struct itemTypeData getInventoryItem(int inventorySlot);
+struct itemTypeData* getEquippedItemPtr(int equipmentSlot);
+struct itemTypeData getEquippedItem(int equipmentSlot);
 struct itemTypeData* getMeleeWeaponPtr(int actorID);
 struct itemTypeData getMeleeWeapon(int actorID);
 struct itemTypeData* getRangedWeaponPtr(int actorID);
 struct itemTypeData getRangedWeapon(int actorID);
 struct itemTypeData* getUtilItemPtr(int actorID);
 struct itemTypeData getUtilItem(int actorID);
-extern int playerInventory[inventorySize];
+
+extern char equipmentSlotNames[equipmentSlots][8];
 
 // Spawner.c
 extern int levelSpawnPoints;
@@ -235,3 +241,7 @@ extern struct droppedItemData droppedItems[droppedItemsMaxCount];
 
 extern struct actorData playerCopy;
 extern int playerDied;
+
+
+// TermManage.c
+extern char selectSpacers[4];

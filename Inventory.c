@@ -1,10 +1,28 @@
 #include "project.h"
 
-int playerInventory[inventorySize]={1,0,0,3,2,4};
+struct itemTypeData* playerInventory[inventorySize]; //={1,0,0,3,2,4};
+struct itemTypeData* playerEquipped[equipmentSlots];
+char equipmentSlotNames[equipmentSlots][8] = {"Melee", "Ranged", "Utility"};
+
+struct itemTypeData* getInventoryItemPtr(int inventorySlot) {
+	return playerInventory[inventorySlot];
+}
+
+struct itemTypeData getInventoryItem(int inventorySlot) {
+	return *(getInventoryItemPtr(inventorySlot));
+}
+
+struct itemTypeData* getEquippedItemPtr(int equipmentSlot) {
+	return playerEquipped[equipmentSlot];
+}
+
+struct itemTypeData getEquippedItem(int equipmentSlot) {
+	return *(getEquippedItemPtr(equipmentSlot));
+}
 
 struct itemTypeData* getMeleeWeaponPtr(int actorID) {
 	if (isActorPlayer(actorID)) {
-		return &items[playerInventory[slotMelee]];
+		return playerEquipped[slotMelee];
 	} else {
 		struct itemTypeData* itemType = actors[actorID].type->weapon;
 		return itemType->category == itemCategoryMelee ? itemType : getItemPtr("none");
@@ -17,7 +35,7 @@ struct itemTypeData getMeleeWeapon(int actorID) {
 
 struct itemTypeData* getRangedWeaponPtr(int actorID) {
 	if (isActorPlayer(actorID)) {
-		return &items[playerInventory[slotRanged]];
+		return playerEquipped[slotRanged];
 	} else {
 		struct itemTypeData* itemType = actors[actorID].type->weapon;
 		return itemType->category == itemCategoryRanged ? itemType : getItemPtr("none");
@@ -29,23 +47,36 @@ struct itemTypeData getRangedWeapon(int actorID) {
 }
 
 struct itemTypeData* getUtilItemPtr(int actorID) {
-	return &items[playerInventory[slotUtil]];
+	return playerEquipped[slotUtil];
 }
 
 struct itemTypeData getUtilItem(int actorID) {
 	return *(getUtilItemPtr(actorID));
 }
 
-int addToInventory(struct itemTypeData* type) {
-	char text[64];
-	int i, id = type - items; // this is cursed, but is a result of playerInventory not containing pointers :(
-	// TODO: make playerInventory contain pointers...
+void clearInventory() {
+	struct itemTypeData* noneItem = getItemPtr("none");
+	int i;
 	
-	for (i = 3; i < inventorySize; i++) { // This is also bad, we shouldn't randomly start at 3 to skip special slots, they should be separate
-		if (playerInventory[i] == 0) { // Again, this is bad and i hate it. Magic numbers bad.
-			playerInventory[i] = id;
-			snprintf(text, 64, $lyellow "Picked up a %s.\n", type->displayName);
-			updateSideText(text);
+	for (i = 0; i < inventorySize; i++) {
+		playerInventory[i] = noneItem;
+	}
+	for (i = 0; i < equipmentSlots; i++) {
+		playerEquipped[i] = noneItem;
+	}
+}
+
+int addToInventory(struct itemTypeData* type, int silent) {
+	char text[64];
+	int i;
+	
+	for (i = 0; i < inventorySize; i++) {
+		if (itemNameIs(*playerInventory[i], "none")) {
+			playerInventory[i] = type;
+			if (!silent) {
+				snprintf(text, 64, $lyellow "Picked up a %s.\n", type->displayName);
+				updateSideText(text);
+			}
 			return 1;
 		}
 	}
@@ -57,7 +88,7 @@ void playerPickupItems() {
 	int droppedItemID = getDroppedItemAtXY(pos.x, pos.y);
 	
 	while (isValidDroppedItemID(droppedItemID)) {
-		if (addToInventory(droppedItems[droppedItemID].type)) {
+		if (addToInventory(droppedItems[droppedItemID].type, 0)) {
 			droppedItems[droppedItemID].type = getItemPtr("none");
 			droppedItemID = getDroppedItemAtXY(pos.x, pos.y);
 		} else {
@@ -67,30 +98,33 @@ void playerPickupItems() {
 	}
 }
 
-
-// TODO: This code does not function with new itemCategories, it should be overhauled along with playerInventory
 void manageInventory() {
-	int slotType, slotSelected = 0;
+	int slotSelected = 0;
 	char keyCode[8] = "\0";
 	
 	do {
-		if (keyCode[0] == 'e' && slotSelected > 2) {
-			slotType = items[playerInventory[slotSelected]].category;
-			if (slotType == itemCategoryDatapad) {
-				// TODO: find a better solution for displaying this
-				puts($lcyan "\nThis datapad reads:");
-				puts(getDatapadPtr(items[playerInventory[slotSelected]].name)->text);
-				continue;
-			} else if (slotType >= 0) {
-        char text[100] = "Equipped "; 
-        strcat(text, items[playerInventory[slotSelected]].displayName);
-        strcat(text, ".\n");
-        updateSideText(text);
-      
-				playerInventory[slotType]=playerInventory[slotType]^playerInventory[slotSelected];
-				playerInventory[slotSelected]=playerInventory[slotType]^playerInventory[slotSelected];
-				playerInventory[slotType]=playerInventory[slotType]^playerInventory[slotSelected];
-        
+		struct itemTypeData* selectedItem = slotSelected < equipmentSlots ? playerEquipped[slotSelected] : playerInventory[slotSelected - equipmentSlots];
+		
+		if (keyCode[0] == 'e' && slotSelected >= equipmentSlots) {
+			switch (selectedItem->category) {
+				case itemCategoryDatapad:
+					puts($lcyan "\nThis datapad reads:");
+					puts(getDatapadPtr(selectedItem->name)->text);
+					continue; // Skip clearing the screen
+				case itemCategoryMelee:
+				case itemCategoryRanged:
+				case itemCategoryUtility:
+					char text[100];
+					snprintf(text, 100, $lyellow "Equipped %s.\n", selectedItem->displayName);
+					updateSideText(text);
+					
+					// swap things
+					// This code assumes that the category maps directlty to a slot type
+					playerInventory[slotSelected - equipmentSlots] = playerEquipped[selectedItem->category];
+					playerEquipped[selectedItem->category] = selectedItem;
+					break;
+				default:
+					break;
 			}
 		} else if (keyCode[0] == 'i') {
 			return;
@@ -98,5 +132,5 @@ void manageInventory() {
 		
 		drawScreen();
 		drawInventory(slotSelected);
-	} while (readKey(keyCode, 8) && menuHandleInput(&slotSelected, keyCode, inventorySize, 1));
+	} while (readKey(keyCode, 8) && menuHandleInput(&slotSelected, keyCode, inventorySize + equipmentSlots, 1));
 }
