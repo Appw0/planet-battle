@@ -28,7 +28,7 @@ void setupDefaultPlayer() {
 	playerCopy.type = getActorTypePtr("player");
 	playerCopy.health = 10;
 	clearInventory();
-	addToInventory(getItemPtr("knife1"), 1);
+	addToInventory(getItemPtr("knife1"));
 	//addToInventory(getItemPtr("laser1"));
 }
 

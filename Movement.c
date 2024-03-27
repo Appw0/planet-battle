@@ -52,7 +52,7 @@ void moveActorAndRangeAttack(int actorID, struct position movement, int shootDir
 }
 
 int isTileWalkable(int x, int y) {
-	return !tiles[map[y][x]].blockMove;
+	return !tiles[map[y][x]].blockMove && !isValidActorID(getActorAtXY(x, y));
 }
 
 int tileBlocksLasers(int x, int y) {

@@ -66,17 +66,12 @@ void clearInventory() {
 	}
 }
 
-int addToInventory(struct itemTypeData* type, int silent) {
-	char text[64];
+int addToInventory(struct itemTypeData* type) {
 	int i;
 	
 	for (i = 0; i < inventorySize; i++) {
 		if (itemNameIs(*playerInventory[i], "none")) {
 			playerInventory[i] = type;
-			if (!silent) {
-				snprintf(text, 64, $lyellow "Picked up a %s.\n", type->displayName);
-				updateSideText(text);
-			}
 			return 1;
 		}
 	}
@@ -86,9 +81,13 @@ int addToInventory(struct itemTypeData* type, int silent) {
 void playerPickupItems() {
 	struct position pos = getActorPosition(getPlayerID());
 	int droppedItemID = getDroppedItemAtXY(pos.x, pos.y);
+	char text[64];
 	
 	while (isValidDroppedItemID(droppedItemID)) {
-		if (addToInventory(droppedItems[droppedItemID].type, 0)) {
+		if (addToInventory(droppedItems[droppedItemID].type)) {
+			snprintf(text, 64, $lyellow "Picked up a %s.\n", droppedItems[droppedItemID].type->displayName);
+			updateSideText(text);
+			
 			droppedItems[droppedItemID].type = getItemPtr("none");
 			droppedItemID = getDroppedItemAtXY(pos.x, pos.y);
 		} else {
