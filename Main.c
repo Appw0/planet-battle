@@ -5,6 +5,7 @@ char topText[topTextLength];
 
 int main(int argCount, char* args[]) {
     srand(time(NULL));
+	enableRawMode();
 	
 	if (!loadData()) return 1;
 	
@@ -21,7 +22,6 @@ int main(int argCount, char* args[]) {
 	int playerHadTurn = 0;
 	char keyCode[8] = "\0";
 	
-	enableRawMode();
 	computeLaserMap();
 	drawScreen();
 	
@@ -51,7 +51,11 @@ int main(int argCount, char* args[]) {
 	 }
 	 
 	 if (playerDied) {
-		 printf($lred "\nYou ded\n"); // TODO: actually roll back the game to a saved state
+		 printDramatic($lred "\n\n     You are dead.");
+		 sleepMs(1500);
+		 printDramatic($white "\n\n     It's " $lblue "cold" $white " and " $lmagenta "clammy" $white " here.\n\n");
+		 sleepMs(1500);
+		 //printf($lred "\nYou ded\n"); // TODO: actually roll back the game to a saved state
 		 break;
 	 }
    

@@ -64,7 +64,6 @@ int askWithTextMenu(char text[], char options[][32], char moreInfo[][512], int o
 	int i, selected = 0;
 	char keyCode[8] = "\0";
 	
-	enableRawMode();
 	do {
 		clearTerm();
 		printf("%s", text);
@@ -89,7 +88,6 @@ int askWithSpriteMenu(char text[], char sprites[][5][6], char moreInfo[][512], i
 	int x, y, selected = 0;
 	char keyCode[8] = "\0";
 	
-	enableRawMode();
 	do {
 		clearTerm();
 		printf("%s", text);
@@ -102,4 +100,38 @@ int askWithSpriteMenu(char text[], char sprites[][5][6], char moreInfo[][512], i
 		}
 		printf("\n%s\n", moreInfo[selected]);
 	} while(readKey(keyCode, 8) && menuHandleInput(&selected, keyCode, optionNum, 0, '\n'));
+}
+
+void printDramatic(char text[]) {
+	setbuf(stdout, NULL);
+	
+	int i;
+	for (i = 0; i < strlen(text); i++) {
+		int millis, doPrint = 1;
+		
+		switch (text[i]) {
+			case '@':
+				millis = 2000;
+				doPrint = 0;
+				break;
+			case '!':
+			case '.':
+			case '?':
+			case ',':
+			case '\n':
+				millis = 200;
+				break;
+			case ' ':
+				millis = 80;
+				break;
+			default:
+				millis = 20;
+		}
+		
+		if (doPrint) printf("%c", text[i]);
+		
+		sleepMs(millis);
+	}
+	
+	setvbuf(stdout, NULL, _IOLBF, 1024);
 }

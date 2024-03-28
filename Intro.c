@@ -1,35 +1,5 @@
 #include "project.h"
 
-void printDramatic(char text[]) {
-	int i;
-	for (i = 0; i < strlen(text); i++) {
-		int millis, doPrint = 1;
-		
-		switch (text[i]) {
-			case '@':
-				millis = 2000;
-				doPrint = 0;
-				break;
-			case '!':
-			case '.':
-			case '?':
-			case ',':
-			case '\n':
-				millis = 200;
-				break;
-			case ' ':
-				millis = 80;
-				break;
-			default:
-				millis = 20;
-		}
-		
-		if (doPrint) printf("%c", text[i]);
-		
-		sleepMs(millis);
-	}
-}
-
 void introMovie() {
 	int line;
 	char introText[] = {
@@ -45,14 +15,11 @@ void introMovie() {
 	};
 	
 	clearTerm();
-	setbuf(stdout, NULL);
 	
 	printDramatic(introText);
 	sleepMs(2000);
 	
 	char opts[][32] = {"Yes", "No"};
 	char moreinf[2][512] = {"\0", "\0"};
-	askWithTextMenu(introText, opts, moreinf, 2, 0);
-	
-	setvbuf(stdout, NULL, _IOLBF, 1024);
+	askWithTextMenu(introText, opts, moreinf, 2, 0);	
 }
