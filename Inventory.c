@@ -100,11 +100,12 @@ void playerPickupItems() {
 void manageInventory() {
 	int slotSelected = 0;
 	char keyCode[8] = "\0";
+	char text[100];
 	
 	do {
 		struct itemTypeData* selectedItem = slotSelected < equipmentSlots ? playerEquipped[slotSelected] : playerInventory[slotSelected - equipmentSlots];
 		
-		if (keyCode[0] == 'e' && slotSelected >= equipmentSlots) {
+		if ((keyCode[0] == '\n' || keyCode[0] == 'e') && slotSelected >= equipmentSlots) {
 			switch (selectedItem->category) {
 				case itemCategoryDatapad:
 					puts($lcyan "\nThis datapad reads:");
@@ -113,7 +114,6 @@ void manageInventory() {
 				case itemCategoryMelee:
 				case itemCategoryRanged:
 				case itemCategoryUtility:
-					char text[100];
 					snprintf(text, 100, $lyellow "Equipped %s.\n", selectedItem->displayName);
 					updateSideText(text);
 					
@@ -125,11 +125,11 @@ void manageInventory() {
 				default:
 					break;
 			}
-		} else if (keyCode[0] == 'i') {
+		} else if (strcmp(keyCode, "\e") == 0) {
 			return;
 		}
 		
 		drawScreen();
 		drawInventory(slotSelected);
-	} while (readKey(keyCode, 8) && menuHandleInput(&slotSelected, keyCode, inventorySize + equipmentSlots, 1));
+	} while (readKey(keyCode, 8) && menuHandleInput(&slotSelected, keyCode, inventorySize + equipmentSlots, 1, 'i'));
 }

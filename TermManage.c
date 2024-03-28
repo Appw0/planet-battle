@@ -47,14 +47,14 @@ int readKey(char keyEscape[], int codeLength) {
 	return read(STDIN_FILENO, keyEscape, codeLength);
 }
 
-int menuHandleInput(int* selected, char keyCode[], int optionNum, int vertical) {
+int menuHandleInput(int* selected, char keyCode[], int optionNum, int vertical, char exitCode) {
 	if (!vertical && (keyCode[0] == 'd' || strcmp(keyCode, "\e[C") == 0) ||
 		vertical && (keyCode[0] == 's' || strcmp(keyCode, "\e[B") == 0)) {
 		*selected = ++*selected > optionNum - 1 ? optionNum - 1 : *selected;
 	} else if (!vertical && (keyCode[0] == 'a' || strcmp(keyCode, "\e[D") == 0) ||
 		vertical && (keyCode[0] == 'w' || strcmp(keyCode, "\e[A") == 0)) {
 		*selected = --*selected < 0 ? 0 : *selected;
-	} else if (keyCode[0] == 10) {
+	} else if (keyCode[0] == exitCode) {
 		return 0;
 	}
 	return 1;
@@ -81,7 +81,7 @@ int askWithTextMenu(char text[], char options[][32], char moreInfo[][512], int o
 			if (vertical) printf("\n");
 		}
 		if (!vertical) printf("%s", moreInfo[selected]);
-	} while (readKey(keyCode, 8) && menuHandleInput(&selected, keyCode, optionNum, vertical));
+	} while (readKey(keyCode, 8) && menuHandleInput(&selected, keyCode, optionNum, vertical, '\n'));
 }
 
 // TODO: Update/make new function to use item/sprite IDs instead of passing an entire array
@@ -101,5 +101,5 @@ int askWithSpriteMenu(char text[], char sprites[][5][6], char moreInfo[][512], i
 			printf("\n");
 		}
 		printf("\n%s\n", moreInfo[selected]);
-	} while(readKey(keyCode, 8) && menuHandleInput(&selected, keyCode, optionNum, 0));
+	} while(readKey(keyCode, 8) && menuHandleInput(&selected, keyCode, optionNum, 0, '\n'));
 }
