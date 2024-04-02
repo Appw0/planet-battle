@@ -24,11 +24,11 @@ int datapadsCreated = 0;
 struct actorData playerCopy;
 int playerDied = 0;
 
-void setupDefaultPlayer() {
+void setupDefaultPlayer(int health) {
 	playerCopy.type = getActorTypePtr("player");
-	playerCopy.health = 10;
+	playerCopy.health = health;
 	clearInventory();
-	addToInventory(getItemPtr("knife1"));
+	//addToInventory(getItemPtr("knife1"));
 	//addToInventory(getItemPtr("laser1"));
 }
 

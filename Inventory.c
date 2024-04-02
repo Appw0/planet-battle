@@ -1,6 +1,6 @@
 #include "project.h"
 
-struct itemTypeData* playerInventory[inventorySize]; //={1,0,0,3,2,4};
+struct itemTypeData* playerInventory[inventorySize];
 struct itemTypeData* playerEquipped[equipmentSlots];
 char equipmentSlotNames[equipmentSlots][8] = {"Melee", "Ranged", "Utility"};
 

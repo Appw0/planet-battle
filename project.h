@@ -205,6 +205,8 @@ struct itemTypeData* getUtilItemPtr(int actorID);
 struct itemTypeData getUtilItem(int actorID);
 
 extern char equipmentSlotNames[equipmentSlots][8];
+extern struct itemTypeData* playerInventory[inventorySize];
+extern struct itemTypeData* playerEquipped[equipmentSlots];
 
 // Spawner.c
 void createPlayer(int x, int y) ;

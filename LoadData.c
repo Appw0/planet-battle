@@ -322,6 +322,49 @@ void readLevelINI(struct iniEntry data) {
 	}
 }
 
+void readSaveData(struct iniEntry data) {
+	int i, health = 10;
+	char level[iniMaxNameLength];
+	
+	for (i = 0; i < data.numKeys; i++) {
+		readInt(data, i, "health", &health);
+		readStr(data, i, "level", level, iniMaxNameLength);
+	}
+	
+	setupDefaultPlayer(health);
+	loadLevel(level);
+}
+
+void readSaveEquipped(struct iniEntry data) {
+	int i;
+	struct itemTypeData* item;
+	
+	for (i = 0; i < data.numKeys && i < equipmentSlots; i++) {
+		readItemType(data, i, NULL, &item);
+		playerEquipped[i] = item;
+	}
+}
+
+void readSaveInventory(struct iniEntry data) {
+	int i;
+	struct itemTypeData* item;
+	
+	for (i = 0; i < data.numKeys && i < inventorySize; i++) {
+		readItemType(data, i, NULL, &item);
+		addToInventory(item);
+	}
+}
+
+void readSaveINI(struct iniEntry data) {
+	if (strcmp(data.name, "data") == 0) {
+		readSaveData(data);
+	} else if (strcmp(data.name, "equipped") == 0) {
+		readSaveEquipped(data);
+	} else if (strcmp(data.name, "inventory") == 0) {
+		readSaveInventory(data);
+	}
+}
+
 void readDatapadINI(struct iniEntry data) {
 	char text[datapadTextMaxLength] = "\0";
 	int i;
