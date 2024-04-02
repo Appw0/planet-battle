@@ -335,6 +335,12 @@ void drawHelp() {
   
   printf("Movement:\n");
   printf("W A S D or arrow keys to move\n");
+  printf("To access inventory press I, to close inventory press I again\n");
+  printf("Use the arrow keys to navigate up and down the inventory\n");
+  printf("To equip a weapon or item hover over the item in you inventory and press E\n");
+  printf("F, then a direction key to fire ranged weapons\n");
+  printf("Walk into enemies to deal melee damage\n");
+  printf("To do nothing please press .\n");
   printf("Ctrl C to quit\n");
 }
 
