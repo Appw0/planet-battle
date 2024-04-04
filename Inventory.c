@@ -122,6 +122,9 @@ void manageInventory() {
 					playerInventory[slotSelected - equipmentSlots] = playerEquipped[selectedItem->category];
 					playerEquipped[selectedItem->category] = selectedItem;
 					break;
+				case itemCategorySingleUse:
+					damageActor(getPlayerID(), items[playerInventory[slotSelected]].damage);
+					playerInventory[slotSelected] = 0;
 				default:
 					break;
 			}
