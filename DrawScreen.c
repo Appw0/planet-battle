@@ -314,7 +314,7 @@ void drawInventory(int selected) {
   for (i = 0; i < equipmentSlots; i++) {
 	  printf("%-7s: ",  equipmentSlotNames[i]);
 	  printf("%c ", selected == i ? '>' : '\0');
-	  printf("%s", getEquippedItem(i).displayName);
+	  printf("%s", getEquippedItemPtr(i)->displayName);
 	  printf(selected == i ? " <\n" : "\n");
   }
   
@@ -323,7 +323,7 @@ void drawInventory(int selected) {
   for (i = 0; i < inventorySize; i++) {
     printf("Slot %2d: ", i + 1);
 	printf("%c ", selected == i + equipmentSlots ? '>' : '\0');
-	printf("%s", getInventoryItem(i).displayName);
+	printf("%s", getInventoryItemPtr(i)->displayName);
     printf(selected == i + equipmentSlots ? " <\n" : "\n");
   }
 }
