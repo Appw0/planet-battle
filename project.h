@@ -27,7 +27,7 @@
 
 // Items
 #define itemMaxTypes 32
-#define itemMaxNameLength 17
+#define itemMaxNameLength 32
 #define itemCategoryNone -1
 #define itemCategoryMelee 0
 #define itemCategoryRanged 1
