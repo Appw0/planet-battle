@@ -1,7 +1,7 @@
 #include "project.h"
 
 int levelSpawnPoints = 0;
-
+//Loading in enemy actors with their data
 void createActor(struct actorTypeData* type, struct position pos) {
 	if (actorsCreated < actorMaxCount) {
 		actors[actorsCreated].type = type;
@@ -17,7 +17,7 @@ void createActor(struct actorTypeData* type, struct position pos) {
 		printf($lred "Too many actors!\n");
 	}
 }
-
+// Loading in player and pulling that player data from the default player settings (found in GameData.c)
 void createPlayer(int x, int y) {
 	if (actorsCreated < actorMaxCount) {
 		actors[actorsCreated] = playerCopy;
@@ -30,19 +30,19 @@ void createPlayer(int x, int y) {
 		printf($lred "Too many actors! Can't create the player!\n");
 	}
 }
-
+// Loops through potiential posistions and chooses a random position for the actor to spawn
 void createActorRandomPos(struct actorTypeData* type, struct position pos[], int posCount, int ignoreWalkable) {
 	int i, posIndex;
 	for (i = 0; i < 500; i++) {
 		posIndex = rand()%posCount;
 		if (!isValidActorID(getActorAt(pos[posIndex])) && (ignoreWalkable || isTileWalkable(pos[posIndex].x, pos[posIndex].y))) {
-			createActor(type, pos[posIndex]);
+			createActor(type, pos[posIndex]); //Above is the check statement stating whether or not it taken or unwalkable 
 			return;
 		}
 	}
 	printf($lred "Can't spawn actor %s! Tried to many times!\n", type->name);
 }
-
+//Determines the number of actors, also checks to see is there is a valid number of global spawnpoints, uses all spawnpoints
 void createActors(struct actorTypeData* types[], int numTypes, struct position pos[], int posCount, int ignoreWalkable, int minCount, int maxCount, int spawnPoints) {
 	int i, createNum, createMax = actorMaxCount - actorsCreated;
 	int useGlobalPoints = spawnPoints <= -1;
@@ -74,7 +74,7 @@ void createActors(struct actorTypeData* types[], int numTypes, struct position p
 		}
 	}
 }
-
+//Spawns portals that swap you between levels
 void createPortal(int x, int y, char level[]) {
 	if (portalsCreated < portalMaxCount) {
 		strncpy(portals[portalsCreated].level, level, iniMaxNameLength);
@@ -85,7 +85,7 @@ void createPortal(int x, int y, char level[]) {
 		printf($lred "Too many portals!\n");
 	}
 }
-
+//Pulls the data for the item
 void createDroppedItem(struct itemTypeData* type, struct position pos) {
 	int id = getNextDroppedItemID();
 	if (isValidDroppedItemID(id)) {
@@ -96,11 +96,11 @@ void createDroppedItem(struct itemTypeData* type, struct position pos) {
 		printf($lred "Too many dropped items!\n");
 	}
 }
-
+//randomizes the coordinates
 void createDroppedItemRandomPos(struct itemTypeData* type, struct position pos[], int posCount) {
 	createDroppedItem(type, pos[rand()%posCount]);
 }
-
+//Some items have min and max countshh
 void createDroppedItems(struct itemTypeData* types[], int numTypes, struct position pos[], int posCount, int maxCount, int minCount) {
 	int i, amount;
 	
