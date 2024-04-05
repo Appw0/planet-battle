@@ -1,5 +1,5 @@
 #include "project.h"
-
+//increments the actor cooldown to ), checks if a melee attack exists, checks if the the tile is walkable.
 void moveActorAndAttack(int actorID, int dir) {
 
   int xpos = actors[actorID].x;
@@ -27,7 +27,7 @@ void moveActorAndAttack(int actorID, int dir) {
     }
  
 }
-
+//Calculates the new position, increments the cooldown, 
 void moveActorAndRangeAttack(int actorID, struct position movement, int shootDir, int shouldFire) {
 	struct position pos = getActorPosition(actorID), newPos;
 	newPos = posAdd(pos, movement);
