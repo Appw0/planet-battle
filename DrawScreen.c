@@ -1,6 +1,3 @@
-// Proof of concept for rendering script. Includes all
-// neccessary functions and prerecs to draw a frame.
-// Using this for colors https://www.theurbanpenguin.com/4184-2/
 #include "project.h"
 
 // Map array
@@ -333,9 +330,9 @@ void drawHelp() {
   printf("\nHelp\n");
   
   printf("Movement:\n");
-  printf("If you are unable to move please check you caps lock, caps lock should be off");
-  printf("You are the @ symbol in the top left corner");
-  printf("Enemies are defined as letters, and the % is a dead enemy");
+  printf("If you are unable to move please check you caps lock, caps lock should be off\n");
+  printf("You are the @ symbol in the top left corner\n");
+  printf("Enemies are defined as letters, and the %% is a dead enemy\n");
   printf("W A S D or arrow keys to move\n");
   printf("To access inventory press I, to close inventory press I again or ESC\n");
   printf("Use the arrow keys to navigate up and down the inventory\n");
