@@ -1,4 +1,3 @@
-// Cam
 // Proof of concept for rendering script. Includes all
 // neccessary functions and prerecs to draw a frame.
 // Using this for colors https://www.theurbanpenguin.com/4184-2/
