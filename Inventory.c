@@ -112,11 +112,7 @@ void manageInventory() {
 					puts(getDatapadPtr(selectedItem->name)->text);
 					continue; // Skip clearing the screen
 				case itemCategoryMelee:
-				case itemCategoryRanged:
-				case itemCategorySingleUse:
-					damageActor(getPlayerID(), selectedItem->damage);
-					playerInventory[slotSelected - equipmentSlots] = getItemPtr("none");
-					break;				
+				case itemCategoryRanged:		
 				case itemCategoryUtility:
 					snprintf(text, 100, $lyellow "Equipped %s.\n", selectedItem->displayName);
 					updateSideText(text);
@@ -125,6 +121,10 @@ void manageInventory() {
 					// This code assumes that the category maps directlty to a slot type
 					playerInventory[slotSelected - equipmentSlots] = playerEquipped[selectedItem->category];
 					playerEquipped[selectedItem->category] = selectedItem;
+					break;
+				case itemCategorySingleUse:
+					damageActor(getPlayerID(), selectedItem->damage);
+					playerInventory[slotSelected - equipmentSlots] = getItemPtr("none");
 					break;
 				default:
 					break;
