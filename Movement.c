@@ -58,7 +58,7 @@ int isTileWalkable(int x, int y) {
 int tileBlocksLasers(int x, int y) {
 	return tiles[map[y][x]].blockLaser;
 }
-
+//Pathfind defined line 131
 void doActorAI(int actorID) {
 	int dir, x, y, dX, dY, nearbyActorID;
 	dir = pathfind(actorID); // Where we want to go to get to the player
@@ -71,7 +71,7 @@ void doActorAI(int actorID) {
 		moveActorAndAttack(actorID, dir);
 	}
 }
-
+//RangedPathfind found on line 155, in its current itterattion if no valid actors are near the NPC makes a 50/50 descision to fire
 void doRangedActorAI(int actorID) {
 	int nearbyActorID, shootDir, linedUp, moveDir = rangedPathfind(actorID, &shootDir, &linedUp);
 	struct position movement = directionToPos(moveDir), pos = getActorPosition(actorID);
@@ -84,7 +84,7 @@ void doRangedActorAI(int actorID) {
 		moveActorAndRangeAttack(actorID, movement, shootDir, rand()%2 == 0 ? 1 : linedUp);
 	}
 }
-
+//Using the functions above to to determine quantity of AI and types 
 void doAI() {
 	int id;
 	for (id = 0; id < actorsCreated; id++) {
@@ -99,7 +99,7 @@ void doAI() {
 		}
 	}
 }
-
+//Assigning WASD and the arrows to move the player (Uses function found on line 3)
 int playerMovement(char keyCode[8]) {
 	int playerID = getPlayerID();
 	if (keyCode[0] == 'w' || strcmp(keyCode, "\e[A") == 0) {
@@ -125,8 +125,8 @@ int playerCheckPortals() {
 		if (portals[i].x == actors[playerID].x && portals[i].y == actors[playerID].y) {
 			// TODO: More fanfare! Maybe also ask to confirm...
 			loadLevel(portals[i].level);
-			snprintf(text, 64, $lmagenta "Moved to %s\n", topText);
-			updateSideText(text);
+			snprintf(text, 64, $lmagenta "Moved to %s\n", topText); //snprintf similar to sprintf, but better at preventing overflow
+			updateSideText(text); 
 		}
 	}
 }
@@ -155,21 +155,21 @@ int pathfind(int actorID) {
 int rangedPathfind(int actorID, int* shootDirection, int* shotLinedUp) {
 	struct position dif = {0, 0}, pos = getActorPosition(actorID), playerPos = getActorPosition(getPlayerID());
 	dif = posSubtract(pos, playerPos);
-	(*shotLinedUp) = 1;
+	(*shotLinedUp) = 1; //is my shot lined up?
 	
-	if (dif.x != 0 && dif.y != 0) {
+	if (dif.x != 0 && dif.y != 0) { //are we diagonal?
 		(*shotLinedUp) = 0;
 		if (abs(dif.x) < abs(dif.y)) {
 			(*shootDirection) = dif.y > 0 ? north : south;
 			return dif.x > 0 ? west : east;
-		} else {
+		} else { 
 			(*shootDirection) = dif.x > 0 ? west : east;
 			return dif.y > 0 ? north : south;
 		}
-	} else if (dif.x == 0) {
+	} else if (dif.x == 0) { //Are you above or below me
 		(*shootDirection) = dif.y > 0 ? north : south;
 		return dif.y < 0 ? north : south;
-	} else {
+	} else { //Are you to my right or left
 		(*shootDirection) = dif.x > 0 ? west : east;
 		return dif.x < 0 ? west : east;
 	}
