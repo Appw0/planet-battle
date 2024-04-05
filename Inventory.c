@@ -113,6 +113,10 @@ void manageInventory() {
 					continue; // Skip clearing the screen
 				case itemCategoryMelee:
 				case itemCategoryRanged:
+				case itemCategorySingleUse:
+					damageActor(getPlayerID(), selectedItem->damage);
+					playerInventory[slotSelected - equipmentSlots] = getItemPtr("none");
+					break;				
 				case itemCategoryUtility:
 					snprintf(text, 100, $lyellow "Equipped %s.\n", selectedItem->displayName);
 					updateSideText(text);
