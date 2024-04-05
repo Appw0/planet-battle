@@ -27,7 +27,7 @@ void moveActorAndAttack(int actorID, int dir) {
     }
  
 }
-//Calculates the new position, increments the cooldown, 
+//Calculates the new position, increments the cooldown, then physically updates the actors position, test the direction and ability for validity
 void moveActorAndRangeAttack(int actorID, struct position movement, int shootDir, int shouldFire) {
 	struct position pos = getActorPosition(actorID), newPos;
 	newPos = posAdd(pos, movement);
@@ -50,11 +50,11 @@ void moveActorAndRangeAttack(int actorID, struct position movement, int shootDir
 		actors[actorID].dangerDir = shootDir;
 	}
 }
-
+//Checks that blockMove is not true and that there is no actor at that position
 int isTileWalkable(int x, int y) {
 	return !tiles[map[y][x]].blockMove && !isValidActorID(getActorAtXY(x, y));
 }
-
+//Does the tile have a true block laser value
 int tileBlocksLasers(int x, int y) {
 	return tiles[map[y][x]].blockLaser;
 }
