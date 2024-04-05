@@ -334,6 +334,9 @@ void drawHelp() {
   printf("\nHelp\n");
   
   printf("Movement:\n");
+  printf("If you are unable to move please check you caps lock, caps lock should be off");
+  printf("You are the @ symbol in the top left corner");
+  printf("Enemies are defined as letters, and the % is a dead enemy");
   printf("W A S D or arrow keys to move\n");
   printf("To access inventory press I, to close inventory press I again or ESC\n");
   printf("Use the arrow keys to navigate up and down the inventory\n");
