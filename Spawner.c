@@ -30,7 +30,7 @@ void createPlayer(int x, int y) {
 		printf($lred "Too many actors! Can't create the player!\n");
 	}
 }
-// Loops through potiential posistions and chooses a random position for the actor to spawn
+// Loops through potential positions and chooses a random position for the actor to spawn
 void createActorRandomPos(struct actorTypeData* type, struct position pos[], int posCount, int ignoreWalkable) {
 	int i, posIndex;
 	for (i = 0; i < 500; i++) {
